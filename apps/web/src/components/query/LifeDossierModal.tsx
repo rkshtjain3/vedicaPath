@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useMemo } from 'react';
 import {
   FileText,
   Printer,
@@ -22,6 +22,7 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
+import { calculateAyurvedicDoshaProfile } from '@vedica/life-domain-engine';
 
 interface LifeDossierModalProps {
   isOpen: boolean;
@@ -29,6 +30,11 @@ interface LifeDossierModalProps {
   calculationData: any;
   fullName?: string;
 }
+
+const ZODIAC_SIGNS = [
+  'Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
+  'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'
+];
 
 export function LifeDossierModal({
   isOpen,
@@ -38,7 +44,7 @@ export function LifeDossierModal({
 }: LifeDossierModalProps) {
   const { language } = useI18n();
   const isHi = language === 'hi';
-  const name = fullName || calculationData?.fullName || 'Rakshit Jain';
+  const name = fullName || calculationData?.fullName || 'Seeker';
 
   const astro = calculationData?.astrology || {};
   const dasha = calculationData?.dasha || {};
@@ -46,22 +52,89 @@ export function LifeDossierModal({
   const storybook = calculationData?.lifeStorybook || {};
   const jaimini = calculationData?.jaimini || {};
   const struggles = calculationData?.struggles || {};
+  const ashtakavarga = calculationData?.ashtakavarga || {};
 
-  const lagnaSign = astro.lagna?.sign?.name || astro.ascendant?.sign || 'Gemini';
-  const moonSign = astro.moonSign?.name || astro.moonSign?.sign || 'Capricorn';
-  const birthNak = astro.birthNakshatra?.name || 'Uttara Ashadha';
-  const sunSign = astro.planets?.find((p: any) => p.planet === 'Sun')?.sign?.name || 'Virgo';
+  const lagnaSign = astro.lagna?.sign?.name || astro.ascendant?.sign || 'Aries';
+  const moonSign = astro.moonSign?.name || astro.moonSign?.sign || 'Aries';
+  const birthNak = astro.birthNakshatra?.name || 'Ashwini';
+  const sunSign = astro.planets?.find((p: any) => p.planet === 'Sun')?.sign?.name || 'Aries';
 
-  const activeMaha = dasha.current?.mahadasha?.planet || dasha.current?.mahadasha?.lord || 'Jupiter';
-  const activeAntar = dasha.current?.antardasha?.planet || dasha.current?.antardasha?.lord || 'Saturn';
+  const activeMaha = dasha.current?.mahadasha?.planet || dasha.current?.mahadasha?.lord || 'Sun';
+  const activeAntar = dasha.current?.antardasha?.planet || dasha.current?.antardasha?.lord || 'Moon';
   const antardashaEndDate = dasha.current?.antardasha?.endDate
     ? (typeof dasha.current.antardasha.endDate === 'string'
         ? dasha.current.antardasha.endDate.split('T')[0]
         : dasha.current.antardasha.endDate.toISOString().split('T')[0])
     : '2027-03-01';
 
-  const archetype = storybook?.primaryArchetype || 'The Strategic Innovator';
+  const archetype = storybook?.primaryArchetype || `${lagnaSign} Strategic Leader`;
   const mission = storybook?.coreLifeMission || 'Mastery through autonomy, intellectual foresight, and building enduring scalable systems.';
+
+  // Dynamic House & SAV calculations
+  const dynamicHouses = useMemo(() => {
+    const lagnaIdx = Math.max(0, ZODIAC_SIGNS.indexOf(lagnaSign));
+    const fourthSign = ZODIAC_SIGNS[(lagnaIdx + 3) % 12];
+    const seventhSign = ZODIAC_SIGNS[(lagnaIdx + 6) % 12];
+    const tenthSign = ZODIAC_SIGNS[(lagnaIdx + 9) % 12];
+    const eleventhSign = ZODIAC_SIGNS[(lagnaIdx + 10) % 12];
+    const twelfthSign = ZODIAC_SIGNS[(lagnaIdx + 11) % 12];
+
+    const sav = ashtakavarga?.sav?.signPoints || {};
+    const fourthPts = sav[fourthSign] || 28;
+    const seventhPts = sav[seventhSign] || 28;
+    const tenthPts = sav[tenthSign] || 32;
+    const eleventhPts = sav[eleventhSign] || 33;
+    const twelfthPts = sav[twelfthSign] || 27;
+
+    const netSurplus = eleventhPts - twelfthPts;
+
+    const amkPlanet = jaimini.charaKarakas?.find((k: any) => k.karaka === 'AmK')?.planet || 'Sun';
+    const dkPlanet = jaimini.charaKarakas?.find((k: any) => k.karaka === 'DK')?.planet || 'Venus';
+
+    // Milestone date fallbacks
+    const careerMile = milestones?.careerLeap?.window || milestones?.careerLeap?.period || '2026–2028';
+    const propertyMile = milestones?.propertyPurchase?.window || milestones?.propertyPurchase?.period || '2027–2029';
+    const marriageMile = milestones?.marriage?.window || milestones?.marriage?.period || '2026–2028';
+
+    return {
+      fourthSign, fourthPts,
+      seventhSign, seventhPts,
+      tenthSign, tenthPts,
+      eleventhSign, eleventhPts,
+      twelfthSign, twelfthPts,
+      netSurplus,
+      amkPlanet, dkPlanet,
+      careerMile, propertyMile, marriageMile
+    };
+  }, [lagnaSign, ashtakavarga, jaimini, milestones]);
+
+  // Dynamic Dosha Profile
+  const doshaProfile = useMemo(() => {
+    if (calculationData?.doshaProfile) return calculationData.doshaProfile;
+    if (calculationData?.lifeDomainAnalysis?.doshaProfile) return calculationData.lifeDomainAnalysis.doshaProfile;
+    try {
+      return calculateAyurvedicDoshaProfile(calculationData);
+    } catch {
+      return {
+        primaryDosha: 'VATA_PITTA' as const,
+        digestiveFireType: 'Tikshna (Intense/Pitta)' as const,
+        percentages: { vata: 45, pitta: 35, kapha: 20 },
+        circadianBioClock: {
+          idealWakeWindow: '05:30 - 06:30',
+          deepWorkWindow: '08:30 - 11:30',
+          peakDigestionWindow: '12:00 - 13:30',
+          windDownWindow: '20:30 - 21:30',
+          idealSleepWindow: '22:00 - 06:00',
+        },
+        adaptogensAndHerbs: ['Ashwagandha', 'CCF Tea', 'Triphala'],
+        sattvicDietGuidelines: {
+          favored: ['Warm spiced grains', 'Ghee', 'Moong dal'],
+          toAvoid: ['Ice-cold beverages', 'Excessive dry/raw salads'],
+        },
+        breathworkProtocol: 'Nadi Shodhana & Sheetali breathwork',
+      };
+    }
+  }, [calculationData]);
 
   const handlePrint = () => {
     window.print();
@@ -117,7 +190,7 @@ export function LifeDossierModal({
 
             <div className="flex flex-col sm:items-end gap-1.5 text-xs font-mono text-slate-300 print:text-black">
               <div className="bg-slate-950/80 px-3 py-1 rounded-lg border border-slate-800 print:bg-white print:border-gray-300">
-                <strong>Lagna:</strong> {lagnaSign} (Dual Air) | <strong>Moon:</strong> {moonSign} ({birthNak})
+                <strong>Lagna:</strong> {lagnaSign} | <strong>Moon:</strong> {moonSign} ({birthNak})
               </div>
               <div className="bg-slate-950/80 px-3 py-1 rounded-lg border border-slate-800 print:bg-white print:border-gray-300">
                 <strong>Sun:</strong> {sunSign} | <strong>Dasha:</strong> {activeMaha}-{activeAntar} (until {antardashaEndDate})
@@ -140,10 +213,12 @@ export function LifeDossierModal({
                   <span>{isHi ? 'करियर एवं नेतृत्व (Career Elevation)' : 'Career & Executive Authority'}</span>
                 </div>
                 <p className="text-xs text-slate-300 print:text-gray-800 leading-relaxed">
-                  दशम भाव में 34 बिंदु व अमात्यकारक बुध स्वायत्त भूमिकाओं, तकनीकी वास्तुकला और रणनीतिक नेतृत्व में उच्च प्रतिष्ठा दिलाते हैं।
+                  {isHi
+                    ? `दशम भाव (${dynamicHouses.tenthSign}) में ${dynamicHouses.tenthPts} बिंदु व अमात्यकारक (${dynamicHouses.amkPlanet}) स्वायत्त भूमिकाओं, तकनीकी वास्तुकला और रणनीतिक नेतृत्व में उच्च साख दिलाते हैं।`
+                    : `10th House in ${dynamicHouses.tenthSign} (${dynamicHouses.tenthPts} SAV bindus) and Amatyakaraka (${dynamicHouses.amkPlanet}) empower sovereign craft and executive authority.`}
                 </p>
                 <div className="text-[11px] font-mono text-emerald-300 print:text-emerald-900 font-semibold">
-                  Prime Leap Window: 2026-10-01 to 2027-04-15
+                  Prime Leap Window: {typeof dynamicHouses.careerMile === 'string' ? dynamicHouses.careerMile : JSON.stringify(dynamicHouses.careerMile)}
                 </div>
               </div>
 
@@ -154,10 +229,12 @@ export function LifeDossierModal({
                   <span>{isHi ? 'धन एवं पूंजी संचय (Wealth Surplus)' : 'Wealth & Capital Retention'}</span>
                 </div>
                 <p className="text-xs text-slate-300 print:text-gray-800 leading-relaxed">
-                  लाभ भाव (35 बिंदु) व्यय भाव (30 बिंदु) से बली है। अचल संपत्ति और व्यवस्थित इक्विटी संचय से स्थायी वित्तीय सुरक्षा बनेगी।
+                  {isHi
+                    ? `लाभ भाव (${dynamicHouses.eleventhSign}, ${dynamicHouses.eleventhPts} बिंदु) व्यय भाव (${dynamicHouses.twelfthSign}, ${dynamicHouses.twelfthPts} बिंदु) से बली है। व्यवस्थित संचय से स्थायी वित्तीय सुरक्षा बनेगी।`
+                    : `11th House of Gains (${dynamicHouses.eleventhSign}, ${dynamicHouses.eleventhPts} bindus) outweighs 12th House (${dynamicHouses.twelfthSign}, ${dynamicHouses.twelfthPts} bindus), confirming net surplus compounding.`}
                 </p>
                 <div className="text-[11px] font-mono text-amber-300 print:text-amber-900 font-semibold">
-                  Capital Surplus Ratio: Favorable (+5 Net SAV)
+                  Capital Surplus Ratio: {dynamicHouses.netSurplus >= 0 ? `+${dynamicHouses.netSurplus} Net SAV Bindus (Favorable)` : `${dynamicHouses.netSurplus} Net SAV Bindus`}
                 </div>
               </div>
 
@@ -168,10 +245,12 @@ export function LifeDossierModal({
                   <span>{isHi ? 'विदेश यात्रा / निवास (Relocation)' : 'Foreign Travel & Global Residence'}</span>
                 </div>
                 <p className="text-xs text-slate-300 print:text-gray-800 leading-relaxed">
-                  मिथुन लग्न और 12वें भाव में 30 बिंदु अंतरराष्ट्रीय कार्यभार, बहुराष्ट्रीय सहयोग और विदेशी यात्रा को अत्यधिक शुभ बनाते हैं।
+                  {isHi
+                    ? `${lagnaSign} लग्न और 12वें भाव (${dynamicHouses.twelfthSign}) में ${dynamicHouses.twelfthPts} बिंदु अंतरराष्ट्रीय कार्यभार, बहुराष्ट्रीय सहयोग और विदेशी यात्रा को सक्रिय करते हैं।`
+                    : `${lagnaSign} Lagna alignment with 12th House (${dynamicHouses.twelfthSign}, ${dynamicHouses.twelfthPts} bindus) facilitates cross-border operations and global relocation.`}
                 </p>
                 <div className="text-[11px] font-mono text-sky-300 print:text-sky-900 font-semibold">
-                  Active Sub-period Window: 2026–2028
+                  Active Dasha Alignment: {activeMaha}-{activeAntar}
                 </div>
               </div>
 
@@ -182,10 +261,12 @@ export function LifeDossierModal({
                   <span>{isHi ? 'विवाह एवं गृह सुख (Union & Property)' : 'Matrimonial Union & Domestic Sanctuary'}</span>
                 </div>
                 <p className="text-xs text-slate-300 print:text-gray-800 leading-relaxed">
-                  नवमांश लग्न और दाराकारक शुक्र बुद्धिमान, व्यावहारिक साथी का संकेत देते हैं। चतुर्थ भाव 2027 में गृह क्रय के अनुकूल है।
+                  {isHi
+                    ? `सप्तम भाव (${dynamicHouses.seventhSign}) व दाराकारक (${dynamicHouses.dkPlanet}) व्यावहारिक साथी का संकेत देते हैं। चतुर्थ भाव (${dynamicHouses.fourthSign}, ${dynamicHouses.fourthPts} बिंदु) गृह निर्माण के अनुकूल है।`
+                    : `7th House in ${dynamicHouses.seventhSign} & Darakaraka (${dynamicHouses.dkPlanet}) indicate mutually supportive partnership. 4th House (${dynamicHouses.fourthSign}, ${dynamicHouses.fourthPts} bindus) anchors domestic peace.`}
                 </p>
                 <div className="text-[11px] font-mono text-rose-300 print:text-rose-900 font-semibold">
-                  Prime Timing: 2026-11-15 to 2027-08-30
+                  Sanctuary Horizon: {typeof dynamicHouses.propertyMile === 'string' ? dynamicHouses.propertyMile : JSON.stringify(dynamicHouses.propertyMile)}
                 </div>
               </div>
             </div>
@@ -200,16 +281,16 @@ export function LifeDossierModal({
 
             <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 print:bg-white print:border-gray-300 space-y-3 text-xs">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
-                <span><strong>Primary Dosha:</strong> Vata-Pitta (45% Vata, 35% Pitta, 20% Kapha)</span>
-                <span><strong>Digestive Fire (Agni):</strong> Tikshnagni (Sharp/Variable)</span>
-                <span><strong>Key Organs:</strong> Brain-Gut Axis & Small Intestines</span>
+                <span><strong>Primary Dosha:</strong> {doshaProfile.primaryDosha.replace('_', '-')} ({doshaProfile.percentages.vata}% Vata, {doshaProfile.percentages.pitta}% Pitta, {doshaProfile.percentages.kapha}% Kapha)</span>
+                <span><strong>Digestive Fire (Agni):</strong> {doshaProfile.digestiveFireType}</span>
+                <span><strong>Constitution:</strong> {lagnaSign} Lagna + Sun in {sunSign}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-300 print:text-gray-800">
                 <div>
-                  <strong>Circadian Energy Schedule:</strong> Deep Work (06:00–10:00) • Main Lunch (12:00–13:30) • Sleep (22:00–06:00).
+                  <strong>Circadian Energy Schedule:</strong> Deep Work ({doshaProfile.circadianBioClock.deepWorkWindow}) • Main Meal ({doshaProfile.circadianBioClock.peakDigestionWindow}) • Sleep ({doshaProfile.circadianBioClock.idealSleepWindow}).
                 </div>
                 <div>
-                  <strong>Sattvic Adaptogens:</strong> Cumin-Coriander-Fennel (CCF) tea post meals • Ashwagandha with warm milk at night.
+                  <strong>Sattvic Adaptogens:</strong> {doshaProfile.adaptogensAndHerbs?.join(', ') || 'CCF Tea, Ashwagandha'}.
                 </div>
               </div>
             </div>
@@ -226,13 +307,13 @@ export function LifeDossierModal({
               <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-950/60 border border-slate-800 print:bg-white print:border-gray-300">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <span className="text-slate-300 print:text-gray-800">
-                  <strong>Surya Arghya:</strong> प्रातः तांबे के लोटे से उगते सूर्य को जल अर्पित करें जिससे आत्मविश्वास, ओजस और प्रशासनिक प्रभाव में वृद्धि हो।
+                  <strong>Daily Solar & Breath Practice:</strong> {isHi ? `प्रातः तांबे के लोटे से सूर्य अर्घ्य एवं ${doshaProfile.breathworkProtocol} मन की एकाग्रता व ओजस को संतुलित रखता है।` : `Morning solar hydration & 10 mins of ${doshaProfile.breathworkProtocol} preserves cognitive stamina and vitality.`}
                 </span>
               </div>
               <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-950/60 border border-slate-800 print:bg-white print:border-gray-300">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <span className="text-slate-300 print:text-gray-800">
-                  <strong>Strategic Autonomy:</strong> जल्दबाजी में सट्टेबाजी या शॉर्टकट से बचें; अपनी दुर्लभ विशेषज्ञता और बौद्धिक स्वायत्तता में दीर्घकालिक निवेश करें।
+                  <strong>Strategic Sovereign Compounding:</strong> {isHi ? `दशम भाव (${dynamicHouses.tenthSign}) और महादशा (${activeMaha}-${activeAntar}) के प्रभाव में तात्कालिक सट्टेबाजी से बचें; अपनी दुर्लभ विशेषज्ञता पर केंद्रित रहें।` : `Leverage active ${activeMaha}-${activeAntar} cycle and 10th House in ${dynamicHouses.tenthSign}; prioritize deep rare skill compounding over short-term speculative noise.`}
                 </span>
               </div>
             </div>

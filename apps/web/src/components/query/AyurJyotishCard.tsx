@@ -17,6 +17,7 @@ import {
   Moon,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
+import { calculateAyurvedicDoshaProfile } from '@vedica/life-domain-engine';
 
 interface AyurJyotishCardProps {
   calculationData: any;
@@ -28,14 +29,51 @@ export function AyurJyotishCard({ calculationData, onAskQuestion }: AyurJyotishC
   const isHi = language === 'hi';
 
   const astro = calculationData?.astrology || {};
-  const lagnaSign = astro.lagna?.sign?.name || astro.ascendant?.sign || 'Gemini';
-  const sunSign = astro.planets?.find((p: any) => p.planet === 'Sun')?.sign?.name || 'Virgo';
-  const moonSign = astro.moonSign?.name || astro.moonSign?.sign || 'Capricorn';
+  const lagnaSign = astro.lagna?.sign?.name || astro.ascendant?.sign || 'Aries';
+  const sunPlanet = astro.planets?.find((p: any) => p.planet === 'Sun' || p.name === 'Sun');
+  const sunSign = sunPlanet?.sign?.name || sunPlanet?.sign || 'Aries';
+  const moonSign = astro.moonSign?.name || astro.moonSign?.sign || 'Aries';
 
-  // Dosha weights
-  const vataPct = 45;
-  const pittaPct = 35;
-  const kaphaPct = 20;
+  const doshaProfile = React.useMemo(() => {
+    if (calculationData?.doshaProfile) return calculationData.doshaProfile;
+    if (calculationData?.lifeDomainAnalysis?.doshaProfile) return calculationData.lifeDomainAnalysis.doshaProfile;
+    try {
+      return calculateAyurvedicDoshaProfile(calculationData);
+    } catch {
+      return {
+        primaryDosha: 'VATA_PITTA' as const,
+        digestiveFireType: 'Tikshna (Intense/Pitta)' as const,
+        percentages: { vata: 45, pitta: 35, kapha: 20 },
+        circadianBioClock: {
+          idealWakeWindow: '05:30 - 06:30',
+          deepWorkWindow: '08:30 - 11:30',
+          peakDigestionWindow: '12:00 - 13:30',
+          windDownWindow: '20:30 - 21:30',
+          idealSleepWindow: '22:00 - 06:00',
+        },
+        adaptogensAndHerbs: ['Ashwagandha', 'Brahmi', 'Triphala', 'Tulsi', 'CCF Tea (Cumin, Coriander, Fennel)'],
+        sattvicDietGuidelines: {
+          favored: ['Warm spiced grains', 'Ghee', 'Moong dal', 'Steamed vegetables'],
+          toAvoid: ['Ice-cold beverages', 'Excessive dry/raw salads'],
+        },
+        breathworkProtocol: 'Nadi Shodhana & Sheetali breathwork',
+      };
+    }
+  }, [calculationData]);
+
+  const vataPct = doshaProfile.percentages?.vata ?? 40;
+  const pittaPct = doshaProfile.percentages?.pitta ?? 35;
+  const kaphaPct = doshaProfile.percentages?.kapha ?? 25;
+
+  const circadian = doshaProfile.circadianBioClock || {
+    idealWakeWindow: '05:30 - 06:30',
+    deepWorkWindow: '08:30 - 11:30',
+    peakDigestionWindow: '12:00 - 13:30',
+    windDownWindow: '20:30 - 21:30',
+    idealSleepWindow: '22:00 - 06:00',
+  };
+
+  const herbs = doshaProfile.adaptogensAndHerbs || ['Ashwagandha', 'CCF Tea'];
 
   return (
     <div className="bg-gradient-to-br from-slate-900 via-teal-950/40 to-slate-950 border border-teal-500/30 rounded-3xl p-6 shadow-2xl space-y-5 relative overflow-hidden">
@@ -54,11 +92,13 @@ export function AyurJyotishCard({ calculationData, onAskQuestion }: AyurJyotishC
                 {isHi ? 'आयुर्-ज्योतिष एवं जैविक घड़ी' : 'Ayur-Jyotish & Bio-Rhythm Advisor'}
               </span>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-teal-900/60 text-teal-300 border border-teal-700/50 font-mono">
-                {lagnaSign} Rising • Sun in {sunSign}
+                {lagnaSign} Rising • Sun in {sunSign} • Moon in {moonSign}
               </span>
             </div>
             <h3 className="text-base sm:text-lg font-bold text-slate-100">
-              {isHi ? 'त्रिदोष प्रकृति एवं पाचक अग्नि प्रोफाइल' : 'Planetary Dosha Balance & Circadian Vitality'}
+              {isHi
+                ? `त्रिदोष प्रकृति (${doshaProfile.primaryDosha.replace('_', '-')}) एवं पाचक अग्नि प्रोफाइल`
+                : `Planetary Dosha Balance (${doshaProfile.primaryDosha.replace('_', '-')}) & Circadian Vitality`}
             </h3>
           </div>
         </div>
@@ -95,8 +135,8 @@ export function AyurJyotishCard({ calculationData, onAskQuestion }: AyurJyotishC
           </div>
           <p className="text-[11px] text-slate-400">
             {isHi
-              ? 'मिथुन लग्न के प्रभाव से विचार गति व नर्वस सिस्टम सक्रिय; विश्राम आवश्यक।'
-              : 'Governs nervous processing, mobility, and intellectual agility; needs grounding.'}
+              ? `${lagnaSign} लग्न व ग्रहीय स्थिति से विचार प्रवाह व मानसिक गति तीव्र; नियमबद्ध दिनचर्या सहायक है।`
+              : `Governs neural pathways, kinetic focus, and creative agility in ${lagnaSign} lagna; benefits from rhythmic grounding.`}
           </p>
         </div>
 
@@ -114,8 +154,8 @@ export function AyurJyotishCard({ calculationData, onAskQuestion }: AyurJyotishC
           </div>
           <p className="text-[11px] text-slate-400">
             {isHi
-              ? 'सूर्य कन्या में होने से जठराग्नि तीक्ष्ण; समय पर भोजन अति आवश्यक है।'
-              : 'Governs digestive fire (Agni) and enzymatic metabolism; peak at noon.'}
+              ? `सूर्य ${sunSign} में होने से जठराग्नि (${doshaProfile.digestiveFireType}) सक्रिय; समय पर सुपाच्य भोजन आवश्यक है।`
+              : `Enzymatic metabolism and executive determination driven by Sun in ${sunSign}; Agni type: ${doshaProfile.digestiveFireType}.`}
           </p>
         </div>
 
@@ -133,8 +173,8 @@ export function AyurJyotishCard({ calculationData, onAskQuestion }: AyurJyotishC
           </div>
           <p className="text-[11px] text-slate-400">
             {isHi
-              ? 'मकर चंद्र से संरचनात्मक मजबूती व सहनशक्ति; सुबह का व्यायाम ऊर्जा देगा।'
-              : 'Structural endurance and cellular lubrication; requires morning movement.'}
+              ? `चंद्र ${moonSign} में होने से संरचनात्मक स्थिरता व भावनात्मक गहराई; प्रातः सक्रियता लाभदायक है।`
+              : `Cellular lubrication, bone density, and stability modulated by Moon in ${moonSign}; energized by early activity.`}
           </p>
         </div>
       </div>
@@ -149,16 +189,16 @@ export function AyurJyotishCard({ calculationData, onAskQuestion }: AyurJyotishC
           </div>
           <div className="space-y-1.5">
             <div className="flex items-center justify-between p-2 rounded-xl bg-slate-900/60 border border-slate-800">
-              <span className="text-slate-300 font-medium">06:00 – 10:00 (Kapha/Vata Shift)</span>
-              <span className="text-teal-300 font-semibold">{isHi ? 'गहन मानसिक कार्य व सूर्य नमस्कार' : 'Deep Work & Solar Hydration'}</span>
+              <span className="text-slate-300 font-medium">{circadian.deepWorkWindow} (Peak Cognition)</span>
+              <span className="text-teal-300 font-semibold">{isHi ? 'गहन बौद्धिक कार्य व फोकस' : 'Deep Analytical Focus'}</span>
             </div>
             <div className="flex items-center justify-between p-2 rounded-xl bg-slate-900/60 border border-slate-800">
-              <span className="text-slate-300 font-medium">12:00 – 13:30 (Peak Pitta)</span>
-              <span className="text-amber-300 font-semibold">{isHi ? 'मुख्य भोजन (सर्वोच्च जठराग्नि)' : 'Main Meal (Peak Agni Fire)'}</span>
+              <span className="text-slate-300 font-medium">{circadian.peakDigestionWindow} (Peak Agni)</span>
+              <span className="text-amber-300 font-semibold">{isHi ? 'मुख्य भोजन (पाचक अग्नि)' : 'Main Meal (Peak Agni)'}</span>
             </div>
             <div className="flex items-center justify-between p-2 rounded-xl bg-slate-900/60 border border-slate-800">
-              <span className="text-slate-300 font-medium">22:00 – 06:00 (Restoration)</span>
-              <span className="text-indigo-300 font-semibold">{isHi ? 'गहरी कोशिकीय पुनर्स्थापना नींद' : 'Cellular Restorative Sleep'}</span>
+              <span className="text-slate-300 font-medium">{circadian.idealSleepWindow} (Restoration)</span>
+              <span className="text-indigo-300 font-semibold">{isHi ? 'कोशिकीय पुनर्स्थापना नींद' : 'Restorative Sleep'}</span>
             </div>
           </div>
         </div>
@@ -173,19 +213,19 @@ export function AyurJyotishCard({ calculationData, onAskQuestion }: AyurJyotishC
             <div className="flex items-start gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
               <span>
-                <strong>CCF Tea (सौंफ-जीरा-धनिया):</strong>{' '}
+                <strong>{herbs[0] || 'CCF Tea'}:</strong>{' '}
                 {isHi
-                  ? 'भोजन के बाद गुनगुना पानी या सौंफ-जीरा पानी पाचन शक्ति को संतुलित रखता है।'
-                  : 'Sip warm Cumin-Coriander-Fennel tea post-meals to eliminate digestive gas.'}
+                  ? 'भोजन के बाद गुनगुना पानी या सौंफ-जीरा-धनिया अर्क पाचन तंत्र को शांत व सक्रिय रखता है।'
+                  : 'Sip warm infusion post-meals to harmonize digestive fire (Agni) and prevent metabolic stagnation.'}
               </span>
             </div>
             <div className="flex items-start gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
               <span>
-                <strong>Ashwagandha / Brahmi:</strong>{' '}
+                <strong>{herbs[1] || 'Ashwagandha'}:</strong>{' '}
                 {isHi
-                  ? 'रात में गुनगुने दूध में चुटकी भर जायफल या अश्वगंधा नर्वस सिस्टम को शांति देता है।'
-                  : 'Warm golden milk with nutmeg calms evening cognitive overdrive.'}
+                  ? `प्राणायाम अभ्यास (${doshaProfile.breathworkProtocol}) के साथ सेवन तंत्रिका तंत्र को शांति देता है।`
+                  : `Complement with daily ${doshaProfile.breathworkProtocol} to calm evening nervous strain.`}
               </span>
             </div>
           </div>
@@ -194,3 +234,4 @@ export function AyurJyotishCard({ calculationData, onAskQuestion }: AyurJyotishC
     </div>
   );
 }
+

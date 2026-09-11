@@ -20,6 +20,7 @@ import {
   Utensils,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
+import { calculateAyurvedicDoshaProfile } from '@vedica/life-domain-engine';
 
 interface DailyLifeBriefingProps {
   calculationData: any;
@@ -37,14 +38,73 @@ export function DailyLifeBriefing({
   onOpenDossier,
 }: DailyLifeBriefingProps) {
   const { language } = useI18n();
+  const isHi = language === 'hi';
   const name = fullName || calculationData?.fullName || 'Seeker';
 
   const astro = calculationData?.astrology || {};
   const dasha = calculationData?.dasha || {};
-  const moonSign = astro.moonSign?.name || astro.moonSign?.sign || 'Capricorn';
-  const lagnaSign = astro.lagna?.sign?.name || astro.ascendant?.sign || 'Gemini';
-  const activeMaha = dasha.current?.mahadasha?.planet || dasha.current?.mahadasha?.lord || 'Jupiter';
-  const activeAntar = dasha.current?.antardasha?.planet || dasha.current?.antardasha?.lord || 'Saturn';
+  const panchanga = calculationData?.panchanga || {};
+  const ashtakavarga = calculationData?.ashtakavarga || {};
+  const jaimini = calculationData?.jaimini || {};
+
+  const moonSign = astro.moonSign?.name || astro.moonSign?.sign || 'Aries';
+  const lagnaSign = astro.lagna?.sign?.name || astro.ascendant?.sign || 'Aries';
+  const birthNak = astro.birthNakshatra?.name || 'Ashwini';
+  const activeMaha = dasha.current?.mahadasha?.planet || dasha.current?.mahadasha?.lord || 'Sun';
+  const activeAntar = dasha.current?.antardasha?.planet || dasha.current?.antardasha?.lord || 'Moon';
+  const amk = jaimini.charaKarakas?.find((k: any) => k.karaka === 'AmK')?.planet || 'Sun';
+
+  // Compute or extract dynamic Dosha Profile
+  const doshaProfile = React.useMemo(() => {
+    if (calculationData?.doshaProfile) return calculationData.doshaProfile;
+    if (calculationData?.lifeDomainAnalysis?.doshaProfile) return calculationData.lifeDomainAnalysis.doshaProfile;
+    try {
+      return calculateAyurvedicDoshaProfile(calculationData);
+    } catch {
+      return {
+        primaryDosha: 'VATA_PITTA' as const,
+        digestiveFireType: 'Tikshna (Intense/Pitta)' as const,
+        percentages: { vata: 45, pitta: 35, kapha: 20 },
+        circadianBioClock: {
+          idealWakeWindow: '05:30 - 06:30',
+          deepWorkWindow: '08:30 - 11:30',
+          peakDigestionWindow: '12:00 - 13:30',
+          windDownWindow: '20:30 - 21:30',
+          idealSleepWindow: '22:00 - 06:00',
+        },
+        sattvicDietGuidelines: {
+          favored: ['Warm spiced grains', 'Ghee', 'Moong dal', 'Steamed vegetables'],
+          toAvoid: ['Ice-cold beverages', 'Excessive dry/raw salads'],
+        },
+        breathworkProtocol: 'Nadi Shodhana & Sheetali breathwork',
+      };
+    }
+  }, [calculationData]);
+
+  // Panchanga Timings
+  const rahuStart = panchanga?.muhurtha?.rahuKalam?.start || '13:30';
+  const rahuEnd = panchanga?.muhurtha?.rahuKalam?.end || '15:00';
+  const rahuWindowStr = `${rahuStart} – ${rahuEnd}`;
+
+  const abhijitStart = panchanga?.muhurtha?.abhijitMuhurta?.start || '11:45';
+  const abhijitEnd = panchanga?.muhurtha?.abhijitMuhurta?.end || '12:35';
+  const peakWindowStr = panchanga?.muhurtha?.abhijitMuhurta
+    ? `${abhijitStart} – ${abhijitEnd}`
+    : doshaProfile?.circadianBioClock?.deepWorkWindow || '09:00 – 11:30';
+
+  const tithiName = panchanga?.tithi?.tithiName || (isHi ? 'शुभ तिथि' : 'Auspicious Lunar Phase');
+  const varaName = panchanga?.vara?.dayName || (isHi ? 'वार' : 'Day');
+
+  // SAV points analysis for dynamic caution
+  const savPoints = ashtakavarga?.sav?.signPoints || {};
+  let minSavSign = '';
+  let minSavPoints = 99;
+  for (const [sName, pts] of Object.entries(savPoints)) {
+    if (typeof pts === 'number' && pts < minSavPoints) {
+      minSavPoints = pts;
+      minSavSign = sName;
+    }
+  }
 
   const [todayDateStr, setTodayDateStr] = React.useState('');
 
@@ -59,7 +119,11 @@ export function DailyLifeBriefing({
     );
   }, [language]);
 
-  const isHi = language === 'hi';
+  const doshaLabel = doshaProfile?.primaryDosha
+    ? doshaProfile.primaryDosha.replace('_', '-')
+    : 'Balanced';
+
+  const favoredDiet = doshaProfile?.sattvicDietGuidelines?.favored?.slice(0, 2).join(', ') || 'Warm sattvic meals';
 
   return (
     <div className="bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-950 border border-indigo-500/30 rounded-3xl p-6 sm:p-7 shadow-2xl relative overflow-hidden space-y-5">
@@ -112,28 +176,28 @@ export function DailyLifeBriefing({
 
           <div className="flex items-center gap-2 text-xs font-mono bg-slate-950/80 px-3 py-1.5 rounded-xl border border-slate-800 text-slate-300">
             <Moon className="w-3.5 h-3.5 text-cyan-400" />
-            <span>{lagnaSign} • Moon in {moonSign}</span>
+            <span>{lagnaSign} Lagna • Moon in {moonSign} ({birthNak})</span>
           </div>
         </div>
       </div>
 
-      {/* Dynamic Decision Windows & Caution Banner (Point 1) */}
+      {/* Dynamic Decision Windows & Caution Banner */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 relative z-10 text-xs">
         {/* Peak Productivity Window */}
         <div className="p-3.5 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 space-y-1.5">
           <div className="flex items-center justify-between font-bold text-emerald-400">
             <span className="flex items-center gap-1.5">
               <Zap className="w-4 h-4" />
-              <span>{isHi ? 'सर्वोत्तम कार्य / बातचीत विंडो' : 'Peak Negotiation Window'}</span>
+              <span>{isHi ? 'सर्वोत्तम कार्य / अभिजित विंडो' : 'Peak Power Window'}</span>
             </span>
             <span className="font-mono text-[11px] bg-emerald-900/60 px-2 py-0.5 rounded-md text-emerald-200">
-              09:30 – 11:45
+              {peakWindowStr}
             </span>
           </div>
           <p className="text-slate-300 text-[11px] leading-relaxed">
             {isHi
-              ? 'सूर्य-गुरु होरा में अनुबंध बातचीत, तकनीकी प्रस्तुति व उच्च-मूल्य निर्णय श्रेष्ठ रहेंगे।'
-              : 'Solar/Jupiter resonance supports high-stakes pitching, deal closures, and strategic execution.'}
+              ? `अभिजित मुहूर्त व ${activeMaha} ऊर्जा में महत्वपूर्ण सौदे, उच्च-स्तरीय बातचीत व रणनीतिक योजना सर्वोत्तम रहेगी।`
+              : `Auspicious window & active ${activeMaha} resonance supports deal closures, strategic presentations, and high-impact actions.`}
           </p>
         </div>
 
@@ -145,13 +209,13 @@ export function DailyLifeBriefing({
               <span>{isHi ? 'राहुकाल व सजगता अवधि' : 'Rahu Kaal / Caution Zone'}</span>
             </span>
             <span className="font-mono text-[11px] bg-amber-900/60 px-2 py-0.5 rounded-md text-amber-200">
-              13:30 – 15:00
+              {rahuWindowStr}
             </span>
           </div>
           <p className="text-slate-300 text-[11px] leading-relaxed">
             {isHi
-              ? 'इस समय नए कानूनी समझौते या सट्टा निवेश से बचें; आंतरिक समीक्षा पर ध्यान दें।'
-              : 'Defer impulsive legal signings and speculative financial transactions during this interval.'}
+              ? 'इस अवधि में नए कानूनी अनुबंध, सट्टा निवेश या उत्तेजक वाद-विवाद से बचें; आंतरिक समीक्षा पर ध्यान दें।'
+              : 'Defer impulsive legal commitments and high-risk speculative actions during this interval.'}
           </p>
         </div>
 
@@ -163,13 +227,13 @@ export function DailyLifeBriefing({
               <span>{isHi ? 'दैनिक जैविक आहार सलाह' : 'Daily Bio-Food & Agni Tip'}</span>
             </span>
             <span className="font-mono text-[11px] bg-teal-900/60 px-2 py-0.5 rounded-md text-teal-200">
-              Pitta-Agni
+              {doshaLabel} Agni
             </span>
           </div>
           <p className="text-slate-300 text-[11px] leading-relaxed">
             {isHi
-              ? 'दोपहर 12:30 बजे ताजा गुनगुना भोजन लें; भोजन के बाद सौंफ-जीरा पानी पिएं।'
-              : 'Consume freshly cooked spiced lunch at peak solar noon; sip warm CCF tea post-meal.'}
+              ? `जठराग्नि के समय (${doshaProfile?.circadianBioClock?.peakDigestionWindow || '12:00–13:30'}) ${favoredDiet} लें; भोजनोपरांत गुनगुना पानी पिएं।`
+              : `Optimal digestion at ${doshaProfile?.circadianBioClock?.peakDigestionWindow || '12:00–13:30'}. Favor ${favoredDiet} to keep Agni balanced.`}
           </p>
         </div>
       </div>
@@ -184,8 +248,8 @@ export function DailyLifeBriefing({
           </div>
           <p className="text-slate-300 text-xs leading-relaxed">
             {isHi
-              ? `${activeMaha}-${activeAntar} चक्र में गहन रणनीतिक कार्यों, तकनीकी शोध और अनुबंध समीक्षा को प्राथमिकता दें।`
-              : `Deep analytical focus, strategic planning, and systematic domain execution thrive under your active ${activeMaha}-${activeAntar} cycle.`}
+              ? `${activeMaha}-${activeAntar} महादशा एवं अमात्यकारक (${amk}) प्रभाव में अपनी कोर विशेषज्ञता और स्वायत्त बौद्धिक कार्यों को प्राथमिकता दें।`
+              : `Deep strategic execution, domain authority, and high-leverage craft thrive under your active ${activeMaha}-${activeAntar} cycle and Amatyakaraka (${amk}).`}
           </p>
         </div>
 
@@ -197,8 +261,12 @@ export function DailyLifeBriefing({
           </div>
           <p className="text-slate-300 text-xs leading-relaxed">
             {isHi
-              ? 'जल्दबाजी में वित्तीय निर्णय या भावनात्मक वाद-विवाद से बचें। बातचीत में स्पष्ट और पारदर्शी सीमाएं रखें।'
-              : 'Avoid speculative impulsive financial commitments or heated arguments today. Maintain structured boundaries.'}
+              ? minSavSign
+                ? `${minSavSign} राशि में कम अष्टकवर्ग बिंदु (${minSavPoints}) हैं; आज असंगठित व्यय एवं तात्कालिक प्रतिक्रियाओं से बचें।`
+                : 'जल्दबाजी में वित्तीय निर्णय या भावनात्मक वाद-विवाद से बचें; स्पष्ट सीमाएं बनाए रखें।'
+              : minSavSign
+                ? `Mindful caution in ${minSavSign} domain (${minSavPoints} SAV points). Avoid hasty financial outlays or ungrounded friction.`
+                : 'Avoid speculative impulsive commitments or reactive arguments today. Maintain clear boundaries.'}
           </p>
         </div>
 
@@ -210,8 +278,8 @@ export function DailyLifeBriefing({
           </div>
           <p className="text-slate-300 text-xs leading-relaxed">
             {isHi
-              ? 'प्रातः सूर्य अर्घ्य एवं १० मिनट का प्राणायाम मन की एकाग्रता व सकारात्मक ऊर्जा को संतुलित रखेगा।'
-              : 'Morning solar hydration & 10 minutes of grounding Anulom Vilom breathwork will preserve high cognitive stamina.'}
+              ? `${lagnaSign} लग्न हेतु प्रातः 10 मिनट ${doshaProfile?.breathworkProtocol || 'प्राणायाम'} व सूर्य नमस्कार मानसिक एकाग्रता को शिखर पर रखेगा।`
+              : `Tailored for ${lagnaSign} Lagna: 10 mins of ${doshaProfile?.breathworkProtocol || 'breathwork'} & morning hydration grounds cognitive stamina.`}
           </p>
         </div>
       </div>
@@ -225,12 +293,12 @@ export function DailyLifeBriefing({
         <div className="flex flex-wrap gap-2">
           {[
             {
-              en: 'What is my main focus area for this week?',
-              hi: 'इस सप्ताह मेरा मुख्य ध्यान किस बात पर होना चाहिए?',
+              en: `What is my main focus area for this ${activeMaha}-${activeAntar} cycle?`,
+              hi: `इस ${activeMaha}-${activeAntar} चक्र में मेरा मुख्य ध्यान किस बात पर होना चाहिए?`,
             },
             {
-              en: 'Explain my Ayurvedic Dosha & Circadian bio-rhythm breakdown',
-              hi: 'मेरी त्रिदोष प्रकृति और 24-घंटे जैविक दिनचर्या बताएं',
+              en: `Explain my ${doshaLabel} Dosha & Circadian bio-rhythm breakdown`,
+              hi: `मेरी ${doshaLabel} त्रिदोष प्रकृति और 24-घंटे जैविक दिनचर्या बताएं`,
             },
             {
               en: 'Simulate Option A vs Option B decision for my career',
@@ -252,3 +320,4 @@ export function DailyLifeBriefing({
     </div>
   );
 }
+
