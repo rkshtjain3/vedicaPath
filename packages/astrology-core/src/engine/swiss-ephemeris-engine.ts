@@ -1,5 +1,5 @@
 import sweph from 'sweph';
-import { getUTCInstant } from '@vedica/shared';
+import { getUTCInstant, BirthTimeInput } from '@vedica/shared';
 import { AstrologyCalculationEngine } from './astrology-engine.interface.js';
 import {
   AscendantDetails,
@@ -139,3 +139,46 @@ export class SwissEphemerisEngine implements AstrologyCalculationEngine {
     };
   }
 }
+
+export function calculateAstronomicalSunTimes(input: {
+  birthTime: BirthTimeInput;
+  location: { latitude: number; longitude: number };
+}): { sunriseMinutes: number; sunsetMinutes: number } | null {
+  try {
+    const c = sweph.constants;
+    const localMidnightUtc = getUTCInstant({
+      dateOfBirth: input.birthTime.dateOfBirth,
+      timeOfBirth: '00:00:00',
+      timezone: input.birthTime.timezone,
+    });
+    const midnightJd = sweph.julday(
+      localMidnightUtc.year,
+      localMidnightUtc.month,
+      localMidnightUtc.day,
+      localMidnightUtc.decimalHour,
+      c.SE_GREG_CAL
+    );
+    const geopos: [number, number, number] = [input.location.longitude, input.location.latitude, 0];
+    const riseRes = sweph.rise_trans(midnightJd, c.SE_SUN, '', c.SEFLG_SWIEPH, c.SE_CALC_RISE, geopos, 0, 0);
+    const setRes = sweph.rise_trans(midnightJd, c.SE_SUN, '', c.SEFLG_SWIEPH, c.SE_CALC_SET, geopos, 0, 0);
+
+    if (
+      !riseRes ||
+      !setRes ||
+      riseRes.flag !== 0 ||
+      setRes.flag !== 0 ||
+      typeof riseRes.data !== 'number' ||
+      typeof setRes.data !== 'number'
+    ) {
+      return null;
+    }
+
+    const sunriseMinutes = Math.round((riseRes.data - midnightJd) * 24 * 60);
+    const sunsetMinutes = Math.round((setRes.data - midnightJd) * 24 * 60);
+
+    return { sunriseMinutes, sunsetMinutes };
+  } catch {
+    return null;
+  }
+}
+

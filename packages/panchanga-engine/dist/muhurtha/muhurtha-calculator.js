@@ -44,8 +44,8 @@ const GULIKA_PARTS = {
     6: 1, // Saturday: 6:00 AM - 7:30 AM
 };
 export function calculateMuhurthaWindows(dayIndex, sunriseMinutes = 360, // 6:00 AM
-sunsetMinutes = 1080 // 6:00 PM
-) {
+sunsetMinutes = 1080, // 6:00 PM
+isAstronomical = false) {
     const dayDuration = sunsetMinutes - sunriseMinutes;
     const partDuration = dayDuration / 8;
     const rahuPart = RAHU_KALAM_PARTS[dayIndex] || 1;
@@ -70,5 +70,7 @@ sunsetMinutes = 1080 // 6:00 PM
         gulikaKalam: createInterval(gulikaStart, gulikaEnd),
         abhijitMuhurta: createInterval(abhijitStart, abhijitEnd),
         brahmaMuhurta: createInterval(brahmaStart, brahmaEnd),
+        calculationMode: isAstronomical ? 'ASTRONOMICAL' : 'STANDARDIZED_FALLBACK',
+        source: isAstronomical ? 'LOCAL_SUNRISE_SUNSET' : 'EQUAL_DAYLIGHT_DIVISION',
     };
 }

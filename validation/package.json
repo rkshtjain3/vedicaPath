@@ -24,6 +24,7 @@
     "@vedica/interpretation-engine": "workspace:*",
     "@vedica/location-engine": "workspace:*",
     "@vedica/numerology-engine": "workspace:*",
+    "@vedica/panchanga-engine": "workspace:*",
     "@vedica/report-engine": "workspace:*",
     "@vedica/rules-engine": "workspace:*",
     "@vedica/shared": "workspace:*",

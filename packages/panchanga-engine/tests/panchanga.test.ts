@@ -89,7 +89,7 @@ describe('Panchanga Engine — 5 Classical Limbs', () => {
 });
 
 describe('Panchanga Engine — Muhurtha Windows & Upagrahas', () => {
-  it('computes Rahu Kalam, Yamaganda, and Brahma Muhurta', () => {
+  it('computes Rahu Kalam, Yamaganda, and Brahma Muhurta with calculation mode metadata', () => {
     // Saturday (dayIndex 6): Rahu Kalam = 9:00 AM - 10:30 AM
     const muhurtha = calculateMuhurthaWindows(6, 360, 1080);
     expect(muhurtha.rahuKalam.start).toBe('9:00 AM');
@@ -97,6 +97,12 @@ describe('Panchanga Engine — Muhurtha Windows & Upagrahas', () => {
     expect(muhurtha.brahmaMuhurta.start).toBe('4:24 AM');
     expect(muhurtha.brahmaMuhurta.end).toBe('5:12 AM');
     expect(muhurtha.abhijitMuhurta.start).toBe('11:36 AM');
+    expect(muhurtha.calculationMode).toBe('STANDARDIZED_FALLBACK');
+    expect(muhurtha.source).toBe('EQUAL_DAYLIGHT_DIVISION');
+
+    const astroMuhurtha = calculateMuhurthaWindows(6, 371, 1098, true);
+    expect(astroMuhurtha.calculationMode).toBe('ASTRONOMICAL');
+    expect(astroMuhurtha.source).toBe('LOCAL_SUNRISE_SUNSET');
   });
 
   it('computes Mandi and Gulika Sphutas deterministically', () => {

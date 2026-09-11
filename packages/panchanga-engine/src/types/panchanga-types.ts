@@ -82,6 +82,8 @@ export interface MuhurthaWindows {
   brahmaMuhurta: TimeInterval;
   amritKalam?: TimeInterval;
   durmuhurtham?: TimeInterval[];
+  calculationMode: 'ASTRONOMICAL' | 'STANDARDIZED_FALLBACK';
+  source: 'LOCAL_SUNRISE_SUNSET' | 'EQUAL_DAYLIGHT_DIVISION';
 }
 
 export interface UpagrahaPositions {

@@ -1,3 +1,4 @@
+import { calculateAstronomicalSunTimes } from '@vedica/astrology-core';
 import { calculateTithi } from './tithi/tithi-calculator.js';
 import { calculateVara } from './vara/vara-calculator.js';
 import { calculateNakshatraPanchanga } from './nakshatra/nakshatra-panchanga.js';
@@ -19,8 +20,20 @@ export function evaluatePanchanga(context) {
     const nakshatra = calculateNakshatraPanchanga(moonLongitude);
     const yoga = calculateYoga(sunLongitude, moonLongitude);
     const karana = calculateKarana(sunLongitude, moonLongitude);
+    // 2. Astronomical Sunrise/Sunset Determination
+    let sunriseMinutes = context.sunriseMinutes;
+    let sunsetMinutes = context.sunsetMinutes;
+    let isAstronomical = sunriseMinutes !== undefined && sunsetMinutes !== undefined;
+    if (!isAstronomical && chart.input?.location && chart.input?.birthTime) {
+        const sunTimes = calculateAstronomicalSunTimes(chart.input);
+        if (sunTimes) {
+            sunriseMinutes = sunTimes.sunriseMinutes;
+            sunsetMinutes = sunTimes.sunsetMinutes;
+            isAstronomical = true;
+        }
+    }
     // 2. Muhurtha Windows
-    const muhurtha = calculateMuhurthaWindows(vara.dayIndex, context.sunriseMinutes ?? 360, context.sunsetMinutes ?? 1080);
+    const muhurtha = calculateMuhurthaWindows(vara.dayIndex, sunriseMinutes ?? 360, sunsetMinutes ?? 1080, isAstronomical);
     // 3. Upagrahas (Mandi & Gulika)
     const sunHouse = Math.floor(((sunLongitude - lagnaLongitude + 360) % 360) / 30) + 1;
     const isDayBirth = sunHouse >= 7 && sunHouse <= 12;
