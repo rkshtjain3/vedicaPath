@@ -1,0 +1,30 @@
+{
+  "name": "@vedica/timing-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vedica/analysis-engine": "workspace:*",
+    "@vedica/ashtakavarga-engine": "workspace:*",
+    "@vedica/astrology-core": "workspace:*",
+    "@vedica/dasha-engine": "workspace:*",
+    "@vedica/rules-engine": "workspace:*",
+    "@vedica/shared": "workspace:*",
+    "sweph": "^2.10.3-8"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

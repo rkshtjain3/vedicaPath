@@ -1,0 +1,15 @@
+{
+  "id": "CASE-006",
+  "description": "High latitude birth (Oslo, Norway 59.91° N)",
+  "category": "High latitude birth",
+  "input": {
+    "dateOfBirth": "1985-12-21",
+    "timeOfBirth": "12:00:00",
+    "latitude": 59.9139,
+    "longitude": 10.7522,
+    "timezone": "Europe/Oslo",
+    "locationName": "Oslo, Norway"
+  },
+  "calculationProfile": "personal-vedic-v1",
+  "status": "NOT_VALIDATED"
+}

@@ -1,0 +1,18 @@
+{
+  "id": "CASE-004",
+  "description": "Moon Nakshatra boundary test near 13°20' cusp",
+  "category": "NAKSHATRA_BOUNDARY",
+  "sourceType": "REAL_WORLD_BENCHMARK",
+  "source": {
+    "application": "JHora 8.0",
+    "calculationProfile": "personal-vedic-v1"
+  },
+  "input": {
+    "dateOfBirth": "1994-11-20",
+    "timeOfBirth": "18:15:00",
+    "latitude": 13.0827,
+    "longitude": 80.2707,
+    "timezone": "Asia/Kolkata"
+  },
+  "status": "NOT_VALIDATED"
+}

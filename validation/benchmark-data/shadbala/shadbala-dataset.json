@@ -1,0 +1,421 @@
+{
+  "schemaVersion": "1.0.0",
+  "datasetVersion": "1.0.0",
+  "category": "SHADBALA",
+  "exportedAt": "2026-08-29T12:46:00.000Z",
+  "metadata": {
+    "title": "JHora 8.0 Parashari Shadbala Reference Benchmark Dataset",
+    "description": "Standardized benchmark suite for testing Shadbala calculation engine against Jagannatha Hora reference values"
+  },
+  "cases": [
+    {
+      "id": "CASE-001",
+      "category": "SHADBALA",
+      "title": "Normal Indian chart (New Delhi birth)",
+      "description": "Normal Indian chart (New Delhi birth)",
+      "status": "REFERENCE_ENTERED",
+      "calculationProfileVersion": "shadbala-jhora-v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0 Parashari Shadbala",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        },
+        "enteredAt": "2026-09-11T03:53:19.229Z",
+        "notes": "Test note for store abstraction"
+      },
+      "createdAt": "2026-08-29T12:00:00.000Z",
+      "updatedAt": "2026-09-11T03:53:19.236Z",
+      "inputSnapshot": {
+        "birthDate": "1985-06-15",
+        "birthTime": "08:30:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1985-06-15T03:00:00.000Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "country": "India",
+        "calculationProfileVersion": "shadbala-jhora-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign"
+      },
+      "inputFingerprint": "4a06aae7c82150b4",
+      "referenceValues": {
+        "Sun": {
+          "naisargikaBala": 60
+        }
+      },
+      "metadata": {
+        "checklistConfirmed": true,
+        "investigationCause": "FORMULA_VARIANT",
+        "investigationNotes": "Test note for store abstraction"
+      }
+    },
+    {
+      "id": "CASE-002",
+      "category": "SHADBALA",
+      "title": "Birth near midnight (Midnight boundary transition)",
+      "description": "Birth near midnight (Midnight chart date boundary transition)",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "shadbala-jhora-v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0 Parashari Shadbala",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-29T12:00:00.000Z",
+      "updatedAt": "2026-09-11T03:53:10.127Z",
+      "inputSnapshot": {
+        "birthDate": "1990-12-31",
+        "birthTime": "23:59:30",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-12-31T18:29:30.000Z",
+        "latitude": 19.076,
+        "longitude": 72.8777,
+        "locationName": "Mumbai, India",
+        "country": "India",
+        "calculationProfileVersion": "shadbala-jhora-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign"
+      },
+      "inputFingerprint": "48b6c4e09f584e03",
+      "referenceValues": {},
+      "metadata": {
+        "checklistConfirmed": false
+      }
+    },
+    {
+      "id": "CASE-003",
+      "category": "SHADBALA",
+      "title": "Exaltation/debilitation boundary chart",
+      "description": "Planet close to exaltation/debilitation boundary (Sun at Aries 9.9° vs Libra 10.1°)",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "shadbala-jhora-v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0 Parashari Shadbala",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-29T12:00:00.000Z",
+      "updatedAt": "2026-09-11T03:53:10.130Z",
+      "inputSnapshot": {
+        "birthDate": "1995-04-24",
+        "birthTime": "06:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1995-04-24T00:30:00.000Z",
+        "latitude": 23.1765,
+        "longitude": 75.7885,
+        "locationName": "Ujjain, India",
+        "country": "India",
+        "calculationProfileVersion": "shadbala-jhora-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign"
+      },
+      "inputFingerprint": "cebfca090e29b1d8",
+      "referenceValues": {},
+      "metadata": {
+        "checklistConfirmed": false
+      }
+    },
+    {
+      "id": "CASE-004",
+      "category": "SHADBALA",
+      "title": "0°/360° Sidereal longitude boundary chart",
+      "description": "Planet close to 0°/360° sidereal longitude (Pisces 29.9° / Aries 0.1°)",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "shadbala-jhora-v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0 Parashari Shadbala",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-29T12:00:00.000Z",
+      "updatedAt": "2026-09-11T03:53:10.134Z",
+      "inputSnapshot": {
+        "birthDate": "1988-03-31",
+        "birthTime": "18:15:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1988-03-31T12:45:00.000Z",
+        "latitude": 25.3176,
+        "longitude": 82.9739,
+        "locationName": "Varanasi, India",
+        "country": "India",
+        "calculationProfileVersion": "shadbala-jhora-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign"
+      },
+      "inputFingerprint": "e300bd731fa147ed",
+      "referenceValues": {},
+      "metadata": {
+        "checklistConfirmed": false
+      }
+    },
+    {
+      "id": "CASE-005",
+      "category": "SHADBALA",
+      "title": "Drekkana boundary chart",
+      "description": "Planet near Drekkana boundary (9.999999° vs 10.000000°)",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "shadbala-jhora-v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0 Parashari Shadbala",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-29T12:00:00.000Z",
+      "updatedAt": "2026-09-11T03:53:10.135Z",
+      "inputSnapshot": {
+        "birthDate": "2000-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "2000-01-01T06:30:00.000Z",
+        "latitude": 12.9716,
+        "longitude": 77.5946,
+        "locationName": "Bengaluru, India",
+        "country": "India",
+        "calculationProfileVersion": "shadbala-jhora-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign"
+      },
+      "inputFingerprint": "4dfb072ca2a358c6",
+      "referenceValues": {},
+      "metadata": {
+        "checklistConfirmed": false
+      }
+    },
+    {
+      "id": "CASE-006",
+      "category": "SHADBALA",
+      "title": "Kendra house placement chart",
+      "description": "Kendra house placement (Planets in houses 1, 4, 7, 10)",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "shadbala-jhora-v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0 Parashari Shadbala",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-29T12:00:00.000Z",
+      "updatedAt": "2026-09-11T03:53:10.137Z",
+      "inputSnapshot": {
+        "birthDate": "1992-08-10",
+        "birthTime": "05:30:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1992-08-10T00:00:00.000Z",
+        "latitude": 22.5726,
+        "longitude": 88.3639,
+        "locationName": "Kolkata, India",
+        "country": "India",
+        "calculationProfileVersion": "shadbala-jhora-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign"
+      },
+      "inputFingerprint": "9a07153b811ef25a",
+      "referenceValues": {},
+      "metadata": {
+        "checklistConfirmed": false
+      }
+    },
+    {
+      "id": "CASE-007",
+      "category": "SHADBALA",
+      "title": "Panaphara placement chart",
+      "description": "Panaphara placement (Planets in houses 2, 5, 8, 11)",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "shadbala-jhora-v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0 Parashari Shadbala",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-29T12:00:00.000Z",
+      "updatedAt": "2026-09-11T03:53:10.139Z",
+      "inputSnapshot": {
+        "birthDate": "1997-11-05",
+        "birthTime": "14:20:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1997-11-05T08:50:00.000Z",
+        "latitude": 13.0827,
+        "longitude": 80.2707,
+        "locationName": "Chennai, India",
+        "country": "India",
+        "calculationProfileVersion": "shadbala-jhora-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign"
+      },
+      "inputFingerprint": "757d5415bfbfbcfc",
+      "referenceValues": {},
+      "metadata": {
+        "checklistConfirmed": false
+      }
+    },
+    {
+      "id": "CASE-008",
+      "category": "SHADBALA",
+      "title": "Apoklima placement chart",
+      "description": "Apoklima placement (Planets in houses 3, 6, 9, 12)",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "shadbala-jhora-v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0 Parashari Shadbala",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-29T12:00:00.000Z",
+      "updatedAt": "2026-09-11T03:53:10.141Z",
+      "inputSnapshot": {
+        "birthDate": "1982-02-18",
+        "birthTime": "21:45:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1982-02-18T16:15:00.000Z",
+        "latitude": 23.0225,
+        "longitude": 72.5714,
+        "locationName": "Ahmedabad, India",
+        "country": "India",
+        "calculationProfileVersion": "shadbala-jhora-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign"
+      },
+      "inputFingerprint": "0a12e3e9d8e7b1a2",
+      "referenceValues": {},
+      "metadata": {
+        "checklistConfirmed": false
+      }
+    },
+    {
+      "id": "CASE-009",
+      "category": "SHADBALA",
+      "title": "Foreign location chart (London birth)",
+      "description": "Foreign location chart (London, UK birth)",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "shadbala-jhora-v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0 Parashari Shadbala",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-29T12:00:00.000Z",
+      "updatedAt": "2026-09-11T03:53:10.142Z",
+      "inputSnapshot": {
+        "birthDate": "1994-07-20",
+        "birthTime": "10:15:00",
+        "timezone": "Europe/London",
+        "utcInstant": "1994-07-20T09:15:00.000Z",
+        "latitude": 51.5074,
+        "longitude": -0.1278,
+        "locationName": "London, UK",
+        "country": "United Kingdom",
+        "calculationProfileVersion": "shadbala-jhora-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign"
+      },
+      "inputFingerprint": "3e9b101c5f87e3a1",
+      "referenceValues": {},
+      "metadata": {
+        "checklistConfirmed": false
+      }
+    },
+    {
+      "id": "CASE-010",
+      "category": "SHADBALA",
+      "title": "DST-sensitive chart (New York birth)",
+      "description": "DST-sensitive chart (New York birth during Daylight Saving Time)",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "shadbala-jhora-v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0 Parashari Shadbala",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-29T12:00:00.000Z",
+      "updatedAt": "2026-09-11T03:53:10.145Z",
+      "inputSnapshot": {
+        "birthDate": "1987-06-01",
+        "birthTime": "15:30:00",
+        "timezone": "America/New_York",
+        "utcInstant": "1987-06-01T19:30:00.000Z",
+        "latitude": 40.7128,
+        "longitude": -74.006,
+        "locationName": "New York, USA",
+        "country": "United States",
+        "calculationProfileVersion": "shadbala-jhora-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign"
+      },
+      "inputFingerprint": "f182c9182390a7e5",
+      "referenceValues": {},
+      "metadata": {
+        "checklistConfirmed": false
+      }
+    }
+  ],
+  "results": {
+    "CASE-001": {
+      "id": "922bee62-6fff-4338-82cb-01c967160e8b",
+      "caseId": "CASE-001",
+      "executedAt": "2026-09-07T14:26:25.843Z",
+      "status": "PASS",
+      "driftResult": {
+        "driftStatus": "MATCH",
+        "storedFingerprint": "4a06aae7c82150b4",
+        "currentFingerprint": "4a06aae7c82150b4",
+        "storedProfileVersion": "shadbala-jhora-v1",
+        "currentProfileVersion": "shadbala-jhora-v1"
+      },
+      "comparisonResults": [
+        {
+          "planetOrKey": "System",
+          "field": "SAV Total Invariant",
+          "expectedValue": 337,
+          "actualValue": 337,
+          "passed": true,
+          "notes": "INTERNAL_INVARIANT_PASS"
+        }
+      ],
+      "summary": {
+        "totalComponents": 1,
+        "passedComponents": 1,
+        "failedComponents": 0,
+        "unvalidatedComponents": 0
+      }
+    }
+  }
+}

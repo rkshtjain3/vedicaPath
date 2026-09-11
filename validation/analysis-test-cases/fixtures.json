@@ -1,0 +1,53 @@
+{
+  "fixtures": [
+    {
+      "id": "FIXTURE-001",
+      "description": "Jupiter exalted in Cancer",
+      "sourceType": "SYNTHETIC_TEST_FIXTURE",
+      "planet": "Jupiter",
+      "sign": "Cancer",
+      "expectedDignity": "EXALTED"
+    },
+    {
+      "id": "FIXTURE-002",
+      "description": "Mars in own sign Aries",
+      "sourceType": "SYNTHETIC_TEST_FIXTURE",
+      "planet": "Mars",
+      "sign": "Aries",
+      "expectedDignity": "OWN_SIGN"
+    },
+    {
+      "id": "FIXTURE-003",
+      "description": "Mars special 4th aspect detected",
+      "sourceType": "SYNTHETIC_TEST_FIXTURE",
+      "sourcePlanet": "Mars",
+      "sourceSignIndex": 0,
+      "targetSignIndex": 3,
+      "expectedAspect": true
+    },
+    {
+      "id": "FIXTURE-004",
+      "description": "Two planets within 8° conjunction orb",
+      "sourceType": "SYNTHETIC_TEST_FIXTURE",
+      "planet1Lon": 10.0,
+      "planet2Lon": 14.5,
+      "expectedConjunction": true
+    },
+    {
+      "id": "FIXTURE-005",
+      "description": "Two planets outside 8° conjunction orb",
+      "sourceType": "SYNTHETIC_TEST_FIXTURE",
+      "planet1Lon": 10.0,
+      "planet2Lon": 30.0,
+      "expectedConjunction": false
+    },
+    {
+      "id": "FIXTURE-006",
+      "description": "Gaja Kesari Yoga positive condition",
+      "sourceType": "SYNTHETIC_TEST_FIXTURE",
+      "moonSign": "Aries",
+      "jupiterSign": "Cancer",
+      "expectedYoga": "Gaja Kesari Yoga"
+    }
+  ]
+}

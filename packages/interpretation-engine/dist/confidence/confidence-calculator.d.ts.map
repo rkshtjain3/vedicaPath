@@ -1,0 +1,1 @@
+{"version":3,"file":"confidence-calculator.d.ts","sourceRoot":"","sources":["../../src/confidence/confidence-calculator.ts"],"names":[],"mappings":"AAAA,OAAO,EACL,oBAAoB,EACpB,kBAAkB,EAClB,oBAAoB,EAErB,MAAM,kCAAkC,CAAC;AAE1C,wBAAgB,mBAAmB,CAAC,MAAM,EAAE;IAC1C,OAAO,EAAE,oBAAoB,EAAE,CAAC;IAChC,YAAY,EAAE,kBAAkB,CAAC;IACjC,aAAa,EAAE,OAAO,CAAC;CACxB,GAAG,oBAAoB,CAmEvB"}

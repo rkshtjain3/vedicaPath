@@ -1,0 +1,28 @@
+{
+  "name": "@vedica/life-domain-engine",
+  "version": "0.1.0",
+  "description": "Deterministic rule-based life domain synthesis engine for Vedica astrology platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vedica/shared": "workspace:*",
+    "@vedica/astrology-core": "workspace:*",
+    "@vedica/analysis-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.1"
+  }
+}

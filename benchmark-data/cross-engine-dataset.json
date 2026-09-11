@@ -1,0 +1,397 @@
+{
+  "schemaVersion": "1.0.0",
+  "datasetVersion": "1.0.0",
+  "category": "ASTROLOGY",
+  "cases": [
+    {
+      "id": "CASE-001",
+      "category": "NORMAL_INDIAN",
+      "title": "Standard Indian Birth",
+      "description": "Typical birth in New Delhi",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-002",
+      "category": "MIDNIGHT_BIRTH",
+      "title": "Exact Midnight Birth",
+      "description": "Birth exactly at 00:00:00 to test date boundaries",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-003",
+      "category": "LAGNA_BOUNDARY",
+      "title": "Lagna Sandhi",
+      "description": "Lagna exactly at the border of two signs",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-004",
+      "category": "NAKSHATRA_BOUNDARY",
+      "title": "Nakshatra Gandanta",
+      "description": "Moon at exact Nakshatra junction",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-005",
+      "category": "DATE_BOUNDARY",
+      "title": "Leap Year Date",
+      "description": "Birth on Feb 29",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-006",
+      "category": "DST_AMBIGUOUS",
+      "title": "DST Ambiguous Hour",
+      "description": "Fall backward DST hour",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-007",
+      "category": "DST_NON_EXISTENT",
+      "title": "DST Non-existent Hour",
+      "description": "Spring forward DST hour",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-008",
+      "category": "FOREIGN_LOCATION",
+      "title": "New York Birth",
+      "description": "Western hemisphere birth",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-009",
+      "category": "FOREIGN_LOCATION",
+      "title": "Sydney Birth",
+      "description": "Southern hemisphere birth",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-010",
+      "category": "HIGH_LATITUDE",
+      "title": "High Latitude Birth",
+      "description": "Oslo birth, testing house systems",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-011",
+      "category": "HISTORICAL",
+      "title": "Historical Birth (pre-1900)",
+      "description": "Testing ephemeris accuracy for older dates",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-012",
+      "category": "EXALTATION_BOUNDARY",
+      "title": "Exaltation Degree Entry",
+      "description": "Planet just entering exaltation degree",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-013",
+      "category": "EXALTATION_BOUNDARY",
+      "title": "Exaltation Degree Exit",
+      "description": "Planet just exiting exaltation degree",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-014",
+      "category": "DEBILITATION_BOUNDARY",
+      "title": "Debilitation Exact",
+      "description": "Planet exactly on debilitation degree",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    },
+    {
+      "id": "CASE-015",
+      "category": "DIVISIONAL_BOUNDARY",
+      "title": "Navamsa Boundary",
+      "description": "Planet changing Navamsa by 0.01 degree",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "v1",
+      "referenceSource": {
+        "software": "JHora",
+        "version": "8.0"
+      },
+      "createdAt": "2026-08-29T13:25:21.983Z",
+      "updatedAt": "2026-08-29T13:25:21.983Z",
+      "inputSnapshot": {
+        "birthDate": "1990-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1990-01-01T06:30:00Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "calculationProfileVersion": "v1"
+      },
+      "inputFingerprint": "01856af61292f0ba",
+      "referenceValues": {}
+    }
+  ]
+}

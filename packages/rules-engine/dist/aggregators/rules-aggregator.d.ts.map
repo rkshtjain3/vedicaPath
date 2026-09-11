@@ -1,0 +1,1 @@
+{"version":3,"file":"rules-aggregator.d.ts","sourceRoot":"","sources":["../../src/aggregators/rules-aggregator.ts"],"names":[],"mappings":"AAAA,OAAO,EAEL,oBAAoB,EAIpB,iBAAiB,EAClB,MAAM,wBAAwB,CAAC;AAChC,OAAO,EAAqB,YAAY,EAAE,MAAM,8BAA8B,CAAC;AAiB/E,wBAAgB,mBAAmB,CACjC,OAAO,EAAE,oBAAoB,EAC7B,OAAO,GAAE,YAAgC,GACxC,iBAAiB,CAyEnB"}

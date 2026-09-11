@@ -1,0 +1,112 @@
+[
+  {
+    "id": "D10-BOUND-001",
+    "description": "0° Aries (Odd sign, Division 1 boundary)",
+    "inputLongitude": 0.0,
+    "expected": {
+      "d1Sign": "Aries",
+      "divisionNumber": 1,
+      "d10Sign": "Aries",
+      "sameD1D10Sign": true
+    }
+  },
+  {
+    "id": "D10-BOUND-002",
+    "description": "2° 59' 59.99\" Aries (Odd sign, Division 1 upper boundary)",
+    "inputLongitude": 2.999999,
+    "expected": {
+      "d1Sign": "Aries",
+      "divisionNumber": 1,
+      "d10Sign": "Aries",
+      "sameD1D10Sign": true
+    }
+  },
+  {
+    "id": "D10-BOUND-003",
+    "description": "3.0° Aries (Odd sign, exact Division 2 start boundary)",
+    "inputLongitude": 3.0,
+    "expected": {
+      "d1Sign": "Aries",
+      "divisionNumber": 2,
+      "d10Sign": "Taurus",
+      "sameD1D10Sign": false
+    }
+  },
+  {
+    "id": "D10-BOUND-004",
+    "description": "29° 59' 59.99\" Aries (Odd sign, Division 10 upper boundary)",
+    "inputLongitude": 29.999999,
+    "expected": {
+      "d1Sign": "Aries",
+      "divisionNumber": 10,
+      "d10Sign": "Capricorn",
+      "sameD1D10Sign": false
+    }
+  },
+  {
+    "id": "D10-BOUND-005",
+    "description": "0° Taurus (Even sign, Division 1 start boundary, starts at 9th sign = Capricorn)",
+    "inputLongitude": 30.0,
+    "expected": {
+      "d1Sign": "Taurus",
+      "divisionNumber": 1,
+      "d10Sign": "Capricorn",
+      "sameD1D10Sign": false
+    }
+  },
+  {
+    "id": "D10-BOUND-006",
+    "description": "3.0° Taurus (Even sign, exact Division 2 start boundary = Aquarius)",
+    "inputLongitude": 33.0,
+    "expected": {
+      "d1Sign": "Taurus",
+      "divisionNumber": 2,
+      "d10Sign": "Aquarius",
+      "sameD1D10Sign": false
+    }
+  },
+  {
+    "id": "D10-BOUND-007",
+    "description": "29° 59' 59.99\" Taurus (Even sign, Division 10 upper boundary = Libra)",
+    "inputLongitude": 59.999999,
+    "expected": {
+      "d1Sign": "Taurus",
+      "divisionNumber": 10,
+      "d10Sign": "Libra",
+      "sameD1D10Sign": false
+    }
+  },
+  {
+    "id": "D10-BOUND-008",
+    "description": "0° Gemini (Odd sign, Division 1 start boundary = Gemini)",
+    "inputLongitude": 60.0,
+    "expected": {
+      "d1Sign": "Gemini",
+      "divisionNumber": 1,
+      "d10Sign": "Gemini",
+      "sameD1D10Sign": true
+    }
+  },
+  {
+    "id": "D10-BOUND-009",
+    "description": "0° Cancer (Even sign, Division 1 start boundary = 9th from Cancer = Pisces)",
+    "inputLongitude": 90.0,
+    "expected": {
+      "d1Sign": "Cancer",
+      "divisionNumber": 1,
+      "d10Sign": "Pisces",
+      "sameD1D10Sign": false
+    }
+  },
+  {
+    "id": "D10-BOUND-010",
+    "description": "0° Leo (Odd sign, Division 1 start boundary = Leo)",
+    "inputLongitude": 120.0,
+    "expected": {
+      "d1Sign": "Leo",
+      "divisionNumber": 1,
+      "d10Sign": "Leo",
+      "sameD1D10Sign": true
+    }
+  }
+]

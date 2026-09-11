@@ -1,0 +1,18 @@
+{
+  "id": "CASE-006",
+  "description": "Foreign birth with Daylight Saving Time (New York, 1990-07-04 10:30 EDT)",
+  "category": "FOREIGN_DST_BIRTH",
+  "sourceType": "REAL_WORLD_BENCHMARK",
+  "source": {
+    "application": "JHora 8.0",
+    "calculationProfile": "personal-vedic-v1"
+  },
+  "input": {
+    "dateOfBirth": "1990-07-04",
+    "timeOfBirth": "10:30:00",
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "timezone": "America/New_York"
+  },
+  "status": "NOT_VALIDATED"
+}

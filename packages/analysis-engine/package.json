@@ -1,0 +1,24 @@
+{
+  "name": "@vedica/analysis-engine",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@vedica/astrology-core": "workspace:*",
+    "@vedica/shared": "workspace:*",
+    "@vedica/yoga-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

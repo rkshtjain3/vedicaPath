@@ -1,0 +1,113 @@
+[
+  {
+    "id": "D10_CASE_001",
+    "description": "D10 10th Lord Exalted in Kendra — SUPPORTIVE",
+    "d10Lagna": { "signId": 5, "signName": "Leo" },
+    "d10TenthSign": { "signId": 2, "signName": "Taurus" },
+    "d10TenthLord": "Venus",
+    "d10TenthLordPlacement": { "signId": 12, "signName": "Pisces", "house": 8 },
+    "expectedDignity": "EXALTED",
+    "expectedHouseCategory": "DUSTHANA",
+    "expectedDignityEffect": "SUPPORTIVE",
+    "expectedHouseCategoryEffect": "CHALLENGING"
+  },
+  {
+    "id": "D10_CASE_002",
+    "description": "D10 10th Lord Own Sign in Kendra — SUPPORTIVE",
+    "d10Lagna": { "signId": 1, "signName": "Aries" },
+    "d10TenthSign": { "signId": 10, "signName": "Capricorn" },
+    "d10TenthLord": "Saturn",
+    "d10TenthLordPlacement": { "signId": 10, "signName": "Capricorn", "house": 10 },
+    "expectedDignity": "OWN_SIGN",
+    "expectedHouseCategory": "KENDRA",
+    "expectedDignityEffect": "SUPPORTIVE",
+    "expectedHouseCategoryEffect": "SUPPORTIVE"
+  },
+  {
+    "id": "D10_CASE_003",
+    "description": "D10 10th Lord Friendly Sign in Trikona — SUPPORTIVE",
+    "d10Lagna": { "signId": 4, "signName": "Cancer" },
+    "d10TenthSign": { "signId": 1, "signName": "Aries" },
+    "d10TenthLord": "Mars",
+    "d10TenthLordPlacement": { "signId": 8, "signName": "Scorpio", "house": 5 },
+    "expectedDignity": "OWN_SIGN",
+    "expectedHouseCategory": "TRIKONA",
+    "expectedDignityEffect": "SUPPORTIVE",
+    "expectedHouseCategoryEffect": "SUPPORTIVE"
+  },
+  {
+    "id": "D10_CASE_004",
+    "description": "D10 10th Lord Neutral Sign — NEUTRAL",
+    "d10Lagna": { "signId": 6, "signName": "Virgo" },
+    "d10TenthSign": { "signId": 3, "signName": "Gemini" },
+    "d10TenthLord": "Mercury",
+    "d10TenthLordPlacement": { "signId": 5, "signName": "Leo", "house": 12 },
+    "expectedDignity": "NEUTRAL_SIGN",
+    "expectedHouseCategory": "DUSTHANA",
+    "expectedDignityEffect": "NEUTRAL",
+    "expectedHouseCategoryEffect": "CHALLENGING"
+  },
+  {
+    "id": "D10_CASE_005",
+    "description": "D10 10th Lord Enemy Sign — CHALLENGING",
+    "d10Lagna": { "signId": 7, "signName": "Libra" },
+    "d10TenthSign": { "signId": 4, "signName": "Cancer" },
+    "d10TenthLord": "Moon",
+    "d10TenthLordPlacement": { "signId": 10, "signName": "Capricorn", "house": 4 },
+    "expectedDignity": "ENEMY_SIGN",
+    "expectedHouseCategory": "KENDRA",
+    "expectedDignityEffect": "CHALLENGING",
+    "expectedHouseCategoryEffect": "SUPPORTIVE"
+  },
+  {
+    "id": "D10_CASE_006",
+    "description": "D10 10th Lord Debilitated — CHALLENGING",
+    "d10Lagna": { "signId": 2, "signName": "Taurus" },
+    "d10TenthSign": { "signId": 11, "signName": "Aquarius" },
+    "d10TenthLord": "Saturn",
+    "d10TenthLordPlacement": { "signId": 1, "signName": "Aries", "house": 12 },
+    "expectedDignity": "DEBILITATED",
+    "expectedHouseCategory": "DUSTHANA",
+    "expectedDignityEffect": "CHALLENGING",
+    "expectedHouseCategoryEffect": "CHALLENGING"
+  },
+  {
+    "id": "D10_CASE_007",
+    "description": "D10 Lagna Lord in Kendra — SUPPORTIVE",
+    "d10Lagna": { "signId": 10, "signName": "Capricorn" },
+    "d10LagnaLord": "Saturn",
+    "d10LagnaLordPlacement": { "signId": 10, "signName": "Capricorn", "house": 1 },
+    "expectedLagnaHouseCategory": "KENDRA",
+    "expectedLagnaEffect": "SUPPORTIVE"
+  },
+  {
+    "id": "D10_CASE_008",
+    "description": "D10 Lagna Lord in Dusthana — CHALLENGING",
+    "d10Lagna": { "signId": 4, "signName": "Cancer" },
+    "d10LagnaLord": "Moon",
+    "d10LagnaLordPlacement": { "signId": 9, "signName": "Sagittarius", "house": 6 },
+    "expectedLagnaHouseCategory": "DUSTHANA",
+    "expectedLagnaEffect": "CHALLENGING"
+  },
+  {
+    "id": "D10_CASE_009",
+    "description": "Mixed signals — Supportive 10th Lord, Challenging Lagna Lord",
+    "expectMixedSignals": true
+  },
+  {
+    "id": "D10_CASE_010",
+    "description": "D1/D10 Same Career Lord",
+    "d1TenthLord": "Saturn",
+    "d10TenthLord": "Saturn",
+    "expectedSamePlanet": true,
+    "expectedEffect": "SUPPORTIVE"
+  },
+  {
+    "id": "D10_CASE_011",
+    "description": "D1/D10 Different Career Lords",
+    "d1TenthLord": "Saturn",
+    "d10TenthLord": "Venus",
+    "expectedSamePlanet": false,
+    "expectedEffect": "NEUTRAL"
+  }
+]

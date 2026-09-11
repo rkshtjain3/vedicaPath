@@ -1,0 +1,26 @@
+import { BirthChart } from '@vedica/astrology-core';
+import { calculateCharaKarakas, analyzeKarakamsha } from './karakas/chara-karaka-calculator.js';
+import { calculateArudhaPadas } from './arudha/arudha-calculator.js';
+import { calculateRashiDrishti } from './drishti/rashi-drishti-calculator.js';
+import { JaiminiReport } from './types/jaimini-types.js';
+
+/**
+ * Calculates a complete deterministic Jaimini Astrology report from a BirthChart.
+ */
+export function evaluateJaimini(
+  birthChart: BirthChart,
+  scheme: '7_KARAKA' | '8_KARAKA' = '7_KARAKA'
+): JaiminiReport {
+  const charaKarakas = calculateCharaKarakas(birthChart, scheme);
+  const karakamsha = analyzeKarakamsha(birthChart, charaKarakas);
+  const arudhaPadas = calculateArudhaPadas(birthChart);
+  const rashiDrishti = calculateRashiDrishti(birthChart);
+
+  return {
+    scheme,
+    charaKarakas,
+    karakamsha,
+    arudhaPadas,
+    rashiDrishti,
+  };
+}

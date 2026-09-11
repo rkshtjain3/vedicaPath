@@ -1,0 +1,1 @@
+{"version":3,"file":"divisional-runner.d.ts","sourceRoot":"","sources":["../../src/benchmark-runners/divisional-runner.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,aAAa,EAAE,yBAAyB,EAAE,MAAM,yBAAyB,CAAC;AACnF,OAAO,EAAE,eAAe,EAAE,MAAM,iCAAiC,CAAC;AAElE,wBAAgB,sBAAsB,CACpC,QAAQ,EAAE,aAAa,EACvB,EAAE,CAAC,EAAE,eAAe,EACpB,GAAG,CAAC,EAAE,eAAe,GACpB,yBAAyB,EAAE,CA4C7B"}

@@ -1,0 +1,99 @@
+import { PlanetName } from '@vedica/astrology-core';
+
+export interface ExaltationDebilitationPoint {
+  planet: PlanetName;
+  exaltationSign: string;
+  exaltationDegree: number; // degree in sign (e.g. 10 for Aries 10°)
+  exaltationLongitude: number; // absolute 0°-360° sidereal longitude
+  debilitationSign: string;
+  debilitationDegree: number;
+  debilitationLongitude: number; // absolute 0°-360° (exaltationLongitude + 180) % 360
+}
+
+/**
+ * Classical Planetary Exaltation and Debilitation Deepest Longitudes (Paramochcha & Paramaneecha)
+ * Source: Brihat Parasara Hora Shastra (BPHS) & Surya Siddhanta.
+ */
+export const EXALTATION_DEBILITATION_POINTS: Record<PlanetName, ExaltationDebilitationPoint> = {
+  Sun: {
+    planet: 'Sun',
+    exaltationSign: 'Aries',
+    exaltationDegree: 10,
+    exaltationLongitude: 10,
+    debilitationSign: 'Libra',
+    debilitationDegree: 10,
+    debilitationLongitude: 190,
+  },
+  Moon: {
+    planet: 'Moon',
+    exaltationSign: 'Taurus',
+    exaltationDegree: 3,
+    exaltationLongitude: 33,
+    debilitationSign: 'Scorpio',
+    debilitationDegree: 3,
+    debilitationLongitude: 213,
+  },
+  Mars: {
+    planet: 'Mars',
+    exaltationSign: 'Capricorn',
+    exaltationDegree: 28,
+    exaltationLongitude: 298,
+    debilitationSign: 'Cancer',
+    debilitationDegree: 28,
+    debilitationLongitude: 118,
+  },
+  Mercury: {
+    planet: 'Mercury',
+    exaltationSign: 'Virgo',
+    exaltationDegree: 15,
+    exaltationLongitude: 165,
+    debilitationSign: 'Pisces',
+    debilitationDegree: 15,
+    debilitationLongitude: 345,
+  },
+  Jupiter: {
+    planet: 'Jupiter',
+    exaltationSign: 'Cancer',
+    exaltationDegree: 5,
+    exaltationLongitude: 95,
+    debilitationSign: 'Capricorn',
+    debilitationDegree: 5,
+    debilitationLongitude: 275,
+  },
+  Venus: {
+    planet: 'Venus',
+    exaltationSign: 'Pisces',
+    exaltationDegree: 27,
+    exaltationLongitude: 357,
+    debilitationSign: 'Virgo',
+    debilitationDegree: 27,
+    debilitationLongitude: 177,
+  },
+  Saturn: {
+    planet: 'Saturn',
+    exaltationSign: 'Libra',
+    exaltationDegree: 20,
+    exaltationLongitude: 200,
+    debilitationSign: 'Aries',
+    debilitationDegree: 20,
+    debilitationLongitude: 20,
+  },
+  Rahu: {
+    planet: 'Rahu',
+    exaltationSign: 'Taurus',
+    exaltationDegree: 20,
+    exaltationLongitude: 50,
+    debilitationSign: 'Scorpio',
+    debilitationDegree: 20,
+    debilitationLongitude: 230,
+  },
+  Ketu: {
+    planet: 'Ketu',
+    exaltationSign: 'Scorpio',
+    exaltationDegree: 20,
+    exaltationLongitude: 230,
+    debilitationSign: 'Taurus',
+    debilitationDegree: 20,
+    debilitationLongitude: 50,
+  },
+};

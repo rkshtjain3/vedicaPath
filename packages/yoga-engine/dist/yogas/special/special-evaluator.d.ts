@@ -1,0 +1,2 @@
+import { YogaResult, PlanetFactInput, HouseLordFactInput, ConjunctionResultInput, VedicAspectInput, PlanetDignityInput } from '../../types/yoga-types.js';
+export declare function evaluateSpecialYogas(planetFacts: PlanetFactInput[], houseLordFacts: HouseLordFactInput[], conjunctions: ConjunctionResultInput[], aspects: VedicAspectInput[], dignities: PlanetDignityInput[], methodologyVersion: string): YogaResult[];

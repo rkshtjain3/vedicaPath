@@ -1,0 +1,19 @@
+[
+  {
+    "id": "raja-test-01",
+    "name": "Dharma-Karmadhipati Raja Yoga",
+    "birthTime": {
+      "dateOfBirth": "1996-09-23",
+      "timeOfBirth": "14:30:00",
+      "timezone": "Asia/Kolkata"
+    },
+    "location": {
+      "name": "New Delhi",
+      "latitude": 28.6139,
+      "longitude": 77.209,
+      "timezone": "Asia/Kolkata"
+    },
+    "expectedDetectedYogas": ["DHARMA_KARMADHIPATI_YOGA", "KENDRA_TRIKONA_RAJA_YOGA"],
+    "expectedUndetectedYogas": []
+  }
+]

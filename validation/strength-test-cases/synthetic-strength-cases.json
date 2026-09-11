@@ -1,0 +1,36 @@
+[
+  {
+    "id": "CASE_1_DELHI_1990",
+    "description": "Standard New Delhi chart for testing planetary strength and relationships",
+    "input": {
+      "dateOfBirth": "1990-01-01",
+      "timeOfBirth": "10:30:00",
+      "timezone": "Asia/Kolkata",
+      "latitude": 28.6139,
+      "longitude": 77.209,
+      "locationName": "New Delhi, India"
+    },
+    "expected": {
+      "profileVersion": "personal-strength-v1",
+      "planetCount": 7,
+      "relationshipCount": 7
+    }
+  },
+  {
+    "id": "CASE_2_LONDON_1985",
+    "description": "Historical London chart testing strength classification determinism",
+    "input": {
+      "dateOfBirth": "1985-06-15",
+      "timeOfBirth": "14:45:00",
+      "timezone": "Europe/London",
+      "latitude": 51.5074,
+      "longitude": -0.1278,
+      "locationName": "London, UK"
+    },
+    "expected": {
+      "profileVersion": "personal-strength-v1",
+      "planetCount": 7,
+      "relationshipCount": 7
+    }
+  }
+]

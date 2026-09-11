@@ -1,0 +1,81 @@
+@media print {
+  /* Hide non-printable navigation, header tabs, and action buttons */
+  header,
+  nav,
+  button,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Reset body and background for crisp paper printing */
+  body,
+  html,
+  #root,
+  main {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Printable container layout */
+  .printable-report {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 20mm !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Ensure headings remain distinct */
+  h1, h2, h3, h4 {
+    color: #0f172a !important;
+    page-break-after: avoid !important;
+  }
+
+  /* Prevent awkward page breaks inside chart SVG containers or tables */
+  .print-break-inside-avoid,
+  .printable-section,
+  svg,
+  table,
+  tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Page break rules for report sections */
+  .print-page-break-before {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  /* High contrast colors for SVG chart elements in print mode */
+  svg text {
+    fill: #0f172a !important;
+  }
+
+  svg polygon,
+  svg rect {
+    stroke: #334155 !important;
+  }
+
+  /* Tables formatting */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  th, td {
+    border: 1px solid #cbd5e1 !important;
+    padding: 6px 10px !important;
+    color: #0f172a !important;
+  }
+
+  th {
+    background-color: #f1f5f9 !important;
+  }
+}

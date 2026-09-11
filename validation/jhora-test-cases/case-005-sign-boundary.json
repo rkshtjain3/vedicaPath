@@ -1,0 +1,18 @@
+{
+  "id": "CASE-005",
+  "description": "Zodiac sign boundary cusp test near 29°59' / 0°00'",
+  "category": "SIGN_BOUNDARY",
+  "sourceType": "REAL_WORLD_BENCHMARK",
+  "source": {
+    "application": "JHora 8.0",
+    "calculationProfile": "personal-vedic-v1"
+  },
+  "input": {
+    "dateOfBirth": "2005-04-14",
+    "timeOfBirth": "00:10:00",
+    "latitude": 22.5726,
+    "longitude": 88.3639,
+    "timezone": "Asia/Kolkata"
+  },
+  "status": "NOT_VALIDATED"
+}

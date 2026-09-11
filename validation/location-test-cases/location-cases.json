@@ -1,0 +1,142 @@
+[
+  {
+    "id": "loc-001-panipat-in",
+    "countryCode": "IN",
+    "countryName": "India",
+    "city": "Panipat",
+    "region": "Haryana",
+    "expectedLatitude": 29.3909,
+    "expectedLongitude": 76.9635,
+    "expectedTimezone": "Asia/Kolkata"
+  },
+  {
+    "id": "loc-002-newdelhi-in",
+    "countryCode": "IN",
+    "countryName": "India",
+    "city": "New Delhi",
+    "region": "Delhi",
+    "expectedLatitude": 28.6139,
+    "expectedLongitude": 77.209,
+    "expectedTimezone": "Asia/Kolkata"
+  },
+  {
+    "id": "loc-003-mumbai-in",
+    "countryCode": "IN",
+    "countryName": "India",
+    "city": "Mumbai",
+    "region": "Maharashtra",
+    "expectedLatitude": 19.076,
+    "expectedLongitude": 72.8777,
+    "expectedTimezone": "Asia/Kolkata"
+  },
+  {
+    "id": "loc-004-chennai-in",
+    "countryCode": "IN",
+    "countryName": "India",
+    "city": "Chennai",
+    "region": "Tamil Nadu",
+    "expectedLatitude": 13.0827,
+    "expectedLongitude": 80.2707,
+    "expectedTimezone": "Asia/Kolkata"
+  },
+  {
+    "id": "loc-005-newyork-us",
+    "countryCode": "US",
+    "countryName": "United States",
+    "city": "New York",
+    "region": "New York",
+    "expectedLatitude": 40.7128,
+    "expectedLongitude": -74.006,
+    "expectedTimezone": "America/New_York"
+  },
+  {
+    "id": "loc-006-losangeles-us",
+    "countryCode": "US",
+    "countryName": "United States",
+    "city": "Los Angeles",
+    "region": "California",
+    "expectedLatitude": 34.0522,
+    "expectedLongitude": -118.2437,
+    "expectedTimezone": "America/Los_Angeles"
+  },
+  {
+    "id": "loc-007-london-uk",
+    "countryCode": "GB",
+    "countryName": "United Kingdom",
+    "city": "London",
+    "region": "England",
+    "expectedLatitude": 51.5074,
+    "expectedLongitude": -0.1278,
+    "expectedTimezone": "Europe/London"
+  },
+  {
+    "id": "loc-008-london-on-ca",
+    "countryCode": "CA",
+    "countryName": "Canada",
+    "city": "London",
+    "region": "Ontario",
+    "expectedLatitude": 42.9849,
+    "expectedLongitude": -81.2453,
+    "expectedTimezone": "America/Toronto"
+  },
+  {
+    "id": "loc-009-toronto-ca",
+    "countryCode": "CA",
+    "countryName": "Canada",
+    "city": "Toronto",
+    "region": "Ontario",
+    "expectedLatitude": 43.6532,
+    "expectedLongitude": -79.3832,
+    "expectedTimezone": "America/Toronto"
+  },
+  {
+    "id": "loc-010-sydney-au",
+    "countryCode": "AU",
+    "countryName": "Australia",
+    "city": "Sydney",
+    "region": "New South Wales",
+    "expectedLatitude": -33.8688,
+    "expectedLongitude": 151.2093,
+    "expectedTimezone": "Australia/Sydney"
+  },
+  {
+    "id": "loc-011-melbourne-au",
+    "countryCode": "AU",
+    "countryName": "Australia",
+    "city": "Melbourne",
+    "region": "Victoria",
+    "expectedLatitude": -37.8136,
+    "expectedLongitude": 144.9631,
+    "expectedTimezone": "Australia/Melbourne"
+  },
+  {
+    "id": "loc-012-tokyo-jp",
+    "countryCode": "JP",
+    "countryName": "Japan",
+    "city": "Tokyo",
+    "region": "Kanto",
+    "expectedLatitude": 35.6762,
+    "expectedLongitude": 139.6503,
+    "expectedTimezone": "Asia/Tokyo"
+  },
+  {
+    "id": "loc-013-berlin-de",
+    "countryCode": "DE",
+    "countryName": "Germany",
+    "city": "Berlin",
+    "region": "Berlin",
+    "expectedLatitude": 52.52,
+    "expectedLongitude": 13.405,
+    "expectedTimezone": "Europe/Berlin"
+  },
+  {
+    "id": "loc-014-dubai-ae",
+    "countryCode": "AE",
+    "countryName": "United Arab Emirates",
+    "city": "Dubai",
+    "region": "Dubai",
+    "expectedLatitude": 25.2048,
+    "expectedLongitude": 55.2708,
+    "expectedTimezone": "Asia/Dubai"
+  }
+]

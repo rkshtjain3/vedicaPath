@@ -1,0 +1,19 @@
+[
+  {
+    "id": "special-test-01",
+    "name": "Budha-Aditya Yoga",
+    "birthTime": {
+      "dateOfBirth": "1996-09-18",
+      "timeOfBirth": "12:00:00",
+      "timezone": "Asia/Kolkata"
+    },
+    "location": {
+      "name": "New Delhi",
+      "latitude": 28.6139,
+      "longitude": 77.209,
+      "timezone": "Asia/Kolkata"
+    },
+    "expectedDetectedYogas": ["BUDHA_ADITYA_YOGA"],
+    "expectedUndetectedYogas": []
+  }
+]

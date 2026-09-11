@@ -1,0 +1,17 @@
+{
+  "id": "DASHA-001",
+  "benchmarkChartId": "CASE-001",
+  "sourceType": "REAL_WORLD_BENCHMARK",
+  "testInstant": "2026-08-29T12:00:00.000Z",
+  "input": {
+    "moonLongitude": 285.5141,
+    "birthInstant": "1996-09-23T09:00:00.000Z"
+  },
+  "expected": {
+    "birthDashaLord": "Moon",
+    "currentMahadasha": "Rahu",
+    "currentAntardasha": "Mars",
+    "currentPratyantardasha": "Rahu"
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/caching/location-cache.ts","./src/countries/country-dataset.ts","./src/geocoding/composite-location-provider.ts","./src/providers/open-meteo-provider.ts","./src/providers/static-fallback-provider.ts","./src/timezone/timezone-resolver.ts","./src/types/location-engine-types.ts","./src/validation/location-validator.ts"],"version":"5.9.3"}

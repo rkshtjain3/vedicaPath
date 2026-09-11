@@ -1,0 +1,1 @@
+{"version":3,"file":"calculation-profile.js","sourceRoot":"","sources":["../../src/settings/calculation-profile.ts"],"names":[],"mappings":"AAgBA,MAAM,CAAC,MAAM,iBAAiB,GAAuB;IACnD,OAAO,EAAE,mBAAmB;IAC5B,IAAI,EAAE,4BAA4B;IAClC,MAAM,EAAE,UAAU;IAClB,QAAQ,EAAE,QAAQ;IAClB,QAAQ,EAAE,MAAM;IAChB,WAAW,EAAE,YAAY;IACzB,WAAW,EAAE,aAAa;CAC3B,CAAC;AAEF,MAAM,CAAC,MAAM,2BAA2B,GAAG,iBAAiB,CAAC"}

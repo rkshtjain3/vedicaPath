@@ -1,0 +1,476 @@
+{
+  "schemaVersion": "1.0.0",
+  "datasetVersion": "chart-reference-dataset-v2",
+  "referenceRevision": 2,
+  "category": "ASTROLOGY_CHART",
+  "exportedAt": "2026-08-30T13:00:00.000Z",
+  "metadata": {
+    "title": "Birth Chart Accuracy & Cross-Software Validation Benchmark Dataset",
+    "description": "Standardized benchmark suite for testing birth chart longitudes, Lagna, Nakshatras, Vimshottari Dasha, and D1-D30 Divisional Charts."
+  },
+  "cases": [
+    {
+      "id": "CASE-001",
+      "category": "ASTROLOGY_CHART",
+      "title": "Normal Indian Birth (New Delhi)",
+      "description": "Standard Indian natal birth chart with Lahiri ayanamsha in New Delhi.",
+      "status": "REFERENCE_ENTERED",
+      "calculationProfileVersion": "personal-vedic-v1",
+      "referenceSource": {
+        "software": "Jagannatha Hora",
+        "version": "8.0",
+        "sourceSoftware": "Jagannatha Hora",
+        "sourceVersion": "8.0",
+        "sourceDate": "2026-08-30",
+        "sourceConfiguration": {
+          "zodiac": "SIDEREAL",
+          "ayanamsha": "Lahiri",
+          "houseSystem": "Whole Sign",
+          "nodeCalculation": "TRUE",
+          "ephemeris": "Swiss Ephemeris v2.10"
+        },
+        "dataEntryMethod": "VERIFIED_SOFTWARE_BENCHMARK",
+        "referenceCapturedBy": "Vedica Benchmark Suite",
+        "verificationStatus": "VERIFIED",
+        "enteredBy": "Vedica Validation Lead",
+        "enteredAt": "2026-08-30T11:30:00.000Z",
+        "notes": "Verified reference values obtained from Jagannatha Hora v8.0 / Swiss Ephemeris v2.10 Lahiri sidereal calculations."
+      },
+      "createdAt": "2026-08-30T11:00:00.000Z",
+      "updatedAt": "2026-08-30T11:30:00.000Z",
+      "inputSnapshot": {
+        "birthDate": "1985-06-15",
+        "birthTime": "08:30:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1985-06-15T03:00:00.000Z",
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "locationName": "New Delhi, India",
+        "country": "India",
+        "city": "New Delhi",
+        "calculationProfileVersion": "personal-vedic-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign",
+        "calculationConfig": {
+          "zodiacType": "SIDEREAL",
+          "ayanamsha": "Lahiri",
+          "houseSystem": "Whole Sign",
+          "nodeCalculation": "TRUE",
+          "ephemerisVersion": "Swiss Ephemeris v2.10",
+          "calculationProfileVersion": "personal-vedic-v1"
+        }
+      },
+      "inputFingerprint": "case001fingerprint",
+      "referenceValues": {
+        "astrology": {
+          "ascendantLongitude": 100.5302,
+          "ascendantSign": "Cancer",
+          "planetaryLongitudes": {
+            "Sun": 60.3121,
+            "Moon": 22.5193,
+            "Mars": 70.1309,
+            "Mercury": 69.4056,
+            "Jupiter": 293.1478,
+            "Venus": 14.5854,
+            "Saturn": 209.0792,
+            "Rahu": 24.2191,
+            "Ketu": 204.2191
+          },
+          "planetarySigns": {
+            "Sun": "Gemini",
+            "Moon": "Aries",
+            "Mars": "Gemini",
+            "Mercury": "Gemini",
+            "Jupiter": "Capricorn",
+            "Venus": "Aries",
+            "Saturn": "Libra",
+            "Rahu": "Aries",
+            "Ketu": "Libra"
+          }
+        },
+        "nakshatras": {
+          "Sun": "Mrigashira",
+          "Moon": "Bharani",
+          "Mars": "Ardra",
+          "Mercury": "Ardra",
+          "Jupiter": "Shravana",
+          "Venus": "Bharani",
+          "Saturn": "Vishakha",
+          "Rahu": "Bharani",
+          "Ketu": "Vishakha"
+        },
+        "padas": {
+          "Sun": 3,
+          "Moon": 3,
+          "Mars": 2,
+          "Mercury": 1,
+          "Jupiter": 4,
+          "Venus": 1,
+          "Saturn": 3,
+          "Rahu": 4,
+          "Ketu": 2
+        },
+        "dasha": {
+          "birthNakshatra": "Bharani",
+          "dashaStartingLord": "Venus",
+          "balanceYearsAtBirth": "6.22"
+        },
+        "divisionalCharts": {
+          "D1": {
+            "Sun": "Gemini",
+            "Moon": "Aries",
+            "Mars": "Gemini",
+            "Mercury": "Gemini",
+            "Jupiter": "Capricorn",
+            "Venus": "Aries",
+            "Saturn": "Libra",
+            "Rahu": "Aries",
+            "Ketu": "Libra"
+          },
+          "D2": {
+            "Sun": "Leo",
+            "Moon": "Cancer",
+            "Mars": "Leo",
+            "Mercury": "Leo",
+            "Jupiter": "Leo",
+            "Venus": "Leo",
+            "Saturn": "Cancer",
+            "Rahu": "Cancer",
+            "Ketu": "Cancer"
+          },
+          "D3": {
+            "Sun": "Gemini",
+            "Moon": "Sagittarius",
+            "Mars": "Libra",
+            "Mercury": "Gemini",
+            "Jupiter": "Virgo",
+            "Venus": "Leo",
+            "Saturn": "Gemini",
+            "Rahu": "Sagittarius",
+            "Ketu": "Gemini"
+          },
+          "D7": {
+            "Sun": "Gemini",
+            "Moon": "Virgo",
+            "Mars": "Leo",
+            "Mercury": "Leo",
+            "Jupiter": "Sagittarius",
+            "Venus": "Cancer",
+            "Saturn": "Aries",
+            "Rahu": "Virgo",
+            "Ketu": "Pisces"
+          },
+          "D9": {
+            "Sun": "Libra",
+            "Moon": "Libra",
+            "Mars": "Capricorn",
+            "Mercury": "Sagittarius",
+            "Jupiter": "Cancer",
+            "Venus": "Leo",
+            "Saturn": "Gemini",
+            "Rahu": "Scorpio",
+            "Ketu": "Taurus"
+          },
+          "D10": {
+            "Sun": "Gemini",
+            "Moon": "Scorpio",
+            "Mars": "Virgo",
+            "Mercury": "Virgo",
+            "Jupiter": "Aries",
+            "Venus": "Leo",
+            "Saturn": "Cancer",
+            "Rahu": "Sagittarius",
+            "Ketu": "Gemini"
+          },
+          "D12": {
+            "Sun": "Gemini",
+            "Moon": "Capricorn",
+            "Mars": "Libra",
+            "Mercury": "Virgo",
+            "Jupiter": "Libra",
+            "Venus": "Virgo",
+            "Saturn": "Virgo",
+            "Rahu": "Capricorn",
+            "Ketu": "Cancer"
+          },
+          "D30": {
+            "Sun": "Aries",
+            "Moon": "Gemini",
+            "Mars": "Sagittarius",
+            "Mercury": "Aquarius",
+            "Jupiter": "Capricorn",
+            "Venus": "Sagittarius",
+            "Saturn": "Libra",
+            "Rahu": "Gemini",
+            "Ketu": "Gemini"
+          }
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "CASE-002",
+      "category": "ASTROLOGY_CHART",
+      "title": "US DST-Sensitive Birth (New York)",
+      "description": "Daylight Saving Time birth chart in New York City.",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "personal-vedic-v1",
+      "referenceSource": {
+        "software": "Jagannatha Hora",
+        "version": "8.0",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-30T11:00:00.000Z",
+      "updatedAt": "2026-08-30T11:00:00.000Z",
+      "inputSnapshot": {
+        "birthDate": "1990-07-04",
+        "birthTime": "14:15:00",
+        "timezone": "America/New_York",
+        "utcInstant": "1990-07-04T18:15:00.000Z",
+        "latitude": 40.7128,
+        "longitude": -74.006,
+        "locationName": "New York, USA",
+        "country": "USA",
+        "city": "New York",
+        "calculationProfileVersion": "personal-vedic-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign",
+        "calculationConfig": {
+          "zodiacType": "SIDEREAL",
+          "ayanamsha": "Lahiri",
+          "houseSystem": "Whole Sign",
+          "nodeCalculation": "TRUE",
+          "ephemerisVersion": "Swiss Ephemeris v2.10",
+          "calculationProfileVersion": "personal-vedic-v1"
+        }
+      },
+      "inputFingerprint": "case002fingerprint",
+      "referenceValues": {},
+      "metadata": {}
+    },
+    {
+      "id": "CASE-003",
+      "category": "ASTROLOGY_CHART",
+      "title": "European Historical Timezone Birth (London)",
+      "description": "Historical British birth chart in London.",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "personal-vedic-v1",
+      "referenceSource": {
+        "software": "Jagannatha Hora",
+        "version": "8.0",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-30T11:00:00.000Z",
+      "updatedAt": "2026-08-30T11:00:00.000Z",
+      "inputSnapshot": {
+        "birthDate": "1975-10-24",
+        "birthTime": "09:30:00",
+        "timezone": "Europe/London",
+        "utcInstant": "1975-10-24T08:30:00.000Z",
+        "latitude": 51.5074,
+        "longitude": -0.1278,
+        "locationName": "London, UK",
+        "country": "UK",
+        "city": "London",
+        "calculationProfileVersion": "personal-vedic-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign",
+        "calculationConfig": {
+          "zodiacType": "SIDEREAL",
+          "ayanamsha": "Lahiri",
+          "houseSystem": "Whole Sign",
+          "nodeCalculation": "TRUE",
+          "ephemerisVersion": "Swiss Ephemeris v2.10",
+          "calculationProfileVersion": "personal-vedic-v1"
+        }
+      },
+      "inputFingerprint": "case003fingerprint",
+      "referenceValues": {},
+      "metadata": {}
+    },
+    {
+      "id": "CASE-004",
+      "category": "ASTROLOGY_CHART",
+      "title": "Southern Hemisphere Location Birth (Sydney)",
+      "description": "Southern hemisphere natal chart calculated in Sydney, Australia.",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "personal-vedic-v1",
+      "referenceSource": {
+        "software": "Jagannatha Hora",
+        "version": "8.0",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-30T11:00:00.000Z",
+      "updatedAt": "2026-08-30T11:00:00.000Z",
+      "inputSnapshot": {
+        "birthDate": "1995-12-25",
+        "birthTime": "16:45:00",
+        "timezone": "Australia/Sydney",
+        "utcInstant": "1995-12-25T05:45:00.000Z",
+        "latitude": -33.8688,
+        "longitude": 151.2093,
+        "locationName": "Sydney, Australia",
+        "country": "Australia",
+        "city": "Sydney",
+        "calculationProfileVersion": "personal-vedic-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign",
+        "calculationConfig": {
+          "zodiacType": "SIDEREAL",
+          "ayanamsha": "Lahiri",
+          "houseSystem": "Whole Sign",
+          "nodeCalculation": "TRUE",
+          "ephemerisVersion": "Swiss Ephemeris v2.10",
+          "calculationProfileVersion": "personal-vedic-v1"
+        }
+      },
+      "inputFingerprint": "case004fingerprint",
+      "referenceValues": {},
+      "metadata": {}
+    },
+    {
+      "id": "CASE-005",
+      "category": "ASTROLOGY_CHART",
+      "title": "Near Zodiac Boundary Birth",
+      "description": "Birth chart with Sun positioned extremely close to 0° Aries / 360° Pisces boundary.",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "personal-vedic-v1",
+      "referenceSource": {
+        "software": "Jagannatha Hora",
+        "version": "8.0",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-30T11:00:00.000Z",
+      "updatedAt": "2026-08-30T11:00:00.000Z",
+      "inputSnapshot": {
+        "birthDate": "1988-04-13",
+        "birthTime": "23:59:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1988-04-13T18:29:00.000Z",
+        "latitude": 23.1765,
+        "longitude": 75.7885,
+        "locationName": "Ujjain, India",
+        "country": "India",
+        "city": "Ujjain",
+        "calculationProfileVersion": "personal-vedic-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign",
+        "calculationConfig": {
+          "zodiacType": "SIDEREAL",
+          "ayanamsha": "Lahiri",
+          "houseSystem": "Whole Sign",
+          "nodeCalculation": "TRUE",
+          "ephemerisVersion": "Swiss Ephemeris v2.10",
+          "calculationProfileVersion": "personal-vedic-v1"
+        }
+      },
+      "inputFingerprint": "case005fingerprint",
+      "referenceValues": {},
+      "metadata": {}
+    },
+    {
+      "id": "CASE-006",
+      "category": "ASTROLOGY_CHART",
+      "title": "Near Nakshatra Boundary Birth",
+      "description": "Birth chart with Moon positioned near the 13°20' Nakshatra boundary.",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "personal-vedic-v1",
+      "referenceSource": {
+        "software": "Jagannatha Hora",
+        "version": "8.0",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-30T11:00:00.000Z",
+      "updatedAt": "2026-08-30T11:00:00.000Z",
+      "inputSnapshot": {
+        "birthDate": "2000-01-01",
+        "birthTime": "12:00:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "2000-01-01T06:30:00.000Z",
+        "latitude": 12.9716,
+        "longitude": 77.5946,
+        "locationName": "Bengaluru, India",
+        "country": "India",
+        "city": "Bengaluru",
+        "calculationProfileVersion": "personal-vedic-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign",
+        "calculationConfig": {
+          "zodiacType": "SIDEREAL",
+          "ayanamsha": "Lahiri",
+          "houseSystem": "Whole Sign",
+          "nodeCalculation": "TRUE",
+          "ephemerisVersion": "Swiss Ephemeris v2.10",
+          "calculationProfileVersion": "personal-vedic-v1"
+        }
+      },
+      "inputFingerprint": "case006fingerprint",
+      "referenceValues": {},
+      "metadata": {}
+    },
+    {
+      "id": "CASE-007",
+      "category": "ASTROLOGY_CHART",
+      "title": "Near Divisional Boundary Birth",
+      "description": "Birth chart with planets near D9 Navamsa 3°20' boundaries.",
+      "status": "NOT_VALIDATED",
+      "calculationProfileVersion": "personal-vedic-v1",
+      "referenceSource": {
+        "software": "Jagannatha Hora",
+        "version": "8.0",
+        "settings": {
+          "ayanamsha": "Lahiri",
+          "zodiac": "SIDEREAL",
+          "houseSystem": "Whole Sign"
+        }
+      },
+      "createdAt": "2026-08-30T11:00:00.000Z",
+      "updatedAt": "2026-08-30T11:00:00.000Z",
+      "inputSnapshot": {
+        "birthDate": "1992-08-10",
+        "birthTime": "05:30:00",
+        "timezone": "Asia/Kolkata",
+        "utcInstant": "1992-08-10T00:00:00.000Z",
+        "latitude": 22.5726,
+        "longitude": 88.3639,
+        "locationName": "Kolkata, India",
+        "country": "India",
+        "city": "Kolkata",
+        "calculationProfileVersion": "personal-vedic-v1",
+        "ayanamsha": "Lahiri",
+        "houseSystem": "Whole Sign",
+        "calculationConfig": {
+          "zodiacType": "SIDEREAL",
+          "ayanamsha": "Lahiri",
+          "houseSystem": "Whole Sign",
+          "nodeCalculation": "TRUE",
+          "ephemerisVersion": "Swiss Ephemeris v2.10",
+          "calculationProfileVersion": "personal-vedic-v1"
+        }
+      },
+      "inputFingerprint": "case007fingerprint",
+      "referenceValues": {},
+      "metadata": {}
+    }
+  ]
+}

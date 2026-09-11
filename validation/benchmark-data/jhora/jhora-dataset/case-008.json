@@ -1,0 +1,31 @@
+{
+  "id": "JHORA-008",
+  "name": "DST Non-Existent Local Time",
+  "status": "NOT_VALIDATED",
+  "category": "DST_NON_EXISTENT",
+  "source": {
+    "software": "Jagannatha Hora",
+    "version": null,
+    "capturedAt": null,
+    "enteredBy": null
+  },
+  "input": {
+    "birthDate": "2020-03-08",
+    "birthTime": "02:30:00",
+    "location": "New York, USA",
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "timezone": "America/New_York"
+  },
+  "configuration": {
+    "ayanamsha": "LAHIRI",
+    "houseSystem": "WHOLE_SIGN"
+  },
+  "referenceOutputs": {},
+  "investigation": {
+    "status": "UNINVESTIGATED",
+    "suspectedRootCause": "UNKNOWN",
+    "notes": ""
+  },
+  "notes": "Tests invalid/non-existent local time during Spring Forward DST gap."
+}

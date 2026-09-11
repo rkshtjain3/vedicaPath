@@ -1,0 +1,91 @@
+[
+  {
+    "id": "SHADBALA_CASE_001",
+    "description": "Sun at Exaltation point (Aries 10°) — Uchcha Bala 60 Virupas",
+    "planet": "Sun",
+    "longitude": 10.0,
+    "expectedUchchaVirupas": 60.0,
+    "expectedUchchaRupas": 1.0
+  },
+  {
+    "id": "SHADBALA_CASE_002",
+    "description": "Sun at Debilitation point (Libra 10°) — Uchcha Bala 0 Virupas",
+    "planet": "Sun",
+    "longitude": 190.0,
+    "expectedUchchaVirupas": 0.0,
+    "expectedUchchaRupas": 0.0
+  },
+  {
+    "id": "SHADBALA_CASE_003",
+    "description": "Sun at Midpoint between Exaltation and Debilitation (Cancer 10°) — Uchcha Bala 30 Virupas",
+    "planet": "Sun",
+    "longitude": 100.0,
+    "expectedUchchaVirupas": 30.0,
+    "expectedUchchaRupas": 0.5
+  },
+  {
+    "id": "SHADBALA_CASE_004",
+    "description": "Circular boundary 0°/360° check for Pisces 29° Venus",
+    "planet": "Venus",
+    "longitude": 359.0,
+    "expectedExaltationLongitude": 357.0,
+    "expectedDebilitationLongitude": 177.0
+  },
+  {
+    "id": "SHADBALA_CASE_005",
+    "description": "Jupiter in Kendra House 1 — Kendradi Bala 60 Virupas",
+    "planet": "Jupiter",
+    "house": 1,
+    "expectedKendradiVirupas": 60.0,
+    "expectedCategory": "KENDRA"
+  },
+  {
+    "id": "SHADBALA_CASE_006",
+    "description": "Jupiter in Panaphara House 5 — Kendradi Bala 30 Virupas",
+    "planet": "Jupiter",
+    "house": 5,
+    "expectedKendradiVirupas": 30.0,
+    "expectedCategory": "PANAPHARA"
+  },
+  {
+    "id": "SHADBALA_CASE_007",
+    "description": "Jupiter in Apoklima House 9 — Kendradi Bala 15 Virupas",
+    "planet": "Jupiter",
+    "house": 9,
+    "expectedKendradiVirupas": 15.0,
+    "expectedCategory": "APOKLIMA"
+  },
+  {
+    "id": "SHADBALA_CASE_008",
+    "description": "Sun (Male) in 1st Drekkana (Aries 5°) — Drekkana Bala 15 Virupas",
+    "planet": "Sun",
+    "degreeInSign": 5.0,
+    "expectedDrekkana": 1,
+    "expectedDrekkanaVirupas": 15.0
+  },
+  {
+    "id": "SHADBALA_CASE_009",
+    "description": "Saturn (Neutral) in 2nd Drekkana (Libra 15°) — Drekkana Bala 15 Virupas",
+    "planet": "Saturn",
+    "degreeInSign": 15.0,
+    "expectedDrekkana": 2,
+    "expectedDrekkanaVirupas": 15.0
+  },
+  {
+    "id": "SHADBALA_CASE_010",
+    "description": "Venus (Female) in 3rd Drekkana (Pisces 25°) — Drekkana Bala 15 Virupas",
+    "planet": "Venus",
+    "degreeInSign": 25.0,
+    "expectedDrekkana": 3,
+    "expectedDrekkanaVirupas": 15.0
+  },
+  {
+    "id": "SHADBALA_CASE_011",
+    "description": "Retrograde planet metadata check (Cheshta Bala status FOUNDATION)",
+    "planet": "Saturn",
+    "isRetrograde": true,
+    "speed": -0.05,
+    "expectedCheshtaStatus": "FOUNDATION",
+    "expectedCheshtaVirupas": 0
+  }
+]

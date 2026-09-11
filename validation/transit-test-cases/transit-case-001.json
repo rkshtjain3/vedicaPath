@@ -1,0 +1,7 @@
+{
+  "id": "TRANSIT-001",
+  "sourceType": "REAL_WORLD_BENCHMARK",
+  "testInstant": "2026-08-29T00:00:00.000Z",
+  "calculationProfile": "personal-vedic-v1",
+  "status": "NOT_VALIDATED"
+}

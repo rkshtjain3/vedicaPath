@@ -1,0 +1,22 @@
+{
+  "name": "@vedica/transit-engine",
+  "version": "0.1.0",
+  "description": "Comprehensive Gochar (Transit) Timeline & Natal-Dasha-Transit Convergence Engine for Vedica",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vedica/astrology-core": "workspace:*",
+    "@vedica/dasha-engine": "workspace:*",
+    "@vedica/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "typescript": "^5.7.3",
+    "vitest": "^1.6.1"
+  }
+}

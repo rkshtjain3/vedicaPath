@@ -1,0 +1,28 @@
+{
+  "name": "@vedica/strength-engine",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vedica/analysis-engine": "workspace:*",
+    "@vedica/astrology-core": "workspace:*",
+    "@vedica/divisional-chart-engine": "workspace:*",
+    "@vedica/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.5"
+  }
+}

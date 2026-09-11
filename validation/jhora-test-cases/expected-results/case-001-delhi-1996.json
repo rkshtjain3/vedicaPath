@@ -1,0 +1,31 @@
+{
+  "id": "CASE-001",
+  "description": "Benchmark Birth Chart - New Delhi 1996-09-23 14:30 IST",
+  "source": "Benchmark",
+  "status": "PASS",
+  "dateOfBirth": "1996-09-23",
+  "timeOfBirth": "14:30:00",
+  "timezone": "Asia/Kolkata",
+  "latitude": 28.6139,
+  "longitude": 77.2090,
+  "locationName": "New Delhi, India",
+  "calculationProfileVersion": "personal-vedic-v1",
+  "expected": {
+    "expectedLagnaSign": "Sagittarius",
+    "expectedLagnaDegreeInSign": 26.5611,
+    "expectedMoonSign": "Capricorn",
+    "expectedBirthNakshatra": "Shravana",
+    "expectedBirthNakshatraPada": 2,
+    "planets": [
+      { "planet": "Sun", "expectedSign": "Virgo", "expectedDegreeInSign": 6.7995, "expectedNakshatra": "Uttara Phalguni", "expectedPada": 4 },
+      { "planet": "Moon", "expectedSign": "Capricorn", "expectedDegreeInSign": 15.5141, "expectedNakshatra": "Shravana", "expectedPada": 2 },
+      { "planet": "Mars", "expectedSign": "Cancer", "expectedDegreeInSign": 14.5742, "expectedNakshatra": "Pushya", "expectedPada": 4 },
+      { "planet": "Mercury", "expectedSign": "Leo", "expectedDegreeInSign": 26.1072, "expectedNakshatra": "Purva Phalguni", "expectedPada": 4 },
+      { "planet": "Jupiter", "expectedSign": "Sagittarius", "expectedDegreeInSign": 14.6234, "expectedNakshatra": "Purva Ashadha", "expectedPada": 1 },
+      { "planet": "Venus", "expectedSign": "Cancer", "expectedDegreeInSign": 23.9079, "expectedNakshatra": "Ashlesha", "expectedPada": 3 },
+      { "planet": "Saturn", "expectedSign": "Pisces", "expectedDegreeInSign": 10.4209, "expectedNakshatra": "Uttara Bhadrapada", "expectedPada": 3 },
+      { "planet": "Rahu", "expectedSign": "Virgo", "expectedDegreeInSign": 14.2083, "expectedNakshatra": "Hasta", "expectedPada": 2 },
+      { "planet": "Ketu", "expectedSign": "Pisces", "expectedDegreeInSign": 14.2083, "expectedNakshatra": "Uttara Bhadrapada", "expectedPada": 4 }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "case_standard_delhi_1990",
+    "description": "Standard chart - 1990-05-15 14:30 New Delhi",
+    "expectedBavTotals": {
+      "SUN": 48,
+      "MOON": 49,
+      "MARS": 39,
+      "MERCURY": 54,
+      "JUPITER": 56,
+      "VENUS": 52,
+      "SATURN": 39
+    },
+    "expectedSavTotal": 337
+  },
+  {
+    "id": "case_aries_lagna_all_planets_aries",
+    "description": "Synthetic boundary case - All planets and Lagna in Aries (1)",
+    "expectedBavTotals": {
+      "SUN": 48,
+      "MOON": 49,
+      "MARS": 39,
+      "MERCURY": 54,
+      "JUPITER": 56,
+      "VENUS": 52,
+      "SATURN": 39
+    },
+    "expectedSavTotal": 337
+  }
+]

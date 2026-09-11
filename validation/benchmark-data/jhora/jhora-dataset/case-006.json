@@ -1,0 +1,31 @@
+{
+  "id": "JHORA-006",
+  "name": "Dasha Boundary",
+  "status": "NOT_VALIDATED",
+  "category": "DATE_BOUNDARY",
+  "source": {
+    "software": "Jagannatha Hora",
+    "version": null,
+    "capturedAt": null,
+    "enteredBy": null
+  },
+  "input": {
+    "birthDate": "1985-11-12",
+    "birthTime": "12:00:00",
+    "location": "Hyderabad, India",
+    "latitude": 17.385,
+    "longitude": 78.4867,
+    "timezone": "Asia/Kolkata"
+  },
+  "configuration": {
+    "ayanamsha": "LAHIRI",
+    "houseSystem": "WHOLE_SIGN"
+  },
+  "referenceOutputs": {},
+  "investigation": {
+    "status": "UNINVESTIGATED",
+    "suspectedRootCause": "UNKNOWN",
+    "notes": ""
+  },
+  "notes": "Tests Vimshottari Dasha balance and Mahadasha transition boundary calculations."
+}

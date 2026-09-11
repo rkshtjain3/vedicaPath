@@ -1,0 +1,18 @@
+{
+  "id": "CASE-008",
+  "description": "Historical birth test (1947-08-15 00:00:00 IST - Indian Independence)",
+  "category": "HISTORICAL_BIRTH",
+  "sourceType": "REAL_WORLD_BENCHMARK",
+  "source": {
+    "application": "JHora 8.0",
+    "calculationProfile": "personal-vedic-v1"
+  },
+  "input": {
+    "dateOfBirth": "1947-08-15",
+    "timeOfBirth": "00:00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209,
+    "timezone": "Asia/Kolkata"
+  },
+  "status": "NOT_VALIDATED"
+}

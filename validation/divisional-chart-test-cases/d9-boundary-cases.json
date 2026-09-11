@@ -1,0 +1,79 @@
+[
+  {
+    "id": "D9-BOUND-001",
+    "description": "0° Aries (Movable sign, Division 1 boundary)",
+    "inputLongitude": 0.0,
+    "expected": {
+      "d1Sign": "Aries",
+      "divisionNumber": 1,
+      "d9Sign": "Aries",
+      "isVargottama": true
+    }
+  },
+  {
+    "id": "D9-BOUND-002",
+    "description": "3° 20' Aries (Movable sign, exact Division 2 start boundary)",
+    "inputLongitude": 3.3333333333333335,
+    "expected": {
+      "d1Sign": "Aries",
+      "divisionNumber": 2,
+      "d9Sign": "Taurus",
+      "isVargottama": false
+    }
+  },
+  {
+    "id": "D9-BOUND-003",
+    "description": "3° 19' 59\" Aries (Division 1 upper epsilon boundary)",
+    "inputLongitude": 3.3330,
+    "expected": {
+      "d1Sign": "Aries",
+      "divisionNumber": 1,
+      "d9Sign": "Aries",
+      "isVargottama": true
+    }
+  },
+  {
+    "id": "D9-BOUND-004",
+    "description": "29° 59' 59.99\" Aries (Movable sign, Division 9 upper boundary)",
+    "inputLongitude": 29.999999,
+    "expected": {
+      "d1Sign": "Aries",
+      "divisionNumber": 9,
+      "d9Sign": "Sagittarius",
+      "isVargottama": false
+    }
+  },
+  {
+    "id": "D9-BOUND-005",
+    "description": "14° Taurus (Fixed sign, Vargottama division)",
+    "inputLongitude": 44.0,
+    "expected": {
+      "d1Sign": "Taurus",
+      "divisionNumber": 5,
+      "d9Sign": "Taurus",
+      "isVargottama": true
+    }
+  },
+  {
+    "id": "D9-BOUND-006",
+    "description": "0° Gemini (Dual sign, starts at Libra)",
+    "inputLongitude": 60.0,
+    "expected": {
+      "d1Sign": "Gemini",
+      "divisionNumber": 1,
+      "d9Sign": "Libra",
+      "isVargottama": false
+    }
+  },
+  {
+    "id": "D9-BOUND-007",
+    "description": "28° Gemini (Dual sign, Vargottama division 9)",
+    "inputLongitude": 88.0,
+    "expected": {
+      "d1Sign": "Gemini",
+      "divisionNumber": 9,
+      "d9Sign": "Gemini",
+      "isVargottama": true
+    }
+  }
+]

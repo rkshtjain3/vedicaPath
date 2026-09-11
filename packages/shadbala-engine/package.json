@@ -1,0 +1,21 @@
+{
+  "name": "@vedica/shadbala-engine",
+  "version": "1.0.0",
+  "description": "Classical Shadbala Mathematical Foundation Engine for Vedica Path",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vedica/astrology-core": "workspace:*",
+    "@vedica/analysis-engine": "workspace:*",
+    "@vedica/divisional-chart-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vitest": "^3.0.0"
+  }
+}

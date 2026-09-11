@@ -1,0 +1,31 @@
+{
+  "id": "JHORA-007",
+  "name": "DST Ambiguous Local Time",
+  "status": "NOT_VALIDATED",
+  "category": "DST_AMBIGUOUS",
+  "source": {
+    "software": "Jagannatha Hora",
+    "version": null,
+    "capturedAt": null,
+    "enteredBy": null
+  },
+  "input": {
+    "birthDate": "2020-11-01",
+    "birthTime": "01:30:00",
+    "location": "New York, USA",
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "timezone": "America/New_York"
+  },
+  "configuration": {
+    "ayanamsha": "LAHIRI",
+    "houseSystem": "WHOLE_SIGN"
+  },
+  "referenceOutputs": {},
+  "investigation": {
+    "status": "UNINVESTIGATED",
+    "suspectedRootCause": "UNKNOWN",
+    "notes": ""
+  },
+  "notes": "Tests ambiguous local time during Fall Back DST transition."
+}

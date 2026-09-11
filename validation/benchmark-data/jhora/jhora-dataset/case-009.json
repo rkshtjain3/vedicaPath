@@ -1,0 +1,31 @@
+{
+  "id": "JHORA-009",
+  "name": "Foreign Location",
+  "status": "NOT_VALIDATED",
+  "category": "FOREIGN_LOCATION",
+  "source": {
+    "software": "Jagannatha Hora",
+    "version": null,
+    "capturedAt": null,
+    "enteredBy": null
+  },
+  "input": {
+    "birthDate": "1990-07-20",
+    "birthTime": "16:45:00",
+    "location": "London, UK",
+    "latitude": 51.5074,
+    "longitude": -0.1278,
+    "timezone": "Europe/London"
+  },
+  "configuration": {
+    "ayanamsha": "LAHIRI",
+    "houseSystem": "WHOLE_SIGN"
+  },
+  "referenceOutputs": {},
+  "investigation": {
+    "status": "UNINVESTIGATED",
+    "suspectedRootCause": "UNKNOWN",
+    "notes": ""
+  },
+  "notes": "Tests calculation precision for Western hemisphere / European locations."
+}

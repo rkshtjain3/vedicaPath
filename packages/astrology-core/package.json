@@ -1,0 +1,23 @@
+{
+  "name": "@vedica/astrology-core",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@vedica/shared": "workspace:*",
+    "sweph": "^2.10.3-8"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

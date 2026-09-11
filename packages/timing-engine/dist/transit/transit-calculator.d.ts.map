@@ -1,0 +1,1 @@
+{"version":3,"file":"transit-calculator.d.ts","sourceRoot":"","sources":["../../src/transit/transit-calculator.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,UAAU,EAAsB,MAAM,wBAAwB,CAAC;AACxE,OAAO,EAAE,eAAe,EAAE,MAAM,0BAA0B,CAAC;AAE3D,qBAAa,wBAAwB;IACnC,OAAO,CAAC,KAAK,CAA6C;IAEpD,gBAAgB,CACpB,OAAO,EAAE,IAAI,EACb,UAAU,EAAE,UAAU,GACrB,OAAO,CAAC,eAAe,EAAE,CAAC;CA0F9B"}

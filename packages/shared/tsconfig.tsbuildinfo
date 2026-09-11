@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/types/location.ts","./src/types/profile.ts","./src/types/time.ts","./src/utils/angular-math.ts","./src/utils/fingerprint.ts"],"version":"5.9.3"}

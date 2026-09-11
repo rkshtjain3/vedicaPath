@@ -1,0 +1,18 @@
+{
+  "id": "CASE-002",
+  "description": "Midnight birth boundary (2000-01-01 00:00:01 IST)",
+  "category": "MIDNIGHT_BIRTH",
+  "sourceType": "REAL_WORLD_BENCHMARK",
+  "source": {
+    "application": "JHora 8.0",
+    "calculationProfile": "personal-vedic-v1"
+  },
+  "input": {
+    "dateOfBirth": "2000-01-01",
+    "timeOfBirth": "00:00:01",
+    "latitude": 28.6139,
+    "longitude": 77.209,
+    "timezone": "Asia/Kolkata"
+  },
+  "status": "NOT_VALIDATED"
+}

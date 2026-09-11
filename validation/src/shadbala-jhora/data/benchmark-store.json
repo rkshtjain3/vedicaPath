@@ -1,0 +1,16 @@
+{
+  "CASE-001": {
+    "caseId": "CASE-001",
+    "checklistConfirmed": true,
+    "referenceValues": {
+      "Sun": {
+        "naisargikaBala": 60
+      }
+    },
+    "investigationCause": "FORMULA_VARIANT",
+    "investigationNotes": "Test note for store abstraction",
+    "updatedAt": "2026-08-29T12:46:38.497Z",
+    "fingerprint": "4a06aae7c82150b4",
+    "referenceHash": "3f92b27eeee208be"
+  }
+}

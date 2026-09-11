@@ -1,0 +1,18 @@
+{
+  "id": "CASE-007",
+  "description": "High latitude birth test (Oslo, Norway, 60°N latitude)",
+  "category": "HIGH_LATITUDE_BIRTH",
+  "sourceType": "REAL_WORLD_BENCHMARK",
+  "source": {
+    "application": "JHora 8.0",
+    "calculationProfile": "personal-vedic-v1"
+  },
+  "input": {
+    "dateOfBirth": "1985-12-21",
+    "timeOfBirth": "12:00:00",
+    "latitude": 59.9139,
+    "longitude": 10.7522,
+    "timezone": "Europe/Oslo"
+  },
+  "status": "NOT_VALIDATED"
+}

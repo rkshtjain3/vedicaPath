@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JHora Benchmark Validation Schema for Classical Shadbala",
+  "description": "Validation benchmark template for comparing calculated Shadbala outputs against Jagannatha Hora (JHora) reference data.",
+  "type": "object",
+  "properties": {
+    "validationStatus": {
+      "type": "string",
+      "enum": ["NOT_VALIDATED", "PARTIAL_VALIDATION", "VALIDATED"],
+      "default": "NOT_VALIDATED"
+    },
+    "source": {
+      "type": "string",
+      "default": "JHORA"
+    },
+    "sourceVersion": {
+      "type": "string",
+      "default": "JHora 8.0 Parashari Shadbala"
+    },
+    "birthDetails": {
+      "type": "object",
+      "properties": {
+        "dateOfBirth": { "type": "string" },
+        "timeOfBirth": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "timezone": { "type": "string font" }
+      }
+    },
+    "expectedPlanets": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "sthanaVirupas": { "type": "number" },
+          "digVirupas": { "type": "number" },
+          "naisargikaVirupas": { "type": "number" },
+          "cheshtaVirupas": { "type": "number" },
+          "totalVirupas": { "type": "number" }
+        }
+      }
+    }
+  },
+  "required": ["validationStatus", "source"]
+}

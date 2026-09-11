@@ -1,0 +1,35 @@
+{
+  "name": "@vedica/query-engine",
+  "version": "0.1.0",
+  "description": "Deterministic Personalized Astrology Query & Evidence Explorer for Vedica",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vedica/analysis-engine": "workspace:*",
+    "@vedica/ashtakavarga-engine": "workspace:*",
+    "@vedica/astrology-core": "workspace:*",
+    "@vedica/dasha-engine": "workspace:*",
+    "@vedica/divisional-chart-engine": "workspace:*",
+    "@vedica/life-domain-engine": "workspace:*",
+    "@vedica/numerology-engine": "workspace:*",
+    "@vedica/report-engine": "workspace:*",
+    "@vedica/rules-engine": "workspace:*",
+    "@vedica/shadbala-engine": "workspace:*",
+    "@vedica/shared": "workspace:*",
+    "@vedica/strength-engine": "workspace:*",
+    "@vedica/timeline-engine": "workspace:*",
+    "@vedica/timing-engine": "workspace:*",
+    "@vedica/transit-engine": "workspace:*",
+    "@vedica/yoga-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.5"
+  }
+}

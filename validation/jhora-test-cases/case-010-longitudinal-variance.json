@@ -1,0 +1,18 @@
+{
+  "id": "CASE-010",
+  "description": "Longitudinal variance within India (Guwahati, Assam 91.7°E vs Dwarka, Gujarat 68.9°E)",
+  "category": "LONGITUDINAL_VARIANCE",
+  "sourceType": "REAL_WORLD_BENCHMARK",
+  "source": {
+    "application": "JHora 8.0",
+    "calculationProfile": "personal-vedic-v1"
+  },
+  "input": {
+    "dateOfBirth": "1998-10-10",
+    "timeOfBirth": "06:00:00",
+    "latitude": 26.1445,
+    "longitude": 91.7362,
+    "timezone": "Asia/Kolkata"
+  },
+  "status": "NOT_VALIDATED"
+}

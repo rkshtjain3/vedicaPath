@@ -1,0 +1,1 @@
+{"version":3,"file":"overlap-detector.d.ts","sourceRoot":"","sources":["../../src/windows/overlap-detector.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAE,cAAc,EAAE,MAAM,aAAa,CAAC;AAEzD,wBAAgB,sBAAsB,CACpC,YAAY,EAAE,cAAc,EAAE,EAC9B,MAAM,EAAE,UAAU,GACjB,cAAc,EAAE,CAElB;AAED,wBAAgB,kBAAkB,CAAC,YAAY,EAAE,cAAc,EAAE,GAAG,MAAM,EAAE,CAE3E"}

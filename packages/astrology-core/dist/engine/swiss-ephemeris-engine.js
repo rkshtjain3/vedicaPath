@@ -1,0 +1,101 @@
+import sweph from 'sweph';
+import { getUTCInstant } from '@vedica/shared';
+import { DEFAULT_CALCULATION_PROFILE, } from '../settings/calculation-profile.js';
+import { getRashiFromLongitude } from '../houses/rashi-util.js';
+import { getNakshatraFromLongitude } from '../nakshatra/nakshatra-util.js';
+export class SwissEphemerisEngine {
+    async calculateBirthChart(input, profile = DEFAULT_CALCULATION_PROFILE) {
+        const c = sweph.constants;
+        let sidMode = c.SE_SIDM_LAHIRI;
+        if (profile.ayanamsa === 'raman') {
+            sidMode = c.SE_SIDM_RAMAN;
+        }
+        else if (profile.ayanamsa === 'krishnamurti') {
+            sidMode = c.SE_SIDM_KRISHNAMURTI;
+        }
+        sweph.set_sid_mode(sidMode, 0, 0);
+        const utcInstant = getUTCInstant(input.birthTime);
+        const julianDay = sweph.julday(utcInstant.year, utcInstant.month, utcInstant.day, utcInstant.decimalHour, c.SE_GREG_CAL);
+        const ayanamsaValue = sweph.get_ayanamsa_ut(julianDay);
+        const houseRes = sweph.houses(julianDay, input.location.latitude, input.location.longitude, 'P');
+        const tropicalAscendant = houseRes.data.points[0];
+        const siderealAscendant = (tropicalAscendant - ayanamsaValue + 360) % 360;
+        const lagnaRashi = getRashiFromLongitude(siderealAscendant);
+        const lagnaNakshatra = getNakshatraFromLongitude(siderealAscendant);
+        const lagna = {
+            longitude: siderealAscendant,
+            sign: lagnaRashi.rashi,
+            degreeInSign: lagnaRashi.degreeInSign,
+            formattedDegree: lagnaRashi.formattedDegree,
+            nakshatra: lagnaNakshatra,
+        };
+        const flags = c.SEFLG_SIDEREAL | c.SEFLG_SPEED;
+        const nodeConstant = profile.nodeType === 'mean' ? c.SE_MEAN_NODE : c.SE_TRUE_NODE;
+        const planetMap = {
+            Sun: c.SE_SUN,
+            Moon: c.SE_MOON,
+            Mars: c.SE_MARS,
+            Mercury: c.SE_MERCURY,
+            Jupiter: c.SE_JUPITER,
+            Venus: c.SE_VENUS,
+            Saturn: c.SE_SATURN,
+            Rahu: nodeConstant,
+        };
+        const planets = [];
+        for (const [name, planetId] of Object.entries(planetMap)) {
+            const pName = name;
+            const res = sweph.calc_ut(julianDay, planetId, flags);
+            const longitude = (res.data[0] % 360 + 360) % 360;
+            const speed = res.data[3];
+            const isRetrograde = speed < 0;
+            const rashiRes = getRashiFromLongitude(longitude);
+            const nakshatraRes = getNakshatraFromLongitude(longitude);
+            planets.push({
+                planet: pName,
+                longitude,
+                sign: rashiRes.rashi,
+                degreeInSign: rashiRes.degreeInSign,
+                formattedDegree: rashiRes.formattedDegree,
+                nakshatra: nakshatraRes,
+                isRetrograde,
+                speed,
+            });
+        }
+        const rahuPosition = planets.find((p) => p.planet === 'Rahu');
+        const ketuLongitude = (rahuPosition.longitude + 180) % 360;
+        const ketuRashi = getRashiFromLongitude(ketuLongitude);
+        const ketuNakshatra = getNakshatraFromLongitude(ketuLongitude);
+        planets.push({
+            planet: 'Ketu',
+            longitude: ketuLongitude,
+            sign: ketuRashi.rashi,
+            degreeInSign: ketuRashi.degreeInSign,
+            formattedDegree: ketuRashi.formattedDegree,
+            nakshatra: ketuNakshatra,
+            isRetrograde: rahuPosition.isRetrograde,
+            speed: rahuPosition.speed,
+        });
+        const moonPlanet = planets.find((p) => p.planet === 'Moon');
+        const moonSign = moonPlanet.sign;
+        const birthNakshatra = moonPlanet.nakshatra;
+        return {
+            input,
+            utcInstant,
+            calculationProfile: profile,
+            ayanamsaValue,
+            lagna,
+            moonSign,
+            birthNakshatra,
+            planets,
+            calculationConfig: {
+                zodiacType: 'SIDEREAL',
+                ayanamsha: profile.ayanamsa || 'Lahiri',
+                houseSystem: 'Whole Sign',
+                nodeCalculation: profile.nodeType === 'mean' ? 'MEAN' : 'TRUE',
+                ephemerisVersion: 'Swiss Ephemeris v2.10',
+                calculationProfileVersion: 'personal-vedic-v1',
+            },
+        };
+    }
+}
+//# sourceMappingURL=swiss-ephemeris-engine.js.map

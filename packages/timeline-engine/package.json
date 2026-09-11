@@ -1,0 +1,22 @@
+{
+  "name": "@vedica/timeline-engine",
+  "version": "0.1.0",
+  "description": "Deterministic multi-level Dasha timeline and evidence-based timing windows for Vedica astrology platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vedica/shared": "workspace:*",
+    "@vedica/dasha-engine": "workspace:*",
+    "@vedica/transit-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^1.6.0"
+  }
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "TRANSIT-A8-001",
+    "description": "Standard New Delhi Birth Chart Transit Ashtakavarga Evaluation",
+    "input": {
+      "dateOfBirth": "1990-05-15",
+      "timeOfBirth": "14:30:00",
+      "timezone": "Asia/Kolkata",
+      "latitude": 28.6139,
+      "longitude": 77.209,
+      "transitDate": "2026-08-29T12:00:00.000Z"
+    },
+    "expected": {
+      "supportedPlanets": ["JUPITER", "SATURN"],
+      "savChartAverage": 28.083333333333332
+    }
+  },
+  {
+    "id": "TRANSIT-A8-002",
+    "description": "Historical London Birth Chart Future Date Transit Evaluation",
+    "input": {
+      "dateOfBirth": "1985-10-25",
+      "timeOfBirth": "08:15:00",
+      "timezone": "Europe/London",
+      "latitude": 51.5074,
+      "longitude": -0.1278,
+      "transitDate": "2030-01-01T00:00:00.000Z"
+    },
+    "expected": {
+      "supportedPlanets": ["JUPITER", "SATURN"],
+      "savChartAverage": 28.083333333333332
+    }
+  }
+]

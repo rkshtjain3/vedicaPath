@@ -1,0 +1,1 @@
+{"version":3,"file":"country-dataset.d.ts","sourceRoot":"","sources":["../../src/countries/country-dataset.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,mCAAmC,CAAC;AAE5D,eAAO,MAAM,gBAAgB,EAAE,OAAO,EAgHrC,CAAC;AAEF,wBAAgB,eAAe,CAAC,KAAK,EAAE,MAAM,GAAG,OAAO,EAAE,CAMxD;AAED,wBAAgB,gBAAgB,CAAC,IAAI,EAAE,MAAM,GAAG,OAAO,GAAG,SAAS,CAGlE"}

@@ -1,0 +1,34 @@
+{
+  "name": "@vedica/ai-engine",
+  "version": "0.1.0",
+  "description": "Local LLM Hybrid RAG Conversational Engine for VedicaPath",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vedica/analysis-engine": "workspace:*",
+    "@vedica/astrology-core": "workspace:*",
+    "@vedica/dasha-engine": "workspace:*",
+    "@vedica/interpretation-engine": "workspace:*",
+    "@vedica/life-domain-engine": "workspace:*",
+    "@vedica/shared": "workspace:*",
+    "@vedica/timing-engine": "workspace:*",
+    "@vedica/transit-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.5"
+  }
+}

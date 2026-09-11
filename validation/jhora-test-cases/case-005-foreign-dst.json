@@ -1,0 +1,15 @@
+{
+  "id": "CASE-005",
+  "description": "Foreign birth with Daylight Saving Time (DST)",
+  "category": "Foreign birth with daylight-saving time",
+  "input": {
+    "dateOfBirth": "1990-07-15",
+    "timeOfBirth": "10:30:00",
+    "latitude": 40.7128,
+    "longitude": -74.0060,
+    "timezone": "America/New_York",
+    "locationName": "New York, USA"
+  },
+  "calculationProfile": "personal-vedic-v1",
+  "status": "NOT_VALIDATED"
+}

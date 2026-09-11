@@ -1,0 +1,31 @@
+{
+  "id": "JHORA-005",
+  "name": "Nakshatra Boundary",
+  "status": "NOT_VALIDATED",
+  "category": "NAKSHATRA_BOUNDARY",
+  "source": {
+    "software": "Jagannatha Hora",
+    "version": null,
+    "capturedAt": null,
+    "enteredBy": null
+  },
+  "input": {
+    "birthDate": "1994-03-21",
+    "birthTime": "07:05:00",
+    "location": "Bengaluru, India",
+    "latitude": 12.9716,
+    "longitude": 77.5946,
+    "timezone": "Asia/Kolkata"
+  },
+  "configuration": {
+    "ayanamsha": "LAHIRI",
+    "houseSystem": "WHOLE_SIGN"
+  },
+  "referenceOutputs": {},
+  "investigation": {
+    "status": "UNINVESTIGATED",
+    "suspectedRootCause": "UNKNOWN",
+    "notes": ""
+  },
+  "notes": "Tests Nakshatra and Pada transition accuracy at 13°20' boundaries."
+}

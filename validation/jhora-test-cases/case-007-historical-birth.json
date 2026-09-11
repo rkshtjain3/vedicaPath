@@ -1,0 +1,15 @@
+{
+  "id": "CASE-007",
+  "description": "Historical birth (1869-10-02 07:45 LMT / Porbandar)",
+  "category": "Historical birth",
+  "input": {
+    "dateOfBirth": "1869-10-02",
+    "timeOfBirth": "07:45:00",
+    "latitude": 21.6417,
+    "longitude": 69.6293,
+    "timezone": "Asia/Kolkata",
+    "locationName": "Porbandar, India"
+  },
+  "calculationProfile": "personal-vedic-v1",
+  "status": "NOT_VALIDATED"
+}

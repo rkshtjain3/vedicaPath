@@ -1,0 +1,31 @@
+{
+  "id": "JHORA-004",
+  "name": "Planet Close to Sign Boundary",
+  "status": "NOT_VALIDATED",
+  "category": "EXALTATION_BOUNDARY",
+  "source": {
+    "software": "Jagannatha Hora",
+    "version": null,
+    "capturedAt": null,
+    "enteredBy": null
+  },
+  "input": {
+    "birthDate": "1992-10-10",
+    "birthTime": "18:15:00",
+    "location": "Kolkata, India",
+    "latitude": 22.5726,
+    "longitude": 88.3639,
+    "timezone": "Asia/Kolkata"
+  },
+  "configuration": {
+    "ayanamsha": "LAHIRI",
+    "houseSystem": "WHOLE_SIGN"
+  },
+  "referenceOutputs": {},
+  "investigation": {
+    "status": "UNINVESTIGATED",
+    "suspectedRootCause": "UNKNOWN",
+    "notes": ""
+  },
+  "notes": "Tests planetary sign assignment accuracy near 29°59' Rashi boundary."
+}

@@ -1,0 +1,31 @@
+{
+  "id": "JHORA-011",
+  "name": "Historical Birth",
+  "status": "NOT_VALIDATED",
+  "category": "HISTORICAL",
+  "source": {
+    "software": "Jagannatha Hora",
+    "version": null,
+    "capturedAt": null,
+    "enteredBy": null
+  },
+  "input": {
+    "birthDate": "1890-04-15",
+    "birthTime": "06:00:00",
+    "location": "Varanasi, India",
+    "latitude": 25.3176,
+    "longitude": 82.9739,
+    "timezone": "Asia/Kolkata"
+  },
+  "configuration": {
+    "ayanamsha": "LAHIRI",
+    "houseSystem": "WHOLE_SIGN"
+  },
+  "referenceOutputs": {},
+  "investigation": {
+    "status": "UNINVESTIGATED",
+    "suspectedRootCause": "UNKNOWN",
+    "notes": ""
+  },
+  "notes": "Tests pre-1906 Local Mean Time (LMT) and historical Swiss Ephemeris accuracy."
+}

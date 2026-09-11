@@ -1,0 +1,31 @@
+{
+  "id": "JHORA-003",
+  "name": "Lagna Boundary",
+  "status": "NOT_VALIDATED",
+  "category": "LAGNA_BOUNDARY",
+  "source": {
+    "software": "Jagannatha Hora",
+    "version": null,
+    "capturedAt": null,
+    "enteredBy": null
+  },
+  "input": {
+    "birthDate": "1988-06-15",
+    "birthTime": "05:42:10",
+    "location": "Chennai, India",
+    "latitude": 13.0827,
+    "longitude": 80.2707,
+    "timezone": "Asia/Kolkata"
+  },
+  "configuration": {
+    "ayanamsha": "LAHIRI",
+    "houseSystem": "WHOLE_SIGN"
+  },
+  "referenceOutputs": {},
+  "investigation": {
+    "status": "UNINVESTIGATED",
+    "suspectedRootCause": "UNKNOWN",
+    "notes": ""
+  },
+  "notes": "Tests precision when Ascendant is near sign transition (00°01' or 29°59')."
+}

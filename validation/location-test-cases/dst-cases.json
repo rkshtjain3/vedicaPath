@@ -1,0 +1,80 @@
+[
+  {
+    "id": "dst-001-ny-winter",
+    "timezone": "America/New_York",
+    "dateOfBirth": "1990-01-15",
+    "timeOfBirth": "10:30:00",
+    "expectedStatus": "VALID",
+    "expectedISO": "1990-01-15T15:30:00Z"
+  },
+  {
+    "id": "dst-002-ny-summer",
+    "timezone": "America/New_York",
+    "dateOfBirth": "1990-07-15",
+    "timeOfBirth": "10:30:00",
+    "expectedStatus": "VALID",
+    "expectedISO": "1990-07-15T14:30:00Z"
+  },
+  {
+    "id": "dst-003-ny-ambiguous-fall",
+    "timezone": "America/New_York",
+    "dateOfBirth": "2026-11-01",
+    "timeOfBirth": "01:30:00",
+    "expectedStatus": "AMBIGUOUS"
+  },
+  {
+    "id": "dst-004-ny-nonexistent-spring",
+    "timezone": "America/New_York",
+    "dateOfBirth": "2026-03-08",
+    "timeOfBirth": "02:30:00",
+    "expectedStatus": "NON_EXISTENT"
+  },
+  {
+    "id": "dst-005-london-winter",
+    "timezone": "Europe/London",
+    "dateOfBirth": "2000-01-15",
+    "timeOfBirth": "12:00:00",
+    "expectedStatus": "VALID",
+    "expectedISO": "2000-01-15T12:00:00Z"
+  },
+  {
+    "id": "dst-006-london-summer",
+    "timezone": "Europe/London",
+    "dateOfBirth": "2000-07-15",
+    "timeOfBirth": "12:00:00",
+    "expectedStatus": "VALID",
+    "expectedISO": "2000-07-15T11:00:00Z"
+  },
+  {
+    "id": "dst-007-sydney-summer",
+    "timezone": "Australia/Sydney",
+    "dateOfBirth": "2010-01-15",
+    "timeOfBirth": "10:00:00",
+    "expectedStatus": "VALID",
+    "expectedISO": "2010-01-14T23:00:00Z"
+  },
+  {
+    "id": "dst-008-sydney-winter",
+    "timezone": "Australia/Sydney",
+    "dateOfBirth": "2010-07-15",
+    "timeOfBirth": "10:00:00",
+    "expectedStatus": "VALID",
+    "expectedISO": "2010-07-15T00:00:00Z"
+  },
+  {
+    "id": "dst-009-toronto-historical-1980",
+    "timezone": "America/Toronto",
+    "dateOfBirth": "1980-06-15",
+    "timeOfBirth": "08:00:00",
+    "expectedStatus": "VALID",
+    "expectedISO": "1980-06-15T12:00:00Z"
+  },
+  {
+    "id": "dst-010-kolkata-historical-2025",
+    "timezone": "Asia/Kolkata",
+    "dateOfBirth": "2025-08-15",
+    "timeOfBirth": "06:00:00",
+    "expectedStatus": "VALID",
+    "expectedISO": "2025-08-15T00:30:00Z"
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "name": "@vedica/report-export",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vedica/astrology-core": "workspace:*",
+    "@vedica/chart-renderer": "workspace:*",
+    "@vedica/divisional-chart-engine": "workspace:*",
+    "@vedica/report-engine": "workspace:*",
+    "@vedica/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.5"
+  }
+}

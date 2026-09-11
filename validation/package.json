@@ -1,0 +1,40 @@
+{
+  "name": "@vedica/validation",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vedica/analysis-engine": "workspace:*",
+    "@vedica/ashtakavarga-engine": "workspace:*",
+    "@vedica/astrology-core": "workspace:*",
+    "@vedica/benchmark-store": "workspace:*",
+    "@vedica/dasha-engine": "workspace:*",
+    "@vedica/divisional-chart-engine": "workspace:*",
+    "@vedica/interpretation-engine": "workspace:*",
+    "@vedica/location-engine": "workspace:*",
+    "@vedica/numerology-engine": "workspace:*",
+    "@vedica/report-engine": "workspace:*",
+    "@vedica/rules-engine": "workspace:*",
+    "@vedica/shared": "workspace:*",
+    "@vedica/shadbala-engine": "workspace:*",
+    "@vedica/strength-engine": "workspace:*",
+    "@vedica/timing-engine": "workspace:*",
+    "@vedica/yoga-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.5"
+  }
+}

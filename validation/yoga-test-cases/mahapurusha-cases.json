@@ -1,0 +1,19 @@
+[
+  {
+    "id": "hamsa-test-01",
+    "name": "Jupiter in Sagittarius 1st House (Hamsa Yoga)",
+    "birthTime": {
+      "dateOfBirth": "1995-12-25",
+      "timeOfBirth": "07:00:00",
+      "timezone": "Asia/Kolkata"
+    },
+    "location": {
+      "name": "New Delhi",
+      "latitude": 28.6139,
+      "longitude": 77.209,
+      "timezone": "Asia/Kolkata"
+    },
+    "expectedDetectedYogas": ["HAMSA_YOGA"],
+    "expectedUndetectedYogas": ["BHADRA_YOGA"]
+  }
+]

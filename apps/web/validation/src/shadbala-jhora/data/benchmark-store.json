@@ -1,0 +1,22 @@
+{
+  "CASE-001": {
+    "caseId": "CASE-001",
+    "checklistConfirmed": true,
+    "referenceValues": {
+      "Sun": {
+        "uchchaBala": 60
+      },
+      "Moon": {},
+      "Mars": {},
+      "Mercury": {},
+      "Jupiter": {},
+      "Venus": {},
+      "Saturn": {}
+    },
+    "investigationCause": "UNKNOWN",
+    "investigationNotes": "",
+    "updatedAt": "2026-08-29T12:39:46.263Z",
+    "fingerprint": "4a06aae7c82150b4",
+    "referenceHash": "872bcca8259fc8f8"
+  }
+}
