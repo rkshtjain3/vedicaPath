@@ -6,7 +6,9 @@ export interface LLMStreamOptions {
     ollamaEndpoint?: string;
     onToken?: (token: string) => void;
     signal?: AbortSignal;
-    engineMode?: 'rag' | 'ollama' | 'auto';
+    engineMode?: 'rag' | 'ollama' | 'auto' | 'groq' | 'openai' | 'gemini' | 'deepseek' | 'openrouter';
+    apiKey?: string;
+    apiProvider?: 'groq' | 'openai' | 'gemini' | 'deepseek' | 'openrouter';
 }
 export interface LLMResponse {
     content: string;
@@ -25,15 +27,22 @@ export declare class LocalLLMService {
      */
     isOllamaAvailable(): Promise<boolean>;
     /**
-     * Stream response from local LLM or high-fidelity deterministic synthesizer
+     * Stream response from Cloud LLM (Groq, Gemini, OpenAI, DeepSeek, OpenRouter), local Ollama, or dynamic reasoner
      */
     streamResponse(prompt: SynthesizedPrompt, options?: LLMStreamOptions): AsyncGenerator<string, LLMResponse, unknown>;
+    private streamFromCloudLLM;
     private streamFromOllama;
     /**
      * Deterministic High-Fidelity RAG Response Generator
-     * Covers all life domains and sub-intents in English, Hindi, and Hinglish with concise, scannable format
+     * Covers all life domains, entities, and arbitrary questions dynamically in English, Hindi, and Hinglish
      */
     private generateSynthesizedRAGResponse;
+    /**
+     * Universal Question Astrological Deconstructor
+     * Dynamically maps ANY question to its authentic Vedic Bhava (1H-12H), Karaka, and domain strategy
+     */
+    private resolveQuestionAstrology;
+    private buildDynamicAstrologicalResponse;
     private generateEnglishRAGResponse;
     private generateHindiRAGResponse;
     private generateHinglishRAGResponse;

@@ -15,8 +15,10 @@ export async function POST(req: Request) {
       fullName,
       language = 'en',
       conversationHistory = [],
-      engineMode = 'rag',
+      engineMode = 'auto',
       selectedModel,
+      apiKey,
+      apiProvider,
     } = body;
 
     if (!question || typeof question !== 'string') {
@@ -53,7 +55,9 @@ export async function POST(req: Request) {
           // Stream tokens
           const tokenStream = llmService.streamResponse(prompt, {
             model: selectedModel,
-            engineMode: engineMode as 'rag' | 'ollama' | 'auto',
+            engineMode: engineMode as any,
+            apiKey: apiKey || undefined,
+            apiProvider: apiProvider || undefined,
           });
           for await (const token of tokenStream) {
             const tokenPayload = JSON.stringify({ type: 'token', token });

@@ -41,6 +41,11 @@ import {
   Moon,
   MessageSquare,
   Sparkle,
+  Eye,
+  EyeOff,
+  Key,
+  Cpu,
+  Cloud,
 } from 'lucide-react';
 import { executeQueryEngine, QueryAnswer, QueryEvidenceItem } from '@vedica/query-engine';
 import { useI18n, Language } from '@/lib/i18n';
@@ -464,7 +469,10 @@ export function AskVedicaTab({ calculationData, fullName, transitDate, initialQu
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
 
   // Local AI Engine & Language Selector State
-  const [engineMode, setEngineMode] = useState<'rag' | 'ollama'>('rag');
+  const [engineMode, setEngineMode] = useState<'rag' | 'cloud' | 'ollama'>('rag');
+  const [cloudProvider, setCloudProvider] = useState<'groq' | 'gemini' | 'openai' | 'deepseek' | 'openrouter'>('groq');
+  const [apiKey, setApiKey] = useState<string>('');
+  const [showApiKey, setShowApiKey] = useState<boolean>(false);
   const [selectedModel, setSelectedModel] = useState<string>('qwen2.5:3b');
   const [aiLanguage, setAiLanguage] = useState<'auto' | 'en' | 'hi' | 'hinglish'>('auto');
   const [ollamaStatus, setOllamaStatus] = useState<{
@@ -472,6 +480,40 @@ export function AskVedicaTab({ calculationData, fullName, transitDate, initialQu
     models: Array<{ name: string; size?: number }>;
     loading: boolean;
   }>({ connected: false, models: [], loading: false });
+
+  // Persistence for user preferences
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedKey = localStorage.getItem('vedica_ai_api_key');
+      const savedProvider = localStorage.getItem('vedica_ai_provider') as any;
+      const savedEngine = localStorage.getItem('vedica_ai_engine_mode') as any;
+      if (savedKey) setApiKey(savedKey);
+      if (savedProvider) setCloudProvider(savedProvider);
+      if (savedEngine) setEngineMode(savedEngine);
+    }
+  }, []);
+
+  const updateApiKey = (val: string) => {
+    setApiKey(val);
+    if (typeof window !== 'undefined') {
+      if (val) localStorage.setItem('vedica_ai_api_key', val);
+      else localStorage.removeItem('vedica_ai_api_key');
+    }
+  };
+
+  const updateCloudProvider = (p: 'groq' | 'gemini' | 'openai' | 'deepseek' | 'openrouter') => {
+    setCloudProvider(p);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('vedica_ai_provider', p);
+    }
+  };
+
+  const updateEngineMode = (m: 'rag' | 'cloud' | 'ollama') => {
+    setEngineMode(m);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('vedica_ai_engine_mode', m);
+    }
+  };
 
   // Voice Speech Recognition State
   const [isListening, setIsListening] = useState<boolean>(false);
@@ -691,6 +733,7 @@ export function AskVedicaTab({ calculationData, fullName, transitDate, initialQu
         content: m.content,
       }));
 
+      const effectiveEngine = engineMode === 'cloud' ? cloudProvider : engineMode;
       const res = await fetch('/api/ai/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -700,8 +743,10 @@ export function AskVedicaTab({ calculationData, fullName, transitDate, initialQu
           fullName: fullName || calculationData?.fullName,
           language: aiLanguage,
           conversationHistory: conversationPayload,
-          engineMode,
-          selectedModel,
+          engineMode: effectiveEngine,
+          selectedModel: engineMode === 'ollama' ? selectedModel : undefined,
+          apiKey: apiKey ? apiKey.trim() : undefined,
+          apiProvider: engineMode === 'cloud' ? cloudProvider : undefined,
         }),
       });
 
@@ -834,55 +879,164 @@ export function AskVedicaTab({ calculationData, fullName, transitDate, initialQu
             {/* AI Engine Selector Card */}
             <div className="bg-slate-950/90 border border-indigo-900/40 rounded-2xl p-3.5 space-y-3 text-xs">
               <div className="flex items-center justify-between text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-                <span>{isHi ? '⚙️ एआई इंजन' : '⚙️ AI Intelligence Engine'}</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-800 font-mono">
-                  100% LOCAL
+                <span>{isHi ? '⚙️ एआई इंजन मोड' : '⚙️ AI Intelligence Engine'}</span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono border ${
+                  engineMode === 'cloud'
+                    ? 'bg-emerald-950 text-emerald-300 border-emerald-800'
+                    : engineMode === 'ollama'
+                    ? 'bg-indigo-950 text-indigo-300 border-indigo-800'
+                    : 'bg-amber-950 text-amber-300 border-amber-800'
+                }`}>
+                  {engineMode === 'cloud' ? 'CLOUD AI' : engineMode === 'ollama' ? 'LOCAL LLM' : 'ZERO LATENCY'}
                 </span>
               </div>
 
               {/* Mode Toggle Buttons */}
-              <div className="grid grid-cols-2 gap-1.5 p-1 bg-slate-900/90 rounded-xl border border-slate-800">
+              <div className="grid grid-cols-3 gap-1 p-1 bg-slate-900/90 rounded-xl border border-slate-800">
                 <button
                   type="button"
-                  onClick={() => setEngineMode('rag')}
-                  className={`py-1.5 px-2 rounded-lg text-[11px] font-medium transition-all flex items-center justify-center gap-1.5 ${
+                  onClick={() => updateEngineMode('rag')}
+                  className={`py-1.5 px-1.5 rounded-lg text-[10.5px] font-medium transition-all flex items-center justify-center gap-1 ${
                     engineMode === 'rag'
                       ? 'bg-amber-500 text-slate-950 font-bold shadow-md'
                       : 'text-slate-400 hover:text-slate-200'
                   }`}
+                  title="Deterministic Vedic Astrological Reasoner"
                 >
                   <Sparkles className="w-3 h-3" />
                   <span>{isHi ? 'वैदिक इंजन' : 'Vedic RAG'}</span>
                 </button>
                 <button
                   type="button"
+                  onClick={() => updateEngineMode('cloud')}
+                  className={`py-1.5 px-1.5 rounded-lg text-[10.5px] font-medium transition-all flex items-center justify-center gap-1 ${
+                    engineMode === 'cloud'
+                      ? 'bg-emerald-600 text-white font-bold shadow-md'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                  title="Cloud AI Reasoning (Groq Llama 3.3, Gemini, OpenAI)"
+                >
+                  <Cloud className="w-3 h-3" />
+                  <span>{isHi ? 'क्लाउड एआई' : 'Cloud AI'}</span>
+                </button>
+                <button
+                  type="button"
                   onClick={() => {
-                    setEngineMode('ollama');
+                    updateEngineMode('ollama');
                     if (!ollamaStatus.connected) checkOllamaConnection();
                   }}
-                  className={`py-1.5 px-2 rounded-lg text-[11px] font-medium transition-all flex items-center justify-center gap-1.5 ${
+                  className={`py-1.5 px-1.5 rounded-lg text-[10.5px] font-medium transition-all flex items-center justify-center gap-1 ${
                     engineMode === 'ollama'
                       ? 'bg-indigo-600 text-white font-bold shadow-md'
                       : 'text-slate-400 hover:text-slate-200'
                   }`}
+                  title="Local Desktop Ollama Daemon"
                 >
                   <Bot className="w-3 h-3" />
-                  <span>{isHi ? 'लोकल ओलामा' : 'Local Ollama'}</span>
+                  <span>{isHi ? 'लोकल ओलामा' : 'Ollama'}</span>
                 </button>
               </div>
 
               {/* Engine Context Details */}
               {engineMode === 'rag' ? (
-                <div className="text-[11px] text-slate-400 leading-relaxed bg-slate-900/50 p-2.5 rounded-xl border border-slate-800/80">
+                <div className="text-[11px] text-slate-400 leading-relaxed bg-slate-900/50 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
                   <div className="text-amber-400 font-semibold mb-0.5 flex items-center gap-1">
                     <Sparkles className="w-3 h-3 text-amber-400" />
-                    <span>{isHi ? 'गणितीय प्रमाण एवं सूत्र' : 'Mathematical Vedic Engine'}</span>
+                    <span>{isHi ? 'यूनिवर्सल सिमेंटिक वैदिक रीज़नर' : 'Universal Semantic Vedic Reasoner'}</span>
                   </div>
                   <p className="text-[10.5px] text-slate-400">
                     {isHi
-                      ? 'शून्य विलंबता के साथ सर्वाष्टकवर्ग, षड्बल, नवमांश एवं शास्त्रीय श्लोक प्रमाण।'
-                      : 'Zero-latency deterministic engine with SAV bindus, D9/D10 proofs & confidence ratings.'}
+                      ? 'शून्य विलंबता के साथ किसी भी प्रश्न (माता, पिता, भाई, संतान, परीक्षा, कोर्ट, कर्ज, वाहन, विवाह आदि) का भाव व ग्रह आधारित प्रत्यक्ष उत्तर।'
+                      : 'Zero-latency dynamic reasoner deconstructing any custom question into 12 Bhavas, Karakas, and active Dasha timelines.'}
                   </p>
+                </div>
+              ) : engineMode === 'cloud' ? (
+                <div className="space-y-2.5 bg-slate-900/50 p-2.5 rounded-xl border border-slate-800/80">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-emerald-400 font-semibold text-[11px]">
+                      <Cloud className="w-3.5 h-3.5" />
+                      <span>{isHi ? 'क्लाउड एलएलएम प्रोवाइडर' : 'Cloud LLM Provider'}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-2">
+                    <div>
+                      <label className="text-[10px] text-slate-400 block mb-1">
+                        {isHi ? 'एआई प्रोवाइडर चुनें:' : 'Select Provider:'}
+                      </label>
+                      <select
+                        value={cloudProvider}
+                        onChange={(e) => updateCloudProvider(e.target.value as any)}
+                        className="w-full bg-slate-950 border border-indigo-900/50 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500"
+                      >
+                        <option value="groq">Groq (Llama 3.3 70B — 500 T/s Ultra-Fast)</option>
+                        <option value="gemini">Google Gemini (1.5 Flash)</option>
+                        <option value="openai">OpenAI (GPT-4o-mini)</option>
+                        <option value="deepseek">DeepSeek (V3 Chat)</option>
+                        <option value="openrouter">OpenRouter AI</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-[10px] text-slate-400">
+                          {isHi ? 'एपीआई की (वैकल्पिक):' : 'API Key (Optional / Bring Your Own):'}
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setShowApiKey(!showApiKey)}
+                          className="text-[10px] text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
+                        >
+                          {showApiKey ? <EyeOff className="w-2.5 h-2.5" /> : <Eye className="w-2.5 h-2.5" />}
+                          <span>{showApiKey ? 'Hide' : 'Show'}</span>
+                        </button>
+                      </div>
+                      <div className="relative">
+                        <input
+                          type={showApiKey ? 'text' : 'password'}
+                          value={apiKey}
+                          onChange={(e) => updateApiKey(e.target.value)}
+                          placeholder={
+                            cloudProvider === 'groq'
+                              ? 'gsk_... (or leave empty to use server key)'
+                              : cloudProvider === 'gemini'
+                              ? 'AIzaSy... (or leave empty)'
+                              : 'sk-... (or leave empty)'
+                          }
+                          className="w-full bg-slate-950 border border-indigo-900/50 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono"
+                        />
+                      </div>
+                      <p className="text-[9.5px] text-slate-500 mt-1">
+                        {cloudProvider === 'groq' ? (
+                          <span>
+                            Tip: Get a 100% free Groq key at{' '}
+                            <a
+                              href="https://console.groq.com/keys"
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-emerald-400 underline hover:text-emerald-300"
+                            >
+                              console.groq.com
+                            </a>
+                          </span>
+                        ) : cloudProvider === 'gemini' ? (
+                          <span>
+                            Tip: Get a free Gemini key at{' '}
+                            <a
+                              href="https://aistudio.google.com/"
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-emerald-400 underline hover:text-emerald-300"
+                            >
+                              aistudio.google.com
+                            </a>
+                          </span>
+                        ) : (
+                          <span>Keys are stored securely in your browser localStorage.</span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="space-y-2 bg-slate-900/50 p-2.5 rounded-xl border border-slate-800/80">

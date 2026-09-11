@@ -9,7 +9,9 @@ export interface LLMStreamOptions {
   ollamaEndpoint?: string;
   onToken?: (token: string) => void;
   signal?: AbortSignal;
-  engineMode?: 'rag' | 'ollama' | 'auto';
+  engineMode?: 'rag' | 'ollama' | 'auto' | 'groq' | 'openai' | 'gemini' | 'deepseek' | 'openrouter';
+  apiKey?: string;
+  apiProvider?: 'groq' | 'openai' | 'gemini' | 'deepseek' | 'openrouter';
 }
 
 export interface LLMResponse {
@@ -121,14 +123,56 @@ export class LocalLLMService {
   }
 
   /**
-   * Stream response from local LLM or high-fidelity deterministic synthesizer
+   * Stream response from Cloud LLM (Groq, Gemini, OpenAI, DeepSeek, OpenRouter), local Ollama, or dynamic reasoner
    */
   async *streamResponse(
     prompt: SynthesizedPrompt,
     options?: LLMStreamOptions
   ): AsyncGenerator<string, LLMResponse, unknown> {
-    const shouldTryOllama = options?.engineMode !== 'rag';
+    // 1. Check for Cloud LLM (Groq, Gemini, OpenAI, DeepSeek, OpenRouter)
+    const isExplicitRag = options?.engineMode === 'rag';
+    const provider = options?.apiProvider || (
+      options?.apiKey ? 'groq' :
+      process.env.GROQ_API_KEY ? 'groq' :
+      process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY ? 'gemini' :
+      process.env.OPENAI_API_KEY ? 'openai' :
+      process.env.DEEPSEEK_API_KEY ? 'deepseek' :
+      process.env.OPENROUTER_API_KEY ? 'openrouter' :
+      null
+    );
 
+    const apiKey = options?.apiKey || (
+      provider === 'groq' ? process.env.GROQ_API_KEY :
+      provider === 'gemini' ? (process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY) :
+      provider === 'openai' ? process.env.OPENAI_API_KEY :
+      provider === 'deepseek' ? process.env.DEEPSEEK_API_KEY :
+      provider === 'openrouter' ? process.env.OPENROUTER_API_KEY :
+      null
+    );
+
+    if (provider && apiKey && !isExplicitRag) {
+      try {
+        const stream = this.streamFromCloudLLM(prompt, provider as any, apiKey, options);
+        let accumulated = '';
+        for await (const chunk of stream) {
+          accumulated += chunk;
+          yield chunk;
+          options?.onToken?.(chunk);
+        }
+        if (accumulated.trim().length > 0) {
+          return {
+            content: accumulated,
+            modelUsed: `${provider}:${options?.model || 'default'}`,
+            isFallback: false,
+          };
+        }
+      } catch (cloudErr) {
+        console.warn(`${provider} streaming error, falling back to local or deterministic reasoner:`, cloudErr);
+      }
+    }
+
+    // 2. Check for local Ollama
+    const shouldTryOllama = !isExplicitRag;
     if (shouldTryOllama) {
       const isAvailable = await this.isOllamaAvailable();
       if (isAvailable) {
@@ -150,7 +194,7 @@ export class LocalLLMService {
       }
     }
 
-    // High-fidelity RAG Synthesizer Fallback (Deterministic, Zero Latency)
+    // 3. Dynamic Semantic Astrological Reasoner Fallback (Zero Latency)
     const fallbackText = this.generateSynthesizedRAGResponse(prompt);
     // Split into readable natural phrases / words for snappy smooth rendering
     const phrases = fallbackText.split(/(\s+)/);
@@ -171,9 +215,96 @@ export class LocalLLMService {
 
     return {
       content: accumulated,
-      modelUsed: 'vedica-hybrid-rag-engine-v2',
+      modelUsed: 'vedica-dynamic-semantic-reasoner-v2',
       isFallback: true,
     };
+  }
+
+  private async *streamFromCloudLLM(
+    prompt: SynthesizedPrompt,
+    provider: 'groq' | 'openai' | 'gemini' | 'deepseek' | 'openrouter',
+    apiKey: string,
+    options?: LLMStreamOptions
+  ): AsyncGenerator<string, void, unknown> {
+    let endpoint = 'https://api.groq.com/openai/v1/chat/completions';
+    let defaultModel = 'llama-3.3-70b-versatile';
+
+    if (provider === 'openai') {
+      endpoint = 'https://api.openai.com/v1/chat/completions';
+      defaultModel = 'gpt-4o-mini';
+    } else if (provider === 'gemini') {
+      endpoint = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
+      defaultModel = 'gemini-1.5-flash';
+    } else if (provider === 'deepseek') {
+      endpoint = 'https://api.deepseek.com/chat/completions';
+      defaultModel = 'deepseek-chat';
+    } else if (provider === 'openrouter') {
+      endpoint = 'https://openrouter.ai/api/v1/chat/completions';
+      defaultModel = 'google/gemini-2.0-flash-001';
+    } else {
+      endpoint = 'https://api.groq.com/openai/v1/chat/completions';
+      defaultModel = 'llama-3.3-70b-versatile';
+    }
+
+    const model = options?.model || defaultModel;
+
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: 'system', content: prompt.systemPrompt },
+          { role: 'user', content: prompt.userPrompt },
+        ],
+        stream: true,
+        temperature: options?.temperature ?? 0.7,
+        max_tokens: options?.maxTokens ?? 1500,
+      }),
+      signal: options?.signal,
+    });
+
+    if (!res.ok || !res.body) {
+      const errText = await res.text().catch(() => '');
+      throw new Error(`${provider.toUpperCase()} API error (${res.status}): ${errText || res.statusText}`);
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed || trimmed.startsWith(':')) continue;
+          if (trimmed === 'data: [DONE]') break;
+          if (trimmed.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(trimmed.slice(6));
+              const text = data.choices?.[0]?.delta?.content || '';
+              if (text) {
+                yield text;
+              }
+            } catch {
+              // ignore partial JSON
+            }
+          }
+        }
+      }
+    } finally {
+      reader.releaseLock();
+    }
   }
 
   private async *streamFromOllama(
@@ -233,7 +364,7 @@ export class LocalLLMService {
 
   /**
    * Deterministic High-Fidelity RAG Response Generator
-   * Covers all life domains and sub-intents in English, Hindi, and Hinglish with concise, scannable format
+   * Covers all life domains, entities, and arbitrary questions dynamically in English, Hindi, and Hinglish
    */
   private generateSynthesizedRAGResponse(prompt: SynthesizedPrompt): string {
     const { context } = prompt;
@@ -251,6 +382,477 @@ export class LocalLLMService {
     return this.generateEnglishRAGResponse(context, rating, sav, jaimini);
   }
 
+  /**
+   * Universal Question Astrological Deconstructor
+   * Dynamically maps ANY question to its authentic Vedic Bhava (1H-12H), Karaka, and domain strategy
+   */
+  private resolveQuestionAstrology(question: string = '', context: any): {
+    matched: boolean;
+    topicTitleEn: string;
+    topicTitleHi: string;
+    topicTitleHinglish: string;
+    verdictEn: string;
+    verdictHi: string;
+    verdictHinglish: string;
+    primaryHouseNum: number;
+    secondaryHouseNum?: number;
+    karakaPlanet: string;
+    doEn: string;
+    avoidEn: string;
+    practiceEn: string;
+    doHi: string;
+    avoidHi: string;
+    practiceHi: string;
+    doHinglish: string;
+    avoidHinglish: string;
+    practiceHinglish: string;
+  } {
+    const q = (question || context.questionQuery || '').toLowerCase().trim();
+
+    // 1. Mother / Maternal Well-being
+    if (/\b(mother|mom|maa|mata|matru|mumma)\b/i.test(q) || /(माता|माँ|मातृ)/.test(q)) {
+      return {
+        matched: true,
+        topicTitleEn: 'Mother & Domestic Well-Being Assessment',
+        topicTitleHi: 'माता का स्वास्थ्य एवं मातृ सुख विश्लेषण',
+        topicTitleHinglish: "Mother's Well-Being & Domestic Harmony Analysis",
+        verdictEn: 'Supportive Matru Karma with Strong Emotional Resonance',
+        verdictHi: 'मातृ सुख एवं भावनात्मक सहयोग के उत्तम ज्योतिषीय संकेत',
+        verdictHinglish: 'Strong Matru Karma aur supportive emotional connection',
+        primaryHouseNum: 4,
+        karakaPlanet: 'Moon (Chandra)',
+        doEn: 'Support mother with calm listening, attentive care, and regular wellness routines.',
+        avoidEn: 'Engaging in reactive arguments or overlooking subtle emotional cues.',
+        practiceEn: 'Offer gratitude to mother daily; chant "Om Som Somaya Namaha" on Mondays for emotional tranquility.',
+        doHi: 'माता की सेवा, शांत संवाद और उनकी स्वास्थ्य देखभाल को प्राथमिकता दें।',
+        avoidHi: 'पारिवारिक बातचीत में अधीर होने या विवाद करने से बचें।',
+        practiceHi: 'प्रतिदिन माता का आशीर्वाद लें और सोमवार को चंद्र मंत्र का जप करें।',
+        doHinglish: 'Maa ke sath daily calm conversation aur care maintain karein.',
+        avoidHinglish: 'Unnecessary arguments ya emotional distance avoid karein.',
+        practiceHinglish: 'Daily mother ki blessings lein aur Monday ko peaceful state maintain karein.',
+      };
+    }
+
+    // 2. Father / Paternal Guidance
+    if (/\b(father|dad|papa|pita|pitru|pitaji)\b/i.test(q) || /(पिता|पापा|पितृ|पिताजी)/.test(q)) {
+      return {
+        matched: true,
+        topicTitleEn: 'Father & Paternal Guidance Alignment',
+        topicTitleHi: 'पिता का स्वास्थ्य एवं पितृ सहयोग विश्लेषण',
+        topicTitleHinglish: "Father's Health & Paternal Support Roadmap",
+        verdictEn: 'Dignified Paternal Support & Dharma Lineage Alignment',
+        verdictHi: 'पिता के साथ उत्तम सहयोग एवं पितृ कृपा के प्रबल योग',
+        verdictHinglish: 'Strong Paternal blessings aur family guidance',
+        primaryHouseNum: 9,
+        karakaPlanet: 'Sun (Surya)',
+        doEn: 'Seek paternal wisdom for long-term decisions and maintain ethical conduct in career.',
+        avoidEn: 'Imposing unilateral decisions without discussing with elders.',
+        practiceEn: 'Offer fresh water to the rising Sun daily (Surya Arghya) with copper vessel for fatherly strength.',
+        doHi: 'महत्वपूर्ण निर्णयों में पिता से परामर्श लें और सत्यनिष्ठा का पालन करें।',
+        avoidHi: 'पारिवारिक वरिष्ठों के अनुभव की उपेक्षा करने से बचें।',
+        practiceHi: 'प्रातः तांबे के पात्र से सूर्य को जल (अर्घ्य) अर्पित करें।',
+        doHinglish: 'Major career decisions me father se advice lein aur respect maintain karein.',
+        avoidHinglish: 'Elders ke experience ko disregard karna avoid karein.',
+        practiceHinglish: 'Daily morning copper vessel se Surya ko water offer karein.',
+      };
+    }
+
+    // 3. Younger / Elder Siblings
+    if (/\b(brother|sister|sibling|bhai|behen|bhaiya|didi)\b/i.test(q) || /(भाई|बहन|सहोदर)/.test(q)) {
+      const isElder = /\b(elder|bada|badi)\b/i.test(q);
+      const houseNum = isElder ? 11 : 3;
+      return {
+        matched: true,
+        topicTitleEn: `${isElder ? 'Elder' : 'Younger'} Siblings & Mutual Camaraderie`,
+        topicTitleHi: 'भाई-बहन एवं सहोदर संबंध विश्लेषण',
+        topicTitleHinglish: 'Siblings & Mutual Support Assessment',
+        verdictEn: 'Collaborative Enterprise & Mutual Protection',
+        verdictHi: 'पारस्परिक सहयोग एवं सौहार्दपूर्ण संबंध',
+        verdictHinglish: 'Strong sibling synergy aur practical support',
+        primaryHouseNum: houseNum,
+        karakaPlanet: isElder ? 'Jupiter (Guru)' : 'Mars (Mangal)',
+        doEn: 'Foster open communication, celebrate each other\'s milestones, and collaborate on shared initiatives.',
+        avoidEn: 'Comparing personal career trajectories or competing in ego battles.',
+        practiceEn: 'Share auspicious meals together and support each other with honest encouragement.',
+        doHi: 'आपसी संवाद में स्पष्टता रखें और एक-दूसरे की प्रगति में संबल बनें।',
+        avoidHi: 'अहंकार के टकराव या एक-दूसरे की तुलना करने से बचें।',
+        practiceHi: 'मंगलवार को हनुमान चालीसा का पाठ करें और सौहार्द बनाए रखें।',
+        doHinglish: 'Ek doosre ke career goals ko support karein aur open communication rakhein.',
+        avoidHinglish: 'Comparison ya unnecessary ego clashes avoid karein.',
+        practiceHinglish: 'Tuesdays ko mutual bonding aur grounding practice follow karein.',
+      };
+    }
+
+    // 4. Children / Conception / Progeny
+    if (/\b(child|children|baby|pregnancy|conceive|son|daughter|baccha|bacha|santana|garbh|beta|beti)\b/i.test(q) || /(संतान|बच्चा|गर्भावस्था|बेटा|बेटी)/.test(q)) {
+      return {
+        matched: true,
+        topicTitleEn: 'Children & Progeny Prospects Assessment',
+        topicTitleHi: 'संतान सुख, विद्या एवं प्रगति विश्लेषण',
+        topicTitleHinglish: 'Children & Progeny Prospects Blueprint',
+        verdictEn: 'Auspicious Putra Bhava Resonance & Intellectual Lineage',
+        verdictHi: 'संतान सुख एवं बौद्धिक प्रगति के उत्तम योग',
+        verdictHinglish: 'Positive 5th house activation for children & family growth',
+        primaryHouseNum: 5,
+        karakaPlanet: 'Jupiter (Brihaspati)',
+        doEn: 'Focus on harmonious lifestyle, nutritional vitality, and encouraging children\'s natural curiosity.',
+        avoidEn: 'Imposing rigid expectations or experiencing anxiety over societal timelines.',
+        practiceEn: 'Maintain a peaceful home sanctuary; light a ghee lamp on Thursdays and honor mentors.',
+        doHi: 'बच्चों की स्वाभाविक रुचियों को प्रोत्साहन दें और घर में शांत वातावरण रखें।',
+        avoidHi: 'अनावश्यक चिंता या बच्चों पर अत्यधिक दबाव बनाने से बचें।',
+        practiceHi: 'गुरुवार को सात्विक आहार लें और विद्वानों का सम्मान करें।',
+        doHinglish: 'Children ki natural curiosity ko nurture karein aur home environment peaceful rakhein.',
+        avoidHinglish: 'Excessive societal pressure ya anxiety lena avoid karein.',
+        practiceHinglish: 'Thursdays ko simple charity aur gratitude maintain karein.',
+      };
+    }
+
+    // 5. Competitive Exams / UPSC / IIT / Studies
+    if (/\b(exam|upsc|test|competition|clear exam|entrance|competitive|iit|neet|cfa|mba|padhai|pariksha|sarkari pariksha|result|interview)\b/i.test(q) || /(परीक्षा|प्रतियोगिता|यूपीएससी|इंटरव्यू|अध्ययन)/.test(q)) {
+      return {
+        matched: true,
+        topicTitleEn: 'Competitive Exam & Academic Triumph Blueprint',
+        topicTitleHi: 'प्रतियोगी परीक्षा, साक्षात्कार एवं सफलता विश्लेषण',
+        topicTitleHinglish: 'Competitive Exam & High-Stakes Test Blueprint',
+        verdictEn: 'High Conceptual Retention & Competitive Sharpness',
+        verdictHi: 'तीक्ष्ण बुद्धि, एकाग्रता एवं परीक्षा में सफलता के प्रबल योग',
+        verdictHinglish: 'High focus and strong exam clearing leverage under 5H/6H activation',
+        primaryHouseNum: 5,
+        secondaryHouseNum: 6,
+        karakaPlanet: 'Mercury (Budha) & Jupiter',
+        doEn: 'Study in deep 90-minute distraction-free blocks with weekly simulated timed mock tests.',
+        avoidEn: 'Passive highlighting, last-minute cramming, or irregular sleep cycles before exams.',
+        practiceEn: 'Practice 5 minutes of morning Pranayama (Nadi Shodhana) to sharpen memory and neural focus.',
+        doHi: 'नियमित 90 मिनट के एकाग्र स्लॉट्स में मॉक टेस्ट का अभ्यास करें।',
+        avoidHi: 'परीक्षा से पूर्व नींद में अनियमितता या बहु-कार्य (multitasking) से बचें।',
+        practiceHi: 'प्रातः 5 मिनट भ्रामरी व नाड़ी शोधन प्राणायाम करें।',
+        doHinglish: 'Deep work study blocks aur regular mock test analysis follow karein.',
+        avoidHinglish: 'Last-moment cramming aur irregular sleep routine avoid karein.',
+        practiceHinglish: 'Morning 5 mins deep breathing karein for sharp focus and memory.',
+      };
+    }
+
+    // 6. Vehicles / Car / Bike Purchase
+    if (/\b(car|vehicle|automobile|bike|vahan|gadi|gaadi|buy car|drive)\b/i.test(q) || /(गाड़ी|वाहन|कार|बाइक|वाहन सुख)/.test(q)) {
+      return {
+        matched: true,
+        topicTitleEn: 'Vehicle Acquisition & Conveyance Bliss (Vahana Sukha)',
+        topicTitleHi: 'वाहन क्रय एवं वाहन सुख योग विश्लेषण',
+        topicTitleHinglish: 'Vehicle Purchase & Vahana Sukha Roadmap',
+        verdictEn: 'Favorable Conveyance Activation & Safe Travel Alignment',
+        verdictHi: 'वाहन प्राप्ति एवं सुखद यात्रा के अनुकूल योग',
+        verdictHinglish: 'Supportive 4th house alignment for vehicle purchase',
+        primaryHouseNum: 4,
+        karakaPlanet: 'Venus (Shukra)',
+        doEn: 'Select vehicles prioritizing build quality, safety ratings, and sensible finance structures.',
+        avoidEn: 'Impulsive over-leveraged luxury purchases that stretch monthly cash flow beyond 15%.',
+        practiceEn: 'Keep vehicles impeccably clean and maintain mindful, alert driving habits.',
+        doHi: 'सुरक्षा और उपयोगिता को प्राथमिकता देते हुए उचित बजट में वाहन चयन करें।',
+        avoidHi: 'दिखावे में आकर बजट से बाहर भारी ऋण लेने से बचें।',
+        practiceHi: 'वाहन को स्वच्छ रखें और संयमित ड्राइविंग का पालन करें।',
+        doHinglish: 'Safety ratings aur comfortable budget ko prioritize karein.',
+        avoidHinglish: 'Unnecessary luxury debt lena avoid karein.',
+        practiceHinglish: 'Vehicle ko clean rakhein aur safe driving discipline follow karein.',
+      };
+    }
+
+    // 7. Court Case / Legal Dispute / Enemies
+    if (/\b(court|case|lawsuit|dispute|legal|lawyer|enemy|opponent|police|dushmani|shatru|muqaddama|mukadma|vivad|litigation)\b/i.test(q) || /(कोर्ट|केस|मुकदमा|शत्रु|विवाद|अदालत)/.test(q)) {
+      return {
+        matched: true,
+        topicTitleEn: 'Legal Dispute, Court Case & Adversary Resolution',
+        topicTitleHi: 'न्यायालय प्रकरण, शत्रु विजय एवं विवाद निवारण',
+        topicTitleHinglish: 'Legal Case, Court Dispute & Resolution Roadmap',
+        verdictEn: 'Strategic Fortitude & Definitive Favorable Settlement Horizon',
+        verdictHi: 'धैर्य व तथ्यात्मक पक्ष से विवाद में विजय व शांति के योग',
+        verdictHinglish: 'Strategic leverage and resolution through 6H/11H strength',
+        primaryHouseNum: 6,
+        secondaryHouseNum: 11,
+        karakaPlanet: 'Mars (Mangal) & Jupiter',
+        doEn: 'Rely strictly on documented evidence, maintain ethical composure, and seek structured mediation where feasible.',
+        avoidEn: 'Aggressive provocations, emotional outbursts, or informal non-recorded agreements.',
+        practiceEn: 'Maintain disciplined daily routine; recite Hanuman Chalisa for courage and clarity.',
+        doHi: 'लिखित साक्ष्यों और कानूनी सलाह पर ही भरोसा करें तथा शांति से अपना पक्ष रखें।',
+        avoidHi: 'भावुक होकर क्रोध में कोई अनुचित कदम उठाने से बचें।',
+        practiceHi: 'प्रतिदिन एकाग्रता बनाए रखें और सत्य का मार्ग अपनाएं।',
+        doHinglish: 'Complete documentation aur calm factual legal strategy follow karein.',
+        avoidHinglish: 'Emotional anger ya unverified third-party advice avoid karein.',
+        practiceHinglish: 'Daily grounding breathwork aur focused patience maintain karein.',
+      };
+    }
+
+    // 8. Debts / Loans / Financial Liabilities
+    if (/\b(debt|loan|emi|borrow|owe|creditor|karz|udhaar|rin|karja)\b/i.test(q) || /(कर्ज|लोन|ऋण|उधार)/.test(q)) {
+      return {
+        matched: true,
+        topicTitleEn: 'Debt Clearance & Financial Equilibrium Blueprint',
+        topicTitleHi: 'ऋण मुक्ति एवं आर्थिक भार निवारण विश्लेषण',
+        topicTitleHinglish: 'Debt Relief & Loan Repayment Strategy',
+        verdictEn: 'Systematic Debt Dissolution with Compounding Surplus Cashflow',
+        verdictHi: 'व्यवस्थित वित्तीय प्रबंधन से शीघ्र ऋण मुक्ति के योग',
+        verdictHinglish: 'Clear roadmap for debt resolution via 6H/11H discipline',
+        primaryHouseNum: 6,
+        secondaryHouseNum: 11,
+        karakaPlanet: 'Saturn (Shani) & Mercury',
+        doEn: 'Consolidate high-interest debts, automate principal prepayments, and cap discretionary expenses.',
+        avoidEn: 'Taking fresh unsecured loans or speculating in markets to pay off existing debt.',
+        practiceEn: 'Feed stray animals or contribute to selfless community service on Saturdays for Saturnian balance.',
+        doHi: 'उच्च ब्याज वाले कर्जों को पहले चुकाएं और खर्चों को नियंत्रित करें।',
+        avoidHi: 'कर्ज चुकाने के लिए नया सट्टा या अनियोजित ऋण लेने से बचें।',
+        practiceHi: 'शनिवार को जरूरतमंदों की सेवा करें और वित्तीय अनुशासन बनाए रखें।',
+        doHinglish: 'High-interest loans ko prioritize karke systematically repay karein.',
+        avoidHinglish: 'New debt lena ya speculative trading se debt bharna strictly avoid karein.',
+        practiceHinglish: 'Saturday selfless service aur strict budget discipline follow karein.',
+      };
+    }
+
+    // 9. Gemstones / Astrological Remedies
+    if (/\b(gemstone|ratna|ruby|pearl|emerald|yellow sapphire|blue sapphire|diamond|panna|manik|moti|pukhraj|neelam|heera|rudraksha|stone wear|which stone|wearing stone)\b/i.test(q) || /(रत्न|माणिक|मोती|पन्ना|पुखराज|नीलम|हीरा|रुद्राक्ष)/.test(q)) {
+      return {
+        matched: true,
+        topicTitleEn: 'Gemstone & Sattvic Remedial Prescription',
+        topicTitleHi: 'रत्न परामर्श एवं ग्रह शुद्धि विश्लेषण',
+        topicTitleHinglish: 'Gemstone & Remedial Astrological Protocol',
+        verdictEn: 'Trikona Lord Alignment for Maximum Vitality & Cognitive Elevation',
+        verdictHi: 'त्रिकोणेश (1, 5, 9 भाव) के अनुकूल सात्विक रत्न धारण का विधान',
+        verdictHinglish: 'Benefic Trikona lord gemstone alignment for wisdom & prosperity',
+        primaryHouseNum: 1,
+        secondaryHouseNum: 9,
+        karakaPlanet: 'Jupiter (Brihaspati)',
+        doEn: 'Wear natural, unheated stones of functional benefic lords (1st, 5th, 9th houses) set in appropriate metals on auspicious planetary horas.',
+        avoidEn: 'Wearing stones of 6th, 8th, or 12th lords, or synthetic flawed gemstones.',
+        practiceEn: 'Cleanse gemstones in Ganga water/raw milk before energizing with standard planetary Beej Mantras.',
+        doHi: 'शुभ त्रिकोण भावों (1, 5, 9) के स्वामी ग्रहों के प्रामाणिक रत्न ही धारण करें।',
+        avoidHi: 'त्रिक भावों (6, 8, 12) के मारक ग्रहों के रत्न बिना पूर्ण विश्लेषण के पहनने से बचें।',
+        practiceHi: 'रत्न को शुभ मुहूर्त में धारण करें और सात्विक आचरण बनाए रखें।',
+        doHinglish: 'Always certified, natural Trikona lord gemstones wear karein right finger me.',
+        avoidHinglish: '6H/8H/12H lords ke stones wear karna strictly avoid karein.',
+        practiceHinglish: 'Auspicious muhurta me properly energize karke wear karein.',
+      };
+    }
+
+    // 10. Spirituality / Past Life / Kundalini / Occult
+    if (/\b(spiritual|meditation|kundalini|past life|karma|moksha|occult|astrology learn|tantra|mantra|adhyatm|purva janma|sadhana|enlightenment)\b/i.test(q) || /(अध्यात्म|मोक्ष|कुंडलिनी|पूर्व जन्म|साधना)/.test(q)) {
+      return {
+        matched: true,
+        topicTitleEn: 'Spiritual Path, Past Karma & Inner Awakening',
+        topicTitleHi: 'आध्यात्मिक मार्ग, पूर्व जन्म कर्म एवं आत्मबोध',
+        topicTitleHinglish: 'Spiritual Awakening & Karmic Evolution Blueprint',
+        verdictEn: 'Deep Intuitive Awakening & Sovereign Spiritual Fulfillment',
+        verdictHi: 'गंभीर आध्यात्मिक चेतना, ध्यान एवं मोक्ष मार्ग के उत्तम संकेत',
+        verdictHinglish: 'High intuitive depth aur spiritual evolution under 8H/9H/12H axis',
+        primaryHouseNum: 9,
+        secondaryHouseNum: 12,
+        karakaPlanet: 'Ketu & Jupiter',
+        doEn: 'Cultivate a dedicated 20-minute daily meditation or japa practice in the early morning Brahma Muhurta.',
+        avoidEn: 'Chasing sensational occult shortcuts or treating spiritual practices as commercial transactions.',
+        practiceEn: 'Practice silent witness meditation (Sakshi Bhava) and study classical philosophical texts.',
+        doHi: 'प्रातः काल नियमित 20 मिनट ध्यान व स्वाध्याय का नियम बनाएं।',
+        avoidHi: 'अंधविश्वास या तंत्र-मंत्र के भ्रामक दावों में समय व्यर्थ करने से बचें।',
+        practiceHi: 'मौन ध्यान और सात्विक जीवन शैली का अभ्यास करें।',
+        doHinglish: 'Daily morning 20 mins meditation aur spiritual reading follow karein.',
+        avoidHinglish: 'Superstitious shortcuts ya fear-based rituals avoid karein.',
+        practiceHinglish: 'Mindfulness meditation aur steady lifestyle discipline maintain karein.',
+      };
+    }
+
+    // 11. In-Laws / Spouse's Family
+    if (/\b(in-law|mother-in-law|father-in-law|saas|sasur|sasural)\b/i.test(q) || /(ससुराल|सास|ससुर)/.test(q)) {
+      return {
+        matched: true,
+        topicTitleEn: 'In-Laws & Extended Family Harmony Blueprint',
+        topicTitleHi: 'ससुराल पक्ष एवं पारिवारिक सौहार्द विश्लेषण',
+        topicTitleHinglish: 'In-Laws & Extended Family Relationship Strategy',
+        verdictEn: 'Constructive Interpersonal Harmony through Healthy Boundaries',
+        verdictHi: 'परस्पर सम्मान एवं संतुलित सीमाओं से सौहार्दपूर्ण संबंध',
+        verdictHinglish: 'Supportive family harmony with healthy emotional boundaries',
+        primaryHouseNum: 8,
+        karakaPlanet: 'Moon & Mercury',
+        doEn: 'Maintain dignified, polite communication with well-defined healthy personal boundaries.',
+        avoidEn: 'Over-reacting to generational differences or engaging in subtle domestic politics.',
+        practiceEn: 'Practice unconditional neutrality and express genuine appreciation during family gatherings.',
+        doHi: 'शिष्टता व सम्मान के साथ संतुलित बातचीत बनाए रखें।',
+        avoidHi: 'पीढ़ीगत मतभेदों पर अधिक प्रतिक्रिया देने से बचें।',
+        practiceHi: 'पारिवारिक सौहार्द के लिए धैर्य व समझदारी से कार्य करें।',
+        doHinglish: 'Polite aur dignified communication maintain karein boundaries ke sath.',
+        avoidHinglish: 'Generational differences par over-react karna avoid karein.',
+        practiceHinglish: 'Calm and steady patience maintain karein during family meets.',
+      };
+    }
+
+    // 12. Mental Peace / Stress / Anxiety / Sleep
+    if (/\b(anxiety|stress|depression|mental peace|peace of mind|sleep|insomnia|restless|overthinking|tension|tanaav|neend|chinta|peace)\b/i.test(q) || /(तनाव|चिंता|मानसिक शांति|अनिद्रा|नींद|घबराहट)/.test(q)) {
+      return {
+        matched: true,
+        topicTitleEn: 'Mental Serenity & Nervous System Restitution',
+        topicTitleHi: 'मानसिक शांति, तनाव मुक्ति एवं सुख संरेखण',
+        topicTitleHinglish: 'Mental Peace & Nervous System Equilibrium Roadmap',
+        verdictEn: 'Sustained Nervous System Recovery & Circadian Realignment',
+        verdictHi: 'दिनचर्या संतुलन से मानसिक शांति एवं एकाग्रता प्राप्ति',
+        verdictHinglish: 'Circadian rhythm balance for complete stress relief',
+        primaryHouseNum: 4,
+        secondaryHouseNum: 12,
+        karakaPlanet: 'Moon (Chandra)',
+        doEn: 'Keep a strictly screen-free bedroom 60 minutes before sleep; take warm herbal teas and diaphragmatic breaths.',
+        avoidEn: 'Late-night doom-scrolling, consuming heavy stimulants past 4 PM, or over-analyzing past events.',
+        practiceEn: '10 minutes of Anulom-Vilom breathwork before bed to activate parasympathetic calming.',
+        doHi: 'सोने से 1 घंटा पहले स्क्रीन से दूर रहें और निश्चित समय पर सोएं।',
+        avoidHi: 'देर रात तक जागने और मन में नकारात्मक विचारों को दोहराने से बचें।',
+        practiceHi: 'रात्रि में 10 मिनट अनुलोम-विलोम प्राणायाम करें।',
+        doHinglish: 'Fixed sleep schedule follow karein aur bed se pehle screens band karein.',
+        avoidHinglish: 'Late-night overthinking aur caffeine past 4 PM avoid karein.',
+        practiceHinglish: 'Evening 10 mins slow deep breathing practice karein.',
+      };
+    }
+
+    // 13. Stocks / Speculation / Crypto / Trading
+    if (/\b(stock|share market|crypto|trading|speculation|satta|f&o|options|invest)\b/i.test(q) || /(शेयर बाजार|ट्रेडिंग|सट्टा|क्रिप्टो|पूंजी निवेश)/.test(q)) {
+      return {
+        matched: true,
+        topicTitleEn: 'Capital Markets, Speculation & Strategic Asset Allocation',
+        topicTitleHi: 'शेयर बाजार, ट्रेडिंग एवं पूंजी निवेश रणनीति',
+        topicTitleHinglish: 'Stock Market, Trading & Capital Growth Strategy',
+        verdictEn: 'Long-Term Compounding Favored over High-Leverage Speculation',
+        verdictHi: 'दीर्घकालिक मूल्य आधारित निवेश में लाभ; अत्यधिक सट्टेबाजी से बचाव हितकर',
+        verdictHinglish: 'Fundamental asset compounding favored over speculative trading',
+        primaryHouseNum: 5,
+        secondaryHouseNum: 11,
+        karakaPlanet: 'Mercury (Budha) & Rahu',
+        doEn: 'Invest in high-quality index funds, blue-chip market leaders, and long-term asset compounders.',
+        avoidEn: 'High-leverage intraday trading, revenge trading, or betting on unverified crypto tips.',
+        practiceEn: 'Automate weekly systematic investments (SIP) and review portfolio quarterly without emotional panic.',
+        doHi: 'मजबूत फंडामेंटल्स वाली कंपनियों व इंडेक्स फंड्स में दीर्घकालिक निवेश करें।',
+        avoidHi: 'बिना शोध के इंट्राडे ट्रेडिंग या सोशल मीडिया की सलाह पर पैसा लगाने से बचें।',
+        practiceHi: 'नियमित व्यवस्थित निवेश (SIP) का अनुशासन बनाए रखें।',
+        doHinglish: 'Quality stocks aur index funds me disciplined SIP maintain karein.',
+        avoidHinglish: 'High-leverage F&O aur random tips par trade karna strictly avoid karein.',
+        practiceHinglish: 'Automated systematic investing follow karein with strict risk management.',
+      };
+    }
+
+    // Default Fallback: Maps dynamically to Lagna / 10th House / Dasha
+    return {
+      matched: false,
+      topicTitleEn: 'Comprehensive Life & Planetary Dynamics Assessment',
+      topicTitleHi: 'कुण्डली विश्लेषण एवं जीवन मार्गदर्शन',
+      topicTitleHinglish: 'Astrological Blueprint & Planetary Assessment',
+      verdictEn: 'High Planetary Coherence & Purposeful Evolution',
+      verdictHi: 'शुभ ग्रहीय संरेखण एवं स्पष्ट जीवन दिशा',
+      verdictHinglish: 'High planetary support and strategic life alignment',
+      primaryHouseNum: 1,
+      secondaryHouseNum: 10,
+      karakaPlanet: 'Sun (Surya) & Jupiter',
+      doEn: 'Align daily efforts with core strengths, maintain strict morning discipline, and execute with patience.',
+      avoidEn: 'Short-term panic pivots or chasing low-leverage distractions.',
+      practiceEn: '10 minutes of morning Surya Namaskar and silent contemplation.',
+      doHi: 'अपने मुख्य कौशलों पर ध्यान दें और धैर्यपूर्वक कर्म करें।',
+      avoidHi: 'क्षणिक रुकावटों से विचलित होकर मार्ग बदलने से बचें।',
+      practiceHi: 'प्रातः सूर्य नमस्कार करें और अनुशासित दिनचर्या रखें।',
+      doHinglish: 'Daily morning discipline aur focused execution maintain karein.',
+      avoidHinglish: 'Short-term panic ya random distractions avoid karein.',
+      practiceHinglish: 'Morning sunlight exposure aur consistent daily habits follow karein.',
+    };
+  }
+
+  private buildDynamicAstrologicalResponse(
+    context: any,
+    rating: any,
+    resolved: ReturnType<typeof this.resolveQuestionAstrology>,
+    lang: 'en' | 'hi' | 'hinglish'
+  ): string {
+    const houseNum = resolved.primaryHouseNum || 1;
+    const houseData = context.houseDetails?.find((h: any) => h.houseNumber === houseNum);
+    const sign = houseData?.signName || context.lagnaSign || 'Aries';
+    const lord = houseData?.lord || 'Mars';
+    const savPoints = houseData?.savPoints || context.savScores?.[houseNum] || 28;
+    const occupants = (houseData?.occupants && houseData.occupants.length > 0) ? houseData.occupants.join(', ') : 'None';
+    const lordPlacementObj = context.planetsDetail?.find((p: any) => (p.planet || '').toLowerCase() === lord.toLowerCase());
+    const lordPlacement = lordPlacementObj?.house || 1;
+    const activeDasha = `${context.activeMahadasha || 'Jupiter'}-${context.activeAntardasha || 'Saturn'}`;
+    const antardashaEnd = context.antardashaEndDate || '2027-03-01';
+
+    const getOrdinal = (n: number) => {
+      if (n === 1) return '1st';
+      if (n === 2) return '2nd';
+      if (n === 3) return '3rd';
+      return `${n}th`;
+    };
+
+    if (lang === 'hi') {
+      return `### 🔮 ${resolved.topicTitleHi}
+
+> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *${resolved.verdictHi}*  
+> **⏳ सक्रिय समय चक्र:** **${activeDasha} दशा काल (${antardashaEnd} तक)**
+
+---
+
+#### 🪐 मुख्य ग्रहीय आधार एवं भाव स्थिति
+* **${houseNum}वां भाव (${sign} राशि / ${savPoints} सर्वाष्टकवर्ग बिंदु):** इस भाव के स्वामी **${lord}** आपकी कुण्डली के ${lordPlacement}वें भाव में स्थित हैं। ${occupants !== 'None' ? `इस भाव में **${occupants}** विराजमान हैं।` : 'भाव पर कोई प्रत्यक्ष क्रूर प्रभाव नहीं है।'} ${savPoints >= 28 ? '28 से अधिक बिंदु शुभ परिणाम व अनुकूलता की पुष्टि करते हैं।' : 'धैर्य, संयम एवं नियमित प्रयास से सफलता मिलेगी।'}
+* **मुख्य कारक ग्रह (${resolved.karakaPlanet}):** इस विषय के स्वाभाविक कारक ग्रह के रूप में वर्तमान गोचर में सक्रिय हैं।
+* **सक्रिय दशा प्रभाव (${activeDasha}):** यह दशा काल इस भाव से संबंधित विषयों को गति एवं स्पष्ट दिशा प्रदान कर रहा है।
+
+---
+
+#### 💡 क्या करें और क्या न करें
+* **✅ करें:** ${resolved.doHi}
+* **❌ बचें:** ${resolved.avoidHi}
+
+---
+
+#### 🌿 सात्विक दैनिक उपाय
+* **${resolved.practiceHi}**`;
+    }
+
+    if (lang === 'hinglish') {
+      return `### 🔮 ${resolved.topicTitleHinglish}
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${resolved.verdictHinglish}*  
+> **⏳ Active Time Horizon:** **${activeDasha} Dasha Period (through ${antardashaEnd})**
+
+---
+
+#### 🪐 Core Astrological Markers
+* **${getOrdinal(houseNum)} House (${sign} / ${savPoints} SAV Bindus):** Is house ke lord **${lord}** chart ke ${getOrdinal(lordPlacement)} house me placed hain. ${occupants !== 'None' ? `House me **${occupants}** present hain.` : 'No direct malefic affliction.'} ${savPoints >= 28 ? 'Strong SAV score positive support confirm karta hai.' : 'Patience aur consistent effort zaroori hai.'}
+* **Planetary Karaka (${resolved.karakaPlanet}):** Natural cosmic significator current transits ke under baseline support provide kar raha hai.
+* **Active Dasha Catalyst (${activeDasha}):** Is lifecycle aspect ko directly activate kar raha hai.
+
+---
+
+#### 💡 Strategic Roadmap
+* **✅ Do:** ${resolved.doHinglish}
+* **❌ Avoid:** ${resolved.avoidHinglish}
+
+---
+
+#### 🌿 Daily Practice
+* **${resolved.practiceHinglish}**`;
+    }
+
+    // Default English
+    return `### 🔮 ${resolved.topicTitleEn}
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${resolved.verdictEn}*  
+> **⏳ Prime Timeline / Horizon:** **${activeDasha} Active Cycle (through ${antardashaEnd})**
+
+---
+
+#### 🪐 Astrological Mechanics & Planetary Placement
+* **${getOrdinal(houseNum)} House (${sign} / ${savPoints} SAV Bindus):** Governed by **${lord}** (positioned in the ${getOrdinal(lordPlacement)} House). ${occupants !== 'None' ? `Occupied by **${occupants}**.` : 'No direct malefic affliction.'} ${savPoints >= 28 ? 'Strong bindu count confirms positive karmic baseline and growth.' : 'Requires steady preparation, patience, and structured discipline.'}
+* **Planetary Karaka (${resolved.karakaPlanet}):** Functions as the natural significator, steadying outcomes under current planetary transits.
+* **Active Dasha Catalyst (${activeDasha}):** Energizes the ${getOrdinal(houseNum)} house axis, providing an active window for tangible progress.
+
+---
+
+#### 💡 Actionable Strategy & Guidance
+* **✅ Do:** ${resolved.doEn}
+* **❌ Avoid:** ${resolved.avoidEn}
+
+---
+
+#### 🌿 Sattvic Daily Practice
+* **${resolved.practiceEn}**`;
+  }
+
   // ==========================================
   // ENGLISH SUB-INTENT HANDLERS
   // ==========================================
@@ -260,6 +862,12 @@ export class LocalLLMService {
     sav: Record<number, number>,
     jaimini: any
   ): string {
+    // Check for specific entity matches across any question (Mother, Father, Siblings, Child, Exams, Vehicle, Property, Court, Debt, Gemstone, etc.)
+    const resolved = this.resolveQuestionAstrology(context.questionQuery, context);
+    if (resolved.matched) {
+      return this.buildDynamicAstrologicalResponse(context, rating, resolved, 'en');
+    }
+
     const subIntent = context.detectedSubIntent || 'GENERAL';
     const darakaraka = jaimini.darakaraka || 'Venus';
     const amatyakaraka = jaimini.amatyakaraka || 'Mercury';
@@ -863,29 +1471,7 @@ export class LocalLLMService {
     }
 
     // 11. GENERAL SUMMARY
-    return `### ✨ Astrological Blueprint & Life Summary
-
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${context.primaryArchetype}*  
-> **⏳ Active Dasha:** **${context.activeMahadasha}-${context.activeAntardasha} (ending around ${context.antardashaEndDate})**
-
----
-
-#### 🪐 Key Milestone Horizons
-* **✈️ Relocation & Travel:** ${context.relocationWindow || 'Active during upcoming supportive transits'}
-* **💼 Career Breakthrough:** ${context.careerLeapWindow || 'Active during supportive period'}
-* **🏡 Home & Property:** ${context.propertyPurchaseWindow || 'Active in supportive 4th house cycle'}
-* **❤️ Union & Marriage:** ${context.marriageTimingWindow || 'Active in relational alignment'}
-
----
-
-#### 💡 What to Do vs What to Avoid
-* **✅ Do:** Maintain daily morning discipline, deep-work focus, and systematic wealth compounding.
-* **❌ Avoid:** Impulsive speculative financial bets or panic career pivots.
-
----
-
-#### 🌿 Daily Practice
-* **Surya Arghya:** Offer water to the morning Sun daily for vitality, health, and supreme clarity.`;
+    return this.buildDynamicAstrologicalResponse(context, rating, resolved, 'en');
   }
 
   // ==========================================
@@ -897,6 +1483,12 @@ export class LocalLLMService {
     sav: Record<number, number>,
     jaimini: any
   ): string {
+    // Check for specific entity matches across any question in Hindi
+    const resolved = this.resolveQuestionAstrology(context.questionQuery, context);
+    if (resolved.matched) {
+      return this.buildDynamicAstrologicalResponse(context, rating, resolved, 'hi');
+    }
+
     const subIntent = context.detectedSubIntent || 'GENERAL';
     const darakaraka = jaimini.darakaraka || 'Venus';
     const amatyakaraka = jaimini.amatyakaraka || 'Mercury';
@@ -1267,29 +1859,7 @@ export class LocalLLMService {
     }
 
     // 8. GENERAL
-    return `### ✨ कुण्डली सार एवं जीवन मार्गदर्शन
-
-> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *${context.primaryArchetype}*  
-> **⏳ सक्रिय दशा:** **${context.activeMahadasha}-${context.activeAntardasha} (समाप्ति लगभग ${context.antardashaEndDate})**
-
----
-
-#### 🪐 प्रमुख समय सीमाएं
-* **✈️ विदेश यात्रा / स्थान परिवर्तन:** ${context.relocationWindow || 'आगामी शुभ गोचर में सक्रिय'}
-* **💼 करियर में बड़ा उछाल:** ${context.careerLeapWindow || 'सक्रिय दशा के अंतर्गत अनुकूल'}
-* **🏡 गृह व संपत्ति क्रय:** ${context.propertyPurchaseWindow || 'चतुर्थ भाव के शुभ गोचर में सक्रिय'}
-* **❤️ विवाह एवं संबंध:** ${context.marriageTimingWindow || 'शुभ ग्रहीय संरेखण में सक्रिय'}
-
----
-
-#### 💡 क्या करें और क्या न करें
-* **✅ करें:** दैनिक प्रातः अनुशासन, एकाग्र कार्य और नियमित बचत बनाए रखें।
-* **❌ बचें:** जल्दबाजी में जोखिम भरे वित्तीय निर्णय लेने से बचें।
-
----
-
-#### 🌿 दैनिक उपाय
-* **प्रातः सूर्य अर्घ्य:** प्रतिदिन उगते सूर्य को जल अर्पित करें जिससे आत्मविश्वास व यश में वृद्धि हो।`;
+    return this.buildDynamicAstrologicalResponse(context, rating, resolved, 'hi');
   }
 
   // ==========================================
@@ -1301,6 +1871,12 @@ export class LocalLLMService {
     sav: Record<number, number>,
     jaimini: any
   ): string {
+    // Check for specific entity matches across any question in Hinglish
+    const resolved = this.resolveQuestionAstrology(context.questionQuery, context);
+    if (resolved.matched) {
+      return this.buildDynamicAstrologicalResponse(context, rating, resolved, 'hinglish');
+    }
+
     const subIntent = context.detectedSubIntent || 'GENERAL';
     const darakaraka = jaimini.darakaraka || 'Venus';
     const amatyakaraka = jaimini.amatyakaraka || 'Mercury';
@@ -1588,28 +2164,6 @@ export class LocalLLMService {
     }
 
     // 7. GENERAL
-    return `### ✨ Astrological Blueprint & Life Summary
-
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${context.primaryArchetype}*  
-> **⏳ Active Dasha:** **${context.activeMahadasha}-${context.activeAntardasha} (ending around ${context.antardashaEndDate})**
-
----
-
-#### 🪐 Key Milestone Horizons
-* **✈️ Relocation & Travel:** ${context.relocationWindow || 'Active during upcoming transits'}
-* **💼 Career Breakthrough:** ${context.careerLeapWindow || 'Active during supportive period'}
-* **🏡 Home & Property:** ${context.propertyPurchaseWindow || 'Active in supportive 4th house cycle'}
-* **❤️ Union & Marriage:** ${context.marriageTimingWindow || 'Active in relational alignment'}
-
----
-
-#### 💡 What to Do vs What to Avoid
-* **✅ Do:** Daily morning discipline, deep-work focus aur regular asset compounding maintain karein.
-* **❌ Avoid:** Impulsive speculative financial bets ya panic career pivots.
-
----
-
-#### 🌿 Daily Practice
-* **Surya Arghya:** Daily morning Sun ko water offer karein for vitality, health aur supreme confidence.`;
+    return this.buildDynamicAstrologicalResponse(context, rating, resolved, 'hinglish');
   }
 }
