@@ -2,8 +2,19 @@ import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 import * as schema from './schema';
 
+function getDatabaseUrl(): string {
+  if (process.env.DATABASE_URL) {
+    return process.env.DATABASE_URL;
+  }
+  // In serverless environments (e.g. Vercel, AWS Lambda), the filesystem is read-only except /tmp
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NODE_ENV === 'production') {
+    return 'file:/tmp/vedica.db';
+  }
+  return 'file:vedica.db';
+}
+
 const client = createClient({
-  url: process.env.DATABASE_URL || 'file:vedica.db',
+  url: getDatabaseUrl(),
 });
 
 export const db = drizzle(client, { schema });
