@@ -23,6 +23,9 @@ importers:
       '@libsql/client':
         specifier: ^0.17.4
         version: 0.17.4
+      '@vedica/ai-engine':
+        specifier: workspace:*
+        version: link:../../packages/ai-engine
       '@vedica/analysis-engine':
         specifier: workspace:*
         version: link:../../packages/analysis-engine
@@ -141,6 +144,43 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
+
+  packages/ai-engine:
+    dependencies:
+      '@vedica/analysis-engine':
+        specifier: workspace:*
+        version: link:../analysis-engine
+      '@vedica/astrology-core':
+        specifier: workspace:*
+        version: link:../astrology-core
+      '@vedica/dasha-engine':
+        specifier: workspace:*
+        version: link:../dasha-engine
+      '@vedica/interpretation-engine':
+        specifier: workspace:*
+        version: link:../interpretation-engine
+      '@vedica/life-domain-engine':
+        specifier: workspace:*
+        version: link:../life-domain-engine
+      '@vedica/shared':
+        specifier: workspace:*
+        version: link:../shared
+      '@vedica/timing-engine':
+        specifier: workspace:*
+        version: link:../timing-engine
+      '@vedica/transit-engine':
+        specifier: workspace:*
+        version: link:../transit-engine
+    devDependencies:
+      '@types/node':
+        specifier: ^22.13.4
+        version: 22.20.1
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.5
+        version: 3.2.7(@types/node@22.20.1)(jiti@1.21.7)
 
   packages/analysis-engine:
     dependencies:
