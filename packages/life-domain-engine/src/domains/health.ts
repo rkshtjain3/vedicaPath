@@ -337,6 +337,28 @@ export function evaluateHealthDomain(engineData: any): DomainEvaluationResult {
     whyEvidence.push(...item.whyEvidence);
   }
 
+  // Check for debilitated or weak planets in 8th House (e.g. Debilitated Mars)
+  const weak8thPlanets = analysis?.planetFacts?.filter(
+    (f: any) => f.house === 8 && (f.dignity === 'DEBILITATED' || f.dignity === 'ENEMY_SIGN' || f.dignity === 'GREAT_ENEMY_SIGN')
+  );
+  if (weak8thPlanets && weak8thPlanets.length > 0) {
+    for (const p of weak8thPlanets) {
+      const item = createEvidenceItem({
+        id: `HEALTH-8TH-WEAK-${p.planet.toUpperCase()}`,
+        domain: 'HEALTH',
+        sourceEngine: 'astrology-core',
+        sourceRuleId: 'HEALTH-TRIK-8-WEAK',
+        description: `${p.planet} in 8th House holds ${p.dignity} dignity, advising conscious inflammatory care, routine physical maintenance, and injury avoidance.`,
+        direction: 'CHALLENGING',
+        strength: 'HIGH',
+        weight: 1.0,
+        whyEvidence: [`8th House Planet = ${p.planet}`, `Dignity = ${p.dignity}`],
+      });
+      evidenceItems.push(item);
+      whyEvidence.push(...item.whyEvidence);
+    }
+  }
+
   // 4. Dasha Context
   const dashaContextItems: DashaContextItem[] = [];
   const currentMD = dasha?.current?.mahadasha;
