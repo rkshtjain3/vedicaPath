@@ -11,13 +11,7 @@ const nextConfig = {
     '@vedica/location-engine',
     '@vedica/shared',
   ],
-  serverExternalPackages: ['sweph', '@libsql/client'],
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals = [...(config.externals || []), 'sweph'];
-    }
-    return config;
-  },
+  serverExternalPackages: ['sweph', 'better-sqlite3', '@libsql/client'],
 };
 
 export default nextConfig;

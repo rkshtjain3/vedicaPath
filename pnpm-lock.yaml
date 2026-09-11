@@ -110,6 +110,9 @@ importers:
       '@vedica/yoga-engine':
         specifier: workspace:*
         version: link:../../packages/yoga-engine
+      better-sqlite3:
+        specifier: ^11.8.1
+        version: 11.10.0
       drizzle-orm:
         specifier: ^0.38.4
         version: 0.38.4(@libsql/client@0.17.4)(@types/better-sqlite3@7.6.13)(@types/react@19.2.18)(better-sqlite3@11.10.0)(react@19.2.8)
@@ -125,6 +128,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.2.8(react@19.2.8)
+      sweph:
+        specifier: ^2.10.3-8
+        version: 2.10.3-8
     devDependencies:
       '@playwright/test':
         specifier: ^1.50.1
