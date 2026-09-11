@@ -35,6 +35,8 @@ export interface AstrologicalRAGContext {
     struggleReliefDate?: string;
     sattvicRemedies: string[];
     detectedTopic: LifeDomainTopic;
+    detectedSubIntent?: string;
+    questionQuery?: string;
     intentConfidence: 'HIGH' | 'MEDIUM' | 'GENERAL';
     jaiminiKarakas: {
         atmakaraka?: string;
@@ -109,6 +111,10 @@ export declare function classifyLifeDomain(question: string): {
     topic: LifeDomainTopic;
     confidence: 'HIGH' | 'MEDIUM' | 'GENERAL';
 };
+/**
+ * Intelligent Sub-Intent Classifier for Nuanced Domain Understanding
+ */
+export declare function detectSubIntent(question: string, topic: LifeDomainTopic): string;
 /**
  * Generate Smart Contextual Follow-up Questions based on detected topic & chart
  */

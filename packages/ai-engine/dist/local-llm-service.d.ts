@@ -31,7 +31,7 @@ export declare class LocalLLMService {
     private streamFromOllama;
     /**
      * Deterministic High-Fidelity RAG Response Generator
-     * Covers all life domains in English, Hindi, and Hinglish with concise, scannable format
+     * Covers all life domains and sub-intents in English, Hindi, and Hinglish with concise, scannable format
      */
     private generateSynthesizedRAGResponse;
     private generateEnglishRAGResponse;

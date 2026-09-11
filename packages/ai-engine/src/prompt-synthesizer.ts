@@ -64,6 +64,8 @@ export interface AstrologicalRAGContext {
   struggleReliefDate?: string;
   sattvicRemedies: string[];
   detectedTopic: LifeDomainTopic;
+  detectedSubIntent?: string;
+  questionQuery?: string;
   intentConfidence: 'HIGH' | 'MEDIUM' | 'GENERAL';
   jaiminiKarakas: {
     atmakaraka?: string;
@@ -284,6 +286,149 @@ export function classifyLifeDomain(question: string): { topic: LifeDomainTopic; 
 
   const confidence = maxScore >= 9 ? 'HIGH' : maxScore >= 5 ? 'MEDIUM' : 'GENERAL';
   return { topic: bestTopic, confidence };
+}
+
+/**
+ * Intelligent Sub-Intent Classifier for Nuanced Domain Understanding
+ */
+export function detectSubIntent(question: string, topic: LifeDomainTopic): string {
+  const q = question.toLowerCase().trim();
+
+  if (topic === 'MARRIAGE') {
+    if (
+      /\b(spouse|husband|wife|partner|nature|trait|personality|character|look|appear|profession|career of spouse|who will i marry|background|swabhav|pati|patni|jeevansathi|kaisa hoga|kaisi hogi|kaun hoga|characteristics)\b/i.test(q) ||
+      /(स्वभाव|विशेषताएं|कैसा होगा|कैसी होगी|दिखने में|जीवनसाथी का स्वभाव|पत्नी कैसी|पति कैसा)/.test(q)
+    ) {
+      return 'SPOUSE_TRAITS';
+    }
+    if (
+      /\b(love or arranged|love marriage|arranged marriage|prem vivah|ghar walo|family choice|arranged vs love|love vs arranged|arrange marriage|pasand ki shaadi)\b/i.test(q) ||
+      /(प्रेम विवाह|लव मैरिज|अरेंज मैरिज|घर वालों की पसंद|पसंद की शादी)/.test(q)
+    ) {
+      return 'LOVE_VS_ARRANGED';
+    }
+    if (
+      /\b(delay|late|barrier|obstacle|manglik|mangal dosha|deri|rukawat|problem in marriage|separation|conflict|remed(y|ies)|vivah me badha)\b/i.test(q) ||
+      /(मांगलिक|देरी|रुकावट|विवाह में बाधा|तलाक|शादी में अड़चन)/.test(q)
+    ) {
+      return 'OBSTACLES_MANGLIK';
+    }
+    if (
+      /\b(after marriage|married life|harmony|peace|compatibility|relationship quality|happ(y|iness)|dampatya|shaadi ke baad|relationship success)\b/i.test(q) ||
+      /(दांपत्य जीवन|शादी के बाद|सुख|सामंजस्य|वैवाहिक सुख)/.test(q)
+    ) {
+      return 'MARRIED_LIFE_QUALITY';
+    }
+    if (
+      /\b(when|timing|date|year|month|kab|kb|age|time of marriage|shaadi kab|vivah kab|wedding date|marriage window)\b/i.test(q) ||
+      /(कब होगी शादी|विवाह कब|शादी का समय|कब तक शादी)/.test(q)
+    ) {
+      return 'MARRIAGE_TIMING';
+    }
+    return 'GENERAL_MARRIAGE';
+  }
+
+  if (topic === 'CAREER') {
+    if (
+      /\b(job or business|business or job|startup|founder|entrepreneur|own business|corporate vs business|naukri ya vyapar|dhandha ya naukri|service or business)\b/i.test(q) ||
+      /(नौकरी या व्यापार|बिजनेस या जॉब|खुद का काम|धंधा)/.test(q)
+    ) {
+      return 'JOB_VS_BUSINESS';
+    }
+    if (
+      /\b(which (field|career|job|industry|sector)|suitable (field|career|profession)|what (should i do|job is best)|konsa career|kaunsa kaam|field of work|industry)\b/i.test(q) ||
+      /(कौन सा करियर|किस क्षेत्र में|क्या काम सही है|क्षेत्र)/.test(q)
+    ) {
+      return 'INDUSTRY_SELECTION';
+    }
+    if (
+      /\b(promotion|appraisal|salary|increment|switch|change job|switch company|hike|when will i get promotion|tarakki|padonati)\b/i.test(q) ||
+      /(प्रमोशन|नौकरी बदलना|सैलरी हाइक|पदोन्नति|तरक्की)/.test(q)
+    ) {
+      return 'PROMOTION_TIMING';
+    }
+    if (
+      /\b(boss|politics|workplace|respect|authority|leadership|executive|colleague)\b/i.test(q) ||
+      /(बॉस|ऑफिस की राजनीति|नेतृत्व|प्रभाव|अधिकार)/.test(q)
+    ) {
+      return 'LEADERSHIP_AUTHORITY';
+    }
+    return 'GENERAL_CAREER';
+  }
+
+  if (topic === 'ABROAD') {
+    if (
+      /\b(pr|green card|citizenship|permanent(ly)? settle|permanent residence|naagarikta|pakk(i|a) settlement|settlement abroad)\b/i.test(q) ||
+      /(पीआर|ग्रीन कार्ड|नागरिकता|स्थायी निवास|पक्का सेटलमेंट)/.test(q)
+    ) {
+      return 'PR_SETTLEMENT';
+    }
+    if (
+      /\b(study abroad|higher studies|master|university abroad|study vs work|education abroad)\b/i.test(q) ||
+      /(विदेश में पढ़ाई|उच्च शिक्षा विदेश)/.test(q)
+    ) {
+      return 'STUDY_VS_WORK';
+    }
+    if (
+      /\b(which (country|direction|place)|favorable countries|usa|uk|canada|germany|australia|dubai|kaunsa desh|kis disha)\b/i.test(q) ||
+      /(कौन सा देश|किस दिशा में|अनुकूल देश)/.test(q)
+    ) {
+      return 'DIRECTIONS_COUNTRIES';
+    }
+    if (
+      /\b(when|timing|visa (stamp|approv|process)|kab jaunga|videsh yatra kab)\b/i.test(q) ||
+      /(विदेश कब जाऊंगा|वीजा कब मिलेगा|यात्रा कब)/.test(q)
+    ) {
+      return 'VISA_TIMING';
+    }
+    return 'GENERAL_ABROAD';
+  }
+
+  if (topic === 'WEALTH') {
+    if (
+      /\b(stock(s)?|share market|crypto|trading|speculation|real estate|gold|invest(ment)?|where to invest|kaha invest)\b/i.test(q) ||
+      /(शेयर बाजार|निवेश|ट्रेडिंग|सोना या प्रॉपर्टी|कहाँ निवेश)/.test(q)
+    ) {
+      return 'INVESTMENT_CLASS';
+    }
+    if (
+      /\b(debt|loan|emi|karza|udhar|loss|nuksan|repay|recovery)\b/i.test(q) ||
+      /(कर्ज|उधार|लोन|घाटा|आर्थिक नुकसान|कर्ज मुक्ति)/.test(q)
+    ) {
+      return 'DEBT_RECOVERY';
+    }
+    if (
+      /\b(when|timing|rich|crorepati|millionaire|wealth peak|dhan labh kab|paisa kab aayega)\b/i.test(q) ||
+      /(धन लाभ कब|अमीर कब बनूंगा|पैसा कब आएगा|समृद्धि काल)/.test(q)
+    ) {
+      return 'WEALTH_TIMING';
+    }
+    return 'GENERAL_WEALTH';
+  }
+
+  if (topic === 'HEALTH' || topic === 'AYUR_JYOTISH') {
+    if (
+      /\b(dosha|prakriti|vata|pitta|kapha|body constitution|constitution type|tridosha)\b/i.test(q) ||
+      /(दोष|प्रकृति|वात|पित्त|कफ|शरीर का प्रकार)/.test(q)
+    ) {
+      return 'DOSHA_CONSTITUTION';
+    }
+    if (
+      /\b(stomach|gut|digest(ion|ive)?|acidity|gas|kabz|constipation|pet dard|bloating|ibs|metabolism)\b/i.test(q) ||
+      /(पेट|कब्ज|एसिडिटी|गैस|पाचन|जठराग्नि)/.test(q)
+    ) {
+      return 'DIGESTION_GUT';
+    }
+    if (
+      /\b(stress|anxiety|depression|sleep|insomnia|tanav|mental peace|vitality|ojas|fatigue)\b/i.test(q) ||
+      /(तनाव|चिंता|नींद की समस्या|मानसिक शांति|ओजस)/.test(q)
+    ) {
+      return 'STRESS_VITALITY';
+    }
+    return 'GENERAL_HEALTH';
+  }
+
+  return 'GENERAL';
 }
 
 /**
@@ -569,6 +714,7 @@ export function synthesizeAstrologicalPrompt(params: {
 
   // Perform Semantic Intent Classification
   const { topic: detectedTopic, confidence: intentConfidence } = classifyLifeDomain(question);
+  const detectedSubIntent = detectSubIntent(question, detectedTopic);
 
   const careerWindow = milestones.careerWindows?.[0];
   const propertyWindow = milestones.propertyWindows?.[0];
@@ -866,6 +1012,8 @@ export function synthesizeAstrologicalPrompt(params: {
     struggleReliefDate: struggles.reliefDate || antardashaEndDate,
     sattvicRemedies: remedies,
     detectedTopic,
+    detectedSubIntent,
+    questionQuery: question,
     intentConfidence,
     jaiminiKarakas,
     keyHouseSummary,

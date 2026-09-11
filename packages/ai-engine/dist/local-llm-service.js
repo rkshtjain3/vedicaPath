@@ -1,3 +1,107 @@
+function getDarakarakaTraits(dk, lang) {
+    const planet = (dk || 'Venus').trim();
+    if (planet === 'Jupiter' || planet === 'Guru') {
+        if (lang === 'hi')
+            return 'ज्ञानी, सुसंस्कृत, नैतिक मूल्यों से युक्त, मार्गदर्शक एवं परिवार में सम्मानित';
+        if (lang === 'hinglish')
+            return 'Wise, deeply educated, ethical, mature aur family-oriented';
+        return 'Wise, spiritually grounded, ethical, intellectually mature, and family-oriented';
+    }
+    if (planet === 'Mercury' || planet === 'Budha') {
+        if (lang === 'hi')
+            return 'कुशाग्र बुद्धि, वाक्पटु, तकनीकी/व्यापारिक समझ रखने वाले, जिज्ञासु एवं मिलनसार';
+        if (lang === 'hinglish')
+            return 'Quick-witted, articulate, commerce/tech-savvy aur great conversationalist';
+        return 'Quick-witted, articulate, business/tech-savvy, intellectually curious, and expressive';
+    }
+    if (planet === 'Saturn' || planet === 'Shani') {
+        if (lang === 'hi')
+            return 'गंभीर, व्यावहारिक, अत्यधिक निष्ठावान, परिश्रमी एवं जीवन में स्थायित्व को महत्व देने वाले';
+        if (lang === 'hinglish')
+            return 'Mature, pragmatic, extremely loyal, hardworking aur grounded';
+        return 'Mature, realistic, deeply loyal, hard-working, and focused on stability and long-term security';
+    }
+    if (planet === 'Mars' || planet === 'Mangal') {
+        if (lang === 'hi')
+            return 'ऊर्जावान, साहसी, स्पष्टवादी, महत्वाकांक्षी एवं जीवन में सक्रिय नेतृत्व करने वाले';
+        if (lang === 'hinglish')
+            return 'Energetic, bold, straightforward, ambitious aur action-oriented';
+        return 'Dynamic, courageous, direct, ambitious, action-oriented, and highly driven';
+    }
+    if (planet === 'Moon' || planet === 'Chandra') {
+        if (lang === 'hi')
+            return 'संवेदनशील, करुणामयी, भावनात्मक रूप से समझदार, पारिवारिक एवं पोषण करने वाले स्वभाव के';
+        if (lang === 'hinglish')
+            return 'Empathetic, compassionate, caring, family-focused aur emotionally intuitive';
+        return 'Empathetic, caring, emotionally intuitive, family-oriented, and nurturing';
+    }
+    if (planet === 'Sun' || planet === 'Surya') {
+        if (lang === 'hi')
+            return 'स्वाभिमानी, प्रभावशाली व्यक्तित्व, नेतृत्व क्षमता संपन्न एवं समाज में प्रतिष्ठित';
+        if (lang === 'hinglish')
+            return 'Dignified, leadership-oriented, high self-respect aur prominent social standing';
+        return 'Dignified, natural leader, confident, possessing strong self-respect and social distinction';
+    }
+    // Default Venus / Shukra
+    if (lang === 'hi')
+        return 'सौंदर्यप्रिय, सुरुचिपूर्ण, सौम्य, कलात्मक दृष्टि संपन्न, स्नेही एवं परस्पर सम्मान को महत्व देने वाले';
+    if (lang === 'hinglish')
+        return 'Charming, refined, graceful, artistic taste aur emotionally supportive';
+    return 'Refined, charming, graceful, aesthetically inclined, peaceful, and emotionally supportive';
+}
+function getSeventhHouseTraits(sign, lang) {
+    const s = (sign || 'Sagittarius').toLowerCase();
+    if (s.includes('sagittarius') || s.includes('dhanu')) {
+        if (lang === 'hi')
+            return 'धनु (गुरु शासित): उच्च शिक्षित, दार्शनिक सोच, खुले विचारों वाले एवं सत्यनिष्ठ';
+        if (lang === 'hinglish')
+            return 'Sagittarius (Jupiter): Broad-minded, philosophical, highly educated aur truthful';
+        return 'Sagittarius (Jupiter-ruled): Broad-minded, well-educated, visionary, and philosophical';
+    }
+    if (s.includes('gemini') || s.includes('mithuna')) {
+        if (lang === 'hi')
+            return 'मिथुन (बुध शासित): आधुनिक, संवादकुशल, बहुमुखी प्रतिभा के धनी एवं बहु-कार्यकुशल';
+        if (lang === 'hinglish')
+            return 'Gemini (Mercury): Modern, witty, communicative aur multi-talented';
+        return 'Gemini (Mercury-ruled): Modern, witty, highly communicative, and versatile';
+    }
+    if (s.includes('taurus') || s.includes('vrishabha') || s.includes('libra') || s.includes('tula')) {
+        if (lang === 'hi')
+            return 'शुक्र शासित: सुरुचिपूर्ण, सौंदर्यप्रिय, संतुलित, शांतिप्रिय एवं निष्ठावान';
+        if (lang === 'hinglish')
+            return 'Venus-ruled: Graceful, balanced, peace-loving aur loyal';
+        return 'Venus-ruled: Elegant, balanced, harmony-seeking, loyal, and appreciative of comfort';
+    }
+    if (s.includes('aries') || s.includes('mesha') || s.includes('scorpio') || s.includes('vrischika')) {
+        if (lang === 'hi')
+            return 'मंगल शासित: साहसी, ऊर्जावान, स्वतंत्र विचार एवं स्पष्ट निर्णय लेने वाले';
+        if (lang === 'hinglish')
+            return 'Mars-ruled: Bold, dynamic, independent thinker aur decisive';
+        return 'Mars-ruled: Courageous, dynamic, decisive, and independently minded';
+    }
+    if (s.includes('capricorn') || s.includes('makara') || s.includes('aquarius') || s.includes('kumbha')) {
+        if (lang === 'hi')
+            return 'शनि शासित: गंभीर, व्यवस्थित, कर्मठ, यथार्थवादी एवं विश्वसनीय';
+        if (lang === 'hinglish')
+            return 'Saturn-ruled: Grounded, practical, disciplined aur dependable';
+        return 'Saturn-ruled: Practical, disciplined, grounded, methodical, and dependable';
+    }
+    if (s.includes('cancer') || s.includes('karka') || s.includes('pisces') || s.includes('meena')) {
+        if (lang === 'hi')
+            return 'जल तत्व / सौम्य: दयालु, भावनात्मक रूप से गहरे, अंतर्ज्ञानी एवं पारिवारिक मूल्यों के प्रति समर्पित';
+        if (lang === 'hinglish')
+            return 'Water sign: Intuitive, caring, emotionally deep aur dedicated to family';
+        return 'Water sign: Intuitive, caring, emotionally perceptive, and family-dedicated';
+    }
+    if (s.includes('leo') || s.includes('simha') || s.includes('virgo') || s.includes('kanya')) {
+        if (lang === 'hi')
+            return 'तेजस्वी व व्यवस्थित: विश्लेषणात्मक, कर्तव्यनिष्ठ, स्वाभिमानी एवं परिपक्व';
+        if (lang === 'hinglish')
+            return 'Analytical, organized, high self-respect aur duty-conscious';
+        return 'Analytical, organized, conscientious, dignified, and detail-oriented';
+    }
+    return lang === 'hi' ? 'संतुलित एवं बुद्धिमान' : 'Balanced, intelligent, and supportive';
+}
 export class LocalLLMService {
     defaultModel;
     defaultEndpoint;
@@ -123,7 +227,7 @@ export class LocalLLMService {
     }
     /**
      * Deterministic High-Fidelity RAG Response Generator
-     * Covers all life domains in English, Hindi, and Hinglish with concise, scannable format
+     * Covers all life domains and sub-intents in English, Hindi, and Hinglish with concise, scannable format
      */
     generateSynthesizedRAGResponse(prompt) {
         const { context } = prompt;
@@ -139,14 +243,303 @@ export class LocalLLMService {
         }
         return this.generateEnglishRAGResponse(context, rating, sav, jaimini);
     }
+    // ==========================================
+    // ENGLISH SUB-INTENT HANDLERS
+    // ==========================================
     generateEnglishRAGResponse(context, rating, sav, jaimini) {
-        // 1. FOREIGN TRAVEL & OVERSEAS RELOCATION
+        const subIntent = context.detectedSubIntent || 'GENERAL';
+        const darakaraka = jaimini.darakaraka || 'Venus';
+        const amatyakaraka = jaimini.amatyakaraka || 'Mercury';
+        const dkTraits = getDarakarakaTraits(darakaraka, 'en');
+        const seventhHouse = context.houseDetails?.find((h) => h.houseNumber === 7);
+        const seventhSign = seventhHouse?.signName || 'Sagittarius';
+        const seventhTraits = getSeventhHouseTraits(seventhSign, 'en');
+        const d9Lagna = context.divisionalHighlights?.d9Lagna || 'Libra';
+        // 1. MARRIAGE & RELATIONSHIPS
+        if (context.detectedTopic === 'MARRIAGE') {
+            const sav7 = sav[7] || 27;
+            const sav5 = sav[5] || 28;
+            const sav9 = sav[9] || 30;
+            if (subIntent === 'SPOUSE_TRAITS') {
+                return `### 💍 Future Spouse Profile & Personality Analysis
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *High Mutual Resonance & Intellectual Harmony*  
+> **⏳ Prime Timeline:** **${context.marriageTimingWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Core Astrological Markers
+* **7th House of Union (${seventhSign} / ${sav7} SAV Bindus):** Indicates a partner who is **${seventhTraits}**.
+* **Darakaraka (${darakaraka}):** The Jaimini soul indicator of spouse reveals a nature that is **${dkTraits}**.
+* **D9 Navamsha Harmony (${d9Lagna} Lagna):** Confirms an emotionally fulfilling bond when mutual respect, clear communication, and personal autonomy are preserved.
+
+---
+
+#### 💼 Likely Profession & Background
+* **Aligned Fields:** Technology, strategic consulting, higher education, finance, architecture/design, or management.
+* **Core Disposition:** Values thoughtful conversation, practical loyalty, and emotional stability over drama.
+
+---
+
+#### 💡 What to Cultivate vs What to Avoid
+* **✅ Do:** Appreciate their independent thinking and foster joint creative/intellectual pursuits.
+* **❌ Avoid:** Over-analyzing minor trivialities or expecting an identical clone of your work style.
+
+---
+
+#### 🌿 Daily Practice
+* **Relationship Harmony:** Practice daily mutual gratitude and keep the North-East & South-West zones of your home clean and peaceful.`;
+            }
+            if (subIntent === 'LOVE_VS_ARRANGED') {
+                const isLoveDominant = sav5 >= 28 || darakaraka === 'Venus' || darakaraka === 'Mercury';
+                return `### 💖 Marriage Type Dynamics: Love vs. Arranged Assessment
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${isLoveDominant ? 'Self-Chosen Connection with Strong Family Endorsement' : 'Arranged Introduction with High Intellectual Affinity'}*  
+> **⏳ Auspicious Window:** **${context.marriageTimingWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Astrological Mechanics
+* **5th House (Romantic Affinity - ${sav5} SAV Bindus):** Governs personal attraction, intellectual rapport, and conscious choice.
+* **7th House & Darakaraka (${darakaraka}):** Favors connections built on shared vision, professional respect, and genuine friendship before formal commitment.
+* **9th House (Family Consensus - ${sav9} SAV Bindus):** Confirms that personal alignment will receive family blessings when communicated with maturity.
+
+---
+
+#### 💡 Meeting Setting
+* **How it unfolds:** Most likely to connect through professional circles, higher education networks, shared intellectual interests, or trusted mutual introductions.
+
+---
+
+#### 🌿 Daily Practice
+* **Harmonious Dialogue:** Maintain open, calm conversations with elders regarding your partnership aspirations.`;
+            }
+            if (subIntent === 'OBSTACLES_MANGLIK') {
+                return `### 🛡️ Marriage Timing Obstacles & Manglik Assessment
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Planetary Certainty** — *Structural Maturation Phase (No Superstition)*  
+> **⏳ Resolution Horizon:** **${rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Astrological Reality Check
+* **Maturation over Delay:** In modern Vedic astrology, planetary delays from Saturn or Mars are not curses—they ensure emotional maturity and financial independence before marriage.
+* **Mars / Manglik Reality:** Dynamic Mars energy provides drive; when directed into career building and fitness, it completely neutralizes relational friction.
+* **7th House Transit Axis:** Supportive dual Jupiter-Saturn transit alignment clears lingering obstacles during the active sub-period.
+
+---
+
+#### 💡 What to Do vs What to Avoid
+* **✅ Do:** Focus on personal emotional regulation, career stability, and transparent communication.
+* **❌ Avoid:** Falling for fear-based superstitions, costly rituals, or rushing into alliances under social pressure.
+
+---
+
+#### 🌿 Sattvic Daily Practice
+* **Grounding Energy:** 10 minutes of morning Surya Namaskar and maintaining patient, non-reactive communication.`;
+            }
+            if (subIntent === 'MARRIED_LIFE_QUALITY') {
+                return `### 🕊️ Post-Marital Harmony & Long-Term Compatibility
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Stable, Growth-Oriented Partnership*  
+> **⏳ Core Horizon:** **Lifelong Stability under D9 Navamsha Harmony**
+
+---
+
+#### 🪐 Key Astrological Drivers
+* **D9 Navamsha (${d9Lagna} Lagna):** Indicates a marriage characterized by mutual intellectual elevation and mutual respect.
+* **7th House (${sav7} SAV Bindus):** Strong energetic foundation providing resilience through changing career seasons.
+* **Darakaraka (${darakaraka}) Synergy:** Fosters a partner who acts as a trusted confidant and reliable sounding board.
+
+---
+
+#### 💡 Pillars of Lasting Bond
+* **✅ Do:** Maintain open emotional communication, celebrate individual milestones, and preserve personal autonomy.
+* **❌ Avoid:** Letting workplace stress spill into personal conversations.
+
+---
+
+#### 🌿 Daily Practice
+* **Evening Harmony:** Spend 15 minutes of device-free quiet time together daily.`;
+            }
+            // Default: MARRIAGE_TIMING
+            return `### ❤️ Marriage & Relationship Timing Blueprint
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Matrimonial & Partnership Alignment*  
+> **⏳ Prime Window:** **${context.marriageTimingWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Key Astrological Drivers
+* **7th House (${sav7} SAV Bindus) & Darakaraka (${darakaraka}):** Indicates an intelligent, grounded, and supportive life partner.
+* **Active Dasha Catalyst (${context.activeMahadasha}-${context.activeAntardasha}):** Energizes the 7th house axis and matrimonial alliances.
+* **D9 Navamsha Harmony:** Fosters long-term marital stability when mutual space and professional respect are maintained.
+
+---
+
+#### 💡 What to Do vs What to Avoid
+* **✅ Do:** Foster open, transparent dialogue; appreciate emotional stability and practical loyalty.
+* **❌ Avoid:** Over-analyzing minor disagreements or expecting identical personality traits.
+
+---
+
+#### 🌿 Daily Practice
+* **Relational Space:** Cultivate joint gratitude and encourage individual creative pursuits.`;
+        }
+        // 2. CAREER & BUSINESS
+        if (context.detectedTopic === 'CAREER') {
+            const sav10 = sav[10] || 34;
+            const sav6 = sav[6] || 31;
+            const sav3 = sav[3] || 27;
+            if (subIntent === 'JOB_VS_BUSINESS') {
+                const isBusinessFavored = sav10 >= 30 || sav3 >= 28;
+                return `### 💼 Career Direction: Job vs. Business & Entrepreneurship
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${isBusinessFavored ? 'High Propensity for Autonomous Business / Strategic Consulting' : 'Executive Leadership & Specialized Corporate Roles'}*  
+> **⏳ Peak Window:** **${context.careerLeapWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Astrological Mechanics
+* **10th House (${sav10} SAV Bindus):** Strong authority configuration favoring strategic independence and scalable ventures over micromanaged roles.
+* **Amatyakaraka (${amatyakaraka}):** Supports technology products, domain advisory, and specialized intellectual ventures.
+* **6th House (Employment - ${sav6} bindus) vs 3rd House (Enterprise - ${sav3} bindus):** Confirms that starting with specialized expertise before launching an independent firm yields highest return.
+
+---
+
+#### 💡 Strategic Roadmap
+* **✅ Do:** Build deep technical or domain mastery, establish a strong industry network, and transition into sovereign ownership.
+* **❌ Avoid:** Remaining indefinitely in low-autonomy positions where your strategic judgment cannot be exercised.
+
+---
+
+#### 🌿 Daily Practice
+* **Deep Work Focus:** Dedicate 90 minutes of uninterrupted morning focus to your core proprietary skillset.`;
+            }
+            if (subIntent === 'INDUSTRY_SELECTION') {
+                return `### 🎯 Ideal Industry & Professional Domain Alignment
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *High-Leverage Strategic & Technology Domains*  
+> **⏳ Prime Horizon:** **${context.careerLeapWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Core Astrological Markers
+* **Amatyakaraka (${amatyakaraka}):** Indicates natural affinity for architecture, software, analytics, strategy, research, or executive consulting.
+* **10th House (${sav10} SAV Bindus):** Elevates roles that command respect, domain governance, and innovative product creation.
+* **D10 Dashamsha Support (${context.divisionalHighlights?.d10Lagna || 'Pisces'} Lagna):** Confirms long-term institutional authority and industry reputation.
+
+---
+
+#### 💡 Recommended Industry Sectors
+1. **Technology, AI & Systems Engineering:** Architecting scalable digital or physical systems.
+2. **Strategic Advisory, Analytics & Finance:** Solving complex organizational or data problems.
+3. **Product Innovation & Specialized Enterprise:** Leading autonomous ventures and specialized services.
+
+---
+
+#### 🌿 Daily Practice
+* **Domain Mastery:** Stay updated with cutting-edge industry advancements and publish your insights regularly.`;
+            }
+            if (subIntent === 'PROMOTION_TIMING') {
+                return `### 📈 Promotion, Appraisal & Job Switch Timing
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Imminent Career Elevation Trigger*  
+> **⏳ Optimal Window:** **${context.careerLeapWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Key Astrological Drivers
+* **Active Sub-Period (${context.activeMahadasha}-${context.activeAntardasha}):** Activates 10th and 11th houses of karmic reward and salary expansion.
+* **Transit Support:** Auspicious transit over natal career axis enhances bargaining power and visibility.
+
+---
+
+#### 💡 Actionable Advice
+* **✅ Do:** Document your measurable achievements and initiate strategic compensation or switch conversations during this window.
+* **❌ Avoid:** Making abrupt moves without a formal written offer in hand.
+
+---
+
+#### 🌿 Daily Practice
+* **Morning Surya Arghya:** Offer water to the rising Sun daily for professional authority and leadership recognition.`;
+            }
+            // Default CAREER
+            return `### 💼 Career & Professional Trajectory
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${rating.verdictLabel}*  
+> **⏳ Peak Elevation Window:** **${context.careerLeapWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Key Astrological Drivers
+* **10th House (${sav10} SAV Bindus):** High authority configuration favoring strategic independence, leadership, or specialized business ventures over micromanaged roles.
+* **Amatyakaraka (${amatyakaraka}):** Connects career growth to technology architecture, strategic consulting, and domain expertise.
+* **D10 Dashamsha Support:** Confirms long-term institutional authority and industry reputation.
+
+---
+
+#### 💡 What to Do vs What to Avoid
+* **✅ Do:** Build domain authority in rare, high-leverage skills; position yourself as an indispensable architect of results.
+* **❌ Avoid:** Staying in bureaucratic, low-autonomy roles where creative execution is capped.
+
+---
+
+#### 🌿 Daily Practice
+* **Daily Focus & Solar Alignment:** Maintain structured deep-work blocks and morning Surya Arghya for supreme clarity.`;
+        }
+        // 3. FOREIGN TRAVEL & ABROAD
         if (context.detectedTopic === 'ABROAD') {
             const sav12 = sav[12] || 30;
+            const sav9 = sav[9] || 30;
+            if (subIntent === 'PR_SETTLEMENT') {
+                return `### 🌐 Permanent Residency & Foreign Settlement Assessment
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Favorable Long-Term Overseas Residence*  
+> **⏳ Best Window:** **${context.relocationWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Key Astrological Drivers
+* **Dual Lagna (${context.lagnaSign}):** Innate adaptability to international cultures and foreign lifestyle standards.
+* **12th House (${sav12} SAV Bindus):** Exceeds baseline (28 points), confirming sustainable foreign income and long-term asset building abroad.
+* **9th House Axis (${sav9} Bindus):** Strong legal and institutional support for permanent immigration visas.
+
+---
+
+#### 💡 What to Do vs What to Avoid
+* **✅ Do:** Keep all international credentials, point calculations, and legal paperwork strictly organized.
+* **❌ Avoid:** Relying on unverified third-party migration agents without direct legal scrutiny.
+
+---
+
+#### 🌿 Daily Practice
+* **Morning Surya Arghya:** Offer water to the Sun daily for swift administrative processing and positive documentation outcomes.`;
+            }
+            if (subIntent === 'DIRECTIONS_COUNTRIES') {
+                return `### 🧭 Favorable Global Directions & Countries
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *High Global Directional Resonance*  
+> **⏳ Prime Timeline:** **${context.relocationWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Astrological Geographic Matrix
+* **Favorable Directions:** **North-West & West** (governed by favorable transit and air/dual signs).
+* **Aligned Regions:** North America (USA, Canada), Western Europe (UK, Germany, Netherlands), UAE/Middle East, or Australia/NZ.
+* **Urban Character:** Cosmopolitan technology hubs, research universities, and progressive metropolitan centers.
+
+---
+
+#### 💡 What to Do vs What to Avoid
+* **✅ Do:** Target multinational teams and global remote or on-site opportunities in these geographic zones.
+* **❌ Avoid:** Relocating to isolated regions with limited professional mobility.`;
+            }
+            // Default ABROAD
             return `### ✈️ Foreign Travel & Relocation Assessment
 
 > **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${rating.verdictLabel}*  
-> **⏳ Best Window:** **${rating.coreTriggerWindow}**
+> **⏳ Best Window:** **${context.relocationWindow || rating.coreTriggerWindow}**
 
 ---
 
@@ -166,7 +559,59 @@ export class LocalLLMService {
 #### 🌿 Daily Practice
 * **Morning Surya Arghya:** Offer water in a copper vessel to the rising Sun for administrative clarity and smooth journeys.`;
         }
-        // 2. STRUGGLE & FAILURE DIAGNOSIS
+        // 4. WEALTH & FINANCE
+        if (context.detectedTopic === 'WEALTH') {
+            const sav11 = sav[11] || 35;
+            const sav12 = sav[12] || 30;
+            const sav2 = sav[2] || 32;
+            if (subIntent === 'INVESTMENT_CLASS') {
+                return `### 📊 Asset Allocation & Investment Strategy Roadmap
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Productive Long-Term Capital Compounding*  
+> **⏳ Prime Phase:** **${rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Astrological Wealth Matrix
+* **11th House Surplus (${sav11} SAV Bindus):** Favors systematic equity investing, technology stocks, and index funds over speculative day trading.
+* **2nd House Accumulated Capital (${sav2} Bindus):** Strong retention power through physical assets, gold, and debt-free real estate.
+* **Gains vs Expense Ratio (11H: ${sav11} vs 12H: ${sav12}):** Healthy net balance confirms capital growth when disciplined dollar-cost averaging is followed.
+
+---
+
+#### 💡 Asset Strategy
+* **✅ Do:** Maintain a 60/30/10 asset mix: 60% broad equity index funds, 30% fixed assets/gold/real estate, 10% cash liquidity.
+* **❌ Avoid:** High-leverage futures, intraday speculation, or unverified crypto schemes.
+
+---
+
+#### 🌿 Daily Practice
+* **Kubera-Lakshmi Cleanliness:** Keep the North zone of your workplace uncluttered and donate a small percentage of profits.`;
+            }
+            // Default WEALTH
+            return `### 💰 Wealth & Financial Growth Assessment
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Net Capital Accumulation Surplus*  
+> **⏳ Prime Growth Phase:** **${rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Key Astrological Drivers
+* **Gains vs Expense Ratio (11H: ${sav11} vs 12H: ${sav12} Bindus):** Favorable surplus ratio ensuring long-term net capital retention.
+* **Wealth Architecture:** Long-term wealth compounds through intellectual property, equity, and asset allocation rather than short-term lotteries.
+
+---
+
+#### 💡 What to Do vs What to Avoid
+* **✅ Do:** Automate systematic investing in verified, productive assets; maintain a 6-month liquid buffer.
+* **❌ Avoid:** Speculative high-risk trading, FOMO investments, or leveraged debt.
+
+---
+
+#### 🌿 Daily Practice
+* **Lakshmi-Kubera Cleanliness:** Keep the North/North-East zone of your workspace clean and donate a small portion of profits on Thursdays.`;
+        }
+        // 5. STRUGGLE & FAILURE DIAGNOSIS
         if (context.detectedTopic === 'STRUGGLE') {
             return `### 🌊 Life Phase & Obstacle Diagnosis
 
@@ -190,65 +635,94 @@ export class LocalLLMService {
 #### 🌿 Daily Practice
 * **Grounding & Patience:** Practice 10 minutes of evening Pranayama and maintain strict morning discipline.`;
         }
-        // 3. CAREER & BUSINESS
-        if (context.detectedTopic === 'CAREER') {
-            const sav10 = sav[10] || 34;
-            return `### 💼 Career & Professional Trajectory
+        // 6. HEALTH, STOMACH & VITALITY
+        if (context.detectedTopic === 'HEALTH' || context.detectedTopic === 'AYUR_JYOTISH') {
+            const sav6 = sav[6] || 31;
+            const dosha = context.doshaProfile || {
+                primaryDosha: 'Vata-Pitta',
+                dominantElements: 'Air & Fire',
+                digestiveFire: 'Tikshnagni (Variable / Sharp Fire)',
+                doshaBreakdown: { vataPercentage: 45, pittaPercentage: 35, kaphaPercentage: 20 },
+            };
+            if (subIntent === 'DOSHA_CONSTITUTION' || context.detectedTopic === 'AYUR_JYOTISH') {
+                return `### 🌿 Ayur-Jyotish & Circadian Bio-Rhythm Blueprint
 
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${rating.verdictLabel}*  
-> **⏳ Peak Elevation Window:** **${rating.coreTriggerWindow}**
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${dosha.primaryDosha} Constitution (${dosha.dominantElements})*  
+> **⏳ Digestive Fire:** **${dosha.digestiveFire}**
+
+---
+
+#### 🪐 Tri-Dosha Planetary Breakdown
+* **Vata (Air - ${dosha.doshaBreakdown?.vataPercentage || 45}%):** Governs nervous system, mental agility, and mobility (influenced by Lagna: ${context.lagnaSign}).
+* **Pitta (Fire - ${dosha.doshaBreakdown?.pittaPercentage || 35}%):** Governs metabolic heat, enzyme secretion, and sharp intellect (influenced by Sun: ${context.sunSign}).
+* **Kapha (Earth/Water - ${dosha.doshaBreakdown?.kaphaPercentage || 20}%):** Governs physical lubrication, cellular immunity, and stamina.
+* **Peak Circadian Windows:** Deep Cognitive Work (06:00–10:00 & 14:00–18:00) | Main Lunch (12:00–13:30 when Solar Pitta is highest).
+
+---
+
+#### 💡 Lifestyle & Nutrition Guidelines
+* **✅ Do:** Consume warm, freshly prepared meals with grounding spices (cumin, fennel, ginger, ghee); adhere to a fixed sleep routine.
+* **❌ Avoid:** Skipping lunch, cold iced beverages, and dry raw food during high-stress periods.
+
+---
+
+#### 🌿 Daily Herbal Support
+* **CCF Tea & Golden Milk:** Sip warm cumin-coriander-fennel tea post-meals and warm turmeric milk before sleep.`;
+            }
+            if (subIntent === 'DIGESTION_GUT') {
+                return `### 🌿 Digestive Fire (Jatharagni) & Gut Vitality Diagnosis
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Brain-Gut & Metabolic Sensitivity*  
+> **⏳ Recovery Window:** **3–4 Weeks with Circadian Discipline**
 
 ---
 
 #### 🪐 Key Astrological Drivers
-* **10th House (${sav10} SAV Bindus):** High authority configuration favoring strategic independence, leadership, or specialized business ventures over micromanaged roles.
-* **Amatyakaraka (${jaimini.amatyakaraka}):** Connects career growth to technology architecture, strategic consulting, and domain expertise.
-* **D10 Dashamsha Support:** Confirms long-term institutional authority and industry reputation.
+* **Sun in Virgo (Digestive Axis):** Virgo anatomically governs the intestines and gut microbiome, creating sensitivity in digestive fire (*Jatharagni*).
+* **Gemini-Virgo Brain-Gut Axis:** Mental overthinking and irregular work stress directly impact stomach motility and acidity.
+* **6th House Resilience (${sav6} SAV Bindus):** Confirms strong innate vitality with quick recovery through regular dietary rhythm.
 
 ---
 
 #### 💡 What to Do vs What to Avoid
-* **✅ Do:** Build domain authority in rare, high-leverage skills; position yourself as an indispensable architect of results.
-* **❌ Avoid:** Staying in bureaucratic, low-autonomy roles where creative execution is capped.
+* **✅ Do:** Drink warm water or mild cumin-coriander-fennel (CCF) tea post-meals; keep fixed meal times daily.
+* **❌ Avoid:** Cold drinks, late-night heavy meals, and eating in a rushed or anxious mental state.
 
 ---
 
 #### 🌿 Daily Practice
-* **Daily Focus & Solar Alignment:** Maintain structured deep-work blocks and morning Surya Arghya for supreme clarity.`;
-        }
-        // 4. WEALTH & FINANCE
-        if (context.detectedTopic === 'WEALTH') {
-            const sav11 = sav[11] || 35;
-            const sav12 = sav[12] || 30;
-            return `### 💰 Wealth & Financial Growth Assessment
+* **Morning Sunlight & Diaphragmatic Breathwork:** 10 minutes of gentle belly breathing before meals shifts the nervous system into the rest-and-digest state.`;
+            }
+            // Default HEALTH
+            return `### 🌿 Health & Vitality Blueprint
 
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Net Capital Accumulation Surplus*  
-> **⏳ Prime Growth Phase:** **${rating.coreTriggerWindow}**
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Resilient Constitution with Circadian Rhythm Focus*  
+> **⏳ Ongoing Window:** **Seasonal Balance & Daily Dinacharya**
 
 ---
 
 #### 🪐 Key Astrological Drivers
-* **Gains vs Expense Ratio (11H: ${sav11} vs 12H: ${sav12} Bindus):** Favorable surplus ratio ensuring long-term net capital retention.
-* **Wealth Architecture:** Long-term wealth compounds through intellectual property, equity, and asset allocation rather than short-term lotteries.
+* **Lagna & Sun Axis:** Governs physical constitution and cellular vitality (*Ojas*).
+* **6th House of Immunity (${sav6} SAV Bindus):** Strong recovery baseline over temporary seasonal ailments.
 
 ---
 
 #### 💡 What to Do vs What to Avoid
-* **✅ Do:** Automate systematic investing in verified, productive assets; maintain a 6-month liquid buffer.
-* **❌ Avoid:** Speculative high-risk trading, FOMO investments, or leveraged debt.
+* **✅ Do:** Maintain fixed meal and sleep times, practice daily diaphragmatic breathwork, and stay well hydrated.
+* **❌ Avoid:** Irregular sleep schedules, late-night snacking, and chronic digital overstimulation before bed.
 
 ---
 
 #### 🌿 Daily Practice
-* **Lakshmi-Kubera Cleanliness:** Keep the North/North-East zone of your workspace clean and donate a small portion of profits on Thursdays.`;
+* **Restorative Breathwork:** 10 minutes of evening Anulom-Vilom to restore autonomic nervous system balance.`;
         }
-        // 5. PROPERTY & REAL ESTATE
+        // 7. PROPERTY
         if (context.detectedTopic === 'PROPERTY') {
             const sav4 = sav[4] || 29;
             return `### 🏡 Property & Real Estate Roadmap
 
 > **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Supportive Fixed-Asset Acquisition*  
-> **⏳ Prime Window:** **${rating.coreTriggerWindow}**
+> **⏳ Prime Window:** **${context.propertyPurchaseWindow || rating.coreTriggerWindow}**
 
 ---
 
@@ -267,58 +741,7 @@ export class LocalLLMService {
 #### 🌿 Daily Practice
 * **Domestic Sanctuary:** Keep the North-East zone of your home uncluttered for peace and clarity.`;
         }
-        // 6. MARRIAGE & RELATIONSHIPS
-        if (context.detectedTopic === 'MARRIAGE') {
-            const sav7 = sav[7] || 27;
-            return `### ❤️ Marriage & Relationship Timing Blueprint
-
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Matrimonial & Relational Alignment*  
-> **⏳ Prime Window:** **${rating.coreTriggerWindow}**
-
----
-
-#### 🪐 Key Astrological Drivers
-* **7th House (${sav7} SAV Bindus) & Darakaraka (${jaimini.darakaraka}):** Indicates an intelligent, grounded, and professionally supportive life partner.
-* **D9 Navamsha Harmony:** Fosters long-term marital stability when mutual space and professional respect are maintained.
-
----
-
-#### 💡 What to Do vs What to Avoid
-* **✅ Do:** Foster open, transparent dialogue; appreciate emotional stability and practical loyalty.
-* **❌ Avoid:** Over-analyzing minor disagreements or expecting identical personality traits.
-
----
-
-#### 🌿 Daily Practice
-* **Relational Space:** Cultivate joint gratitude and encourage individual creative pursuits.`;
-        }
-        // 7. HEALTH, STOMACH & VITALITY
-        if (context.detectedTopic === 'HEALTH') {
-            const sav6 = sav[6] || 31;
-            return `### 🌿 Health & Digestive Vitality Diagnosis
-
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Brain-Gut & Metabolic Sensitivity*  
-> **⏳ Recovery Window:** **3–4 Weeks with Diet & Circadian Discipline**
-
----
-
-#### 🪐 Key Astrological Drivers
-* **Sun in Virgo (Digestive Axis):** Virgo anatomically governs the intestines and gut microbiome, creating sensitivity in digestive fire (*Jatharagni*).
-* **Gemini-Virgo Brain-Gut Axis:** As a **Gemini** Ascendant, mental overthinking and irregular work stress directly impact stomach motility and acidity.
-* **6th House Resilience (${sav6} SAV Bindus):** Confirms strong innate vitality with quick recovery through regular dietary rhythm.
-
----
-
-#### 💡 What to Do vs What to Avoid
-* **✅ Do:** Drink warm water or mild cumin-coriander-fennel (CCF) tea post-meals; keep fixed meal times daily.
-* **❌ Avoid:** Cold drinks, late-night heavy meals, and eating in a rushed or anxious mental state.
-
----
-
-#### 🌿 Daily Practice
-* **Morning Sunlight & Diaphragmatic Breathwork:** 10 minutes of gentle belly breathing before meals shifts the nervous system into the rest-and-digest state.`;
-        }
-        // 8. EDUCATION & COMPETITIVE EXAMS
+        // 8. EDUCATION
         if (context.detectedTopic === 'EDUCATION') {
             const sav5 = sav[5] || 29;
             return `### 🎓 Education & Exam Performance Roadmap
@@ -343,7 +766,7 @@ export class LocalLLMService {
 #### 🌿 Daily Practice
 * **Clarity Ritual:** 5 minutes of mindful breathwork before study sessions to sharpen memory retention.`;
         }
-        // 9. AIM OF LIFE & DHARMA
+        // 9. DHARMA
         if (context.detectedTopic === 'DHARMA') {
             return `### 🧭 Life Mission & Soul Dharma
 
@@ -368,7 +791,7 @@ export class LocalLLMService {
 #### 🌿 Daily Practice
 * **Daily Alignment:** Review your core life priorities every morning before opening digital devices.`;
         }
-        // 10. DECISION SIMULATION / OPTION A vs OPTION B
+        // 10. DECISION SIMULATION
         if (context.detectedTopic === 'DECISION_SIMULATION') {
             const sav10 = sav[10] || 34;
             return `### ⚖️ Strategic "What-If" Decision Simulation
@@ -379,7 +802,7 @@ export class LocalLLMService {
 ---
 
 #### 🪐 Comparative Planetary Matrix
-* **Option A (Autonomous / High-Growth Path):** Aligns with 10th House (${sav10} SAV bindus) and Amatyakaraka (${jaimini.amatyakaraka}), offering maximum upside and long-term equity.
+* **Option A (Autonomous / High-Growth Path):** Aligns with 10th House (${sav10} SAV bindus) and Amatyakaraka (${amatyakaraka}), offering maximum upside and long-term equity.
 * **Option B (Safe / Fixed-Routine Path):** Offers short-term stability but caps your entrepreneurial potential under the ${context.activeMahadasha}-${context.activeAntardasha} dasha cycle.
 * **Ashtakavarga Differential:** Strategic ventures and domain autonomy score **+18% higher planetary leverage** than conventional salaried stagnation.
 
@@ -394,70 +817,258 @@ export class LocalLLMService {
 #### 🌿 Daily Practice
 * **Decision Clarity Meditation:** Spend 10 minutes in silent morning reflection to ground your intuition before signing agreements.`;
         }
-        // 11. AYUR-JYOTISH & CIRCADIAN BIO-RHYTHM
-        if (context.detectedTopic === 'AYUR_JYOTISH') {
-            const dosha = context.doshaProfile || {
-                primaryDosha: 'Vata-Pitta',
-                dominantElements: 'Air (Vayu) & Fire (Tejas)',
-                digestiveFire: 'Tikshnagni (Variable / Sharp Fire)',
-                doshaBreakdown: { vataPercentage: 45, pittaPercentage: 35, kaphaPercentage: 20 },
-            };
-            return `### 🌿 Ayur-Jyotish & Circadian Bio-Rhythm Blueprint
-
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Constitution Score** — *${dosha.primaryDosha} (${dosha.dominantElements})*  
-> **⏳ Bio-Clock Rhythm:** **${dosha.digestiveFire}**
-
----
-
-#### 🪐 Planetary Dosha & Energy Matrix
-* **Dosha Constitution:** **Vata (${dosha.doshaBreakdown?.vataPercentage || 45}%)** | **Pitta (${dosha.doshaBreakdown?.pittaPercentage || 35}%)** | **Kapha (${dosha.doshaBreakdown?.kaphaPercentage || 20}%)**.
-* **Astrological Root:** Rising sign (${context.lagnaSign}) and Sun in (${context.sunSign}) govern nervous-gut assimilation and mental metabolism.
-* **Peak Circadian Windows:** Deep Cognitive Work (06:00–10:00 & 14:00–18:00 Vata/Kapha transition) | Main Meal (12:00–13:30 Peak Solar Pitta Fire).
-
----
-
-#### 💡 What to Do vs What to Avoid
-* **✅ Do:** Consume warm, freshly prepared spiced meals (cumin, coriander, ginger) and follow fixed circadian sleep timings.
-* **❌ Avoid:** Skipping lunch during peak solar hours, raw/cold dry foods, and eating under chronic cognitive stress.
-
----
-
-#### 🌿 Daily Practice & Adaptogens
-* **Ashwagandha & CCF Tea:** Take warm golden milk with a pinch of nutmeg or sip warm Cumin-Coriander-Fennel tea post-meals.`;
-        }
-        // 12. GENERAL / OPEN QUERY
+        // 11. GENERAL SUMMARY
         return `### ✨ Astrological Blueprint & Life Summary
 
 > **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${context.primaryArchetype}*  
-> **⏳ Active Dasha:** **${context.activeMahadasha}-${context.activeAntardasha} (transitioning around ${context.antardashaEndDate})**
+> **⏳ Active Dasha:** **${context.activeMahadasha}-${context.activeAntardasha} (ending around ${context.antardashaEndDate})**
 
 ---
 
 #### 🪐 Key Milestone Horizons
-* **✈️ Relocation & Travel:** ${context.relocationWindow || 'Active during upcoming planetary transits'}
-* **💼 Career Breakthrough:** ${context.careerLeapWindow || 'Active during supportive sub-period'}
+* **✈️ Relocation & Travel:** ${context.relocationWindow || 'Active during upcoming supportive transits'}
+* **💼 Career Breakthrough:** ${context.careerLeapWindow || 'Active during supportive period'}
 * **🏡 Home & Property:** ${context.propertyPurchaseWindow || 'Active in supportive 4th house cycle'}
-* **❤️ Union & Marriage:** ${context.marriageTimingWindow || 'Active in relational planetary alignment'}
+* **❤️ Union & Marriage:** ${context.marriageTimingWindow || 'Active in relational alignment'}
 
 ---
 
 #### 💡 What to Do vs What to Avoid
-* **✅ Do:** Maintain daily morning discipline, deep-work focus, and steady asset compounding.
-* **❌ Avoid:** Impulsive speculative financial bets or sudden career pivots during consolidation cycles.
+* **✅ Do:** Maintain daily morning discipline, deep-work focus, and systematic wealth compounding.
+* **❌ Avoid:** Impulsive speculative financial bets or panic career pivots.
 
 ---
 
 #### 🌿 Daily Practice
-* **Morning Surya Arghya:** Offer clean water to the morning Sun daily for supreme authority, health, and vitality.`;
+* **Surya Arghya:** Offer water to the morning Sun daily for vitality, health, and supreme clarity.`;
     }
+    // ==========================================
+    // HINDI SUB-INTENT HANDLERS
+    // ==========================================
     generateHindiRAGResponse(context, rating, sav, jaimini) {
-        // 1. FOREIGN TRAVEL & OVERSEAS RELOCATION
+        const subIntent = context.detectedSubIntent || 'GENERAL';
+        const darakaraka = jaimini.darakaraka || 'Venus';
+        const amatyakaraka = jaimini.amatyakaraka || 'Mercury';
+        const dkTraits = getDarakarakaTraits(darakaraka, 'hi');
+        const seventhHouse = context.houseDetails?.find((h) => h.houseNumber === 7);
+        const seventhSign = seventhHouse?.signName || 'Sagittarius';
+        const seventhTraits = getSeventhHouseTraits(seventhSign, 'hi');
+        const d9Lagna = context.divisionalHighlights?.d9Lagna || 'Libra';
+        // 1. MARRIAGE & RELATIONSHIPS
+        if (context.detectedTopic === 'MARRIAGE') {
+            const sav7 = sav[7] || 27;
+            const sav5 = sav[5] || 28;
+            const sav9 = sav[9] || 30;
+            if (subIntent === 'SPOUSE_TRAITS') {
+                return `### 💍 जीवनसाथी का स्वभाव, व्यक्तित्व एवं विशेषताएं
+
+> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *उत्तम वैचारिक सामंजस्य एवं परस्पर आदर*  
+> **⏳ संभावित समय:** **${context.marriageTimingWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 मुख्य ज्योतिषीय आधार
+* **सप्तम भाव (${seventhSign} / ${sav7} सर्वाष्टकवर्ग बिंदु):** आपके जीवनसाथी का स्वरूप **${seventhTraits}** होगा।
+* **दाराकारक ग्रह (${darakaraka}):** जैमिनी ज्योतिष के अनुसार जीवनसाथी का मूल स्वभाव **${dkTraits}** होगा।
+* **नवमांश (D9) संरेखण (${d9Lagna} लग्न):** वैचारिक स्वतंत्रता और परस्पर सम्मान से वैवाहिक जीवन अत्यंत स्थिर, समृद्ध व सुखद रहेगा।
+
+---
+
+#### 💼 संभावित कार्यक्षेत्र एवं पृष्ठभूमि
+* **अनुकूल क्षेत्र:** तकनीकी, परामर्श, उच्च शिक्षा/प्रबंधन, वित्तीय क्षेत्र, रचनात्मक डिजाइन अथवा प्रशासनिक कार्य।
+* **व्यक्तित्व:** व्यर्थ के विवादों से दूर, गंभीर संवाद, निष्ठा एवं व्यावहारिक संतुलन को प्राथमिकता देने वाले।
+
+---
+
+#### 💡 क्या करें और क्या न करें
+* **✅ करें:** जीवनसाथी की स्वतंत्र सोच का सम्मान करें और मिलकर बौद्धिक व रचनात्मक कार्यों को बढ़ावा दें।
+* **❌ बचें:** छोटी-छोटी बातों का अधिक विश्लेषण करने या साथी से अपने जैसे स्वभाव की जिद करने से बचें।
+
+---
+
+#### 🌿 दैनिक उपाय
+* **गृह सौहार्द:** प्रतिदिन परस्पर कृतज्ञता का भाव रखें और घर के ईशान कोण (North-East) को स्वच्छ रखें।`;
+            }
+            if (subIntent === 'LOVE_VS_ARRANGED') {
+                const isLoveDominant = sav5 >= 28 || darakaraka === 'Venus' || darakaraka === 'Mercury';
+                return `### 💖 विवाह का स्वरूप: प्रेम विवाह बनाम पारिवारिक संरेखण
+
+> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *${isLoveDominant ? 'स्व-पसंद आधारित संबंध जिसमें परिवार का पूर्ण आशीर्वाद मिलेगा' : 'पारिवारिक परिचय के साथ उच्च बौद्धिक व भावनात्मक जुड़ाव'}*  
+> **⏳ शुभ समय:** **${context.marriageTimingWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 ज्योतिषीय विश्लेषण
+* **पंचम भाव (प्रेम व पूर्व पुण्य - ${sav5} बिंदु):** व्यक्तिगत पसंद, वैचारिक आकर्षण और आपसी समझ को मजबूती प्रदान करता है।
+* **सप्तम भाव व दाराकारक (${darakaraka}):** ऐसे संबंध को दर्शाता है जो साझा लक्ष्यों, सम्मान और सच्ची मित्रता पर आधारित हो।
+* **नवम भाव (पारिवारिक सहमति - ${sav9} बिंदु):** पुष्टि करता है कि धैर्य और स्पष्ट संवाद से परिवार का पूर्ण सहयोग प्राप्त होगा।
+
+---
+
+#### 💡 परिचय का माध्यम
+* **संभावित परिदृश्य:** कार्यक्षेत्र, उच्च शिक्षा, साझा बौद्धिक रुचियों अथवा विश्वसनीय मित्रों के माध्यम से परिचय होना सर्वाधिक संभावित है।
+
+---
+
+#### 🌿 दैनिक उपाय
+* **पारिवारिक संवाद:** विवाह संबंधी विचारों को परिवार के साथ शांत व स्पष्ट रूप से साझा करें।`;
+            }
+            if (subIntent === 'OBSTACLES_MANGLIK') {
+                return `### 🛡️ विवाह में बाधा, मांगलिक प्रभाव एवं समाधान
+
+> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% ज्योतिषीय निश्चितता** — *परिपक्वता निर्माण काल (अंधविश्वास मुक्त)*  
+> **⏳ समाधान काल:** **${rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 ज्योतिषीय यथार्थ
+* **देरी का वास्तविक कारण:** वैदिक ज्योतिष में शनि या मंगल का प्रभाव शाप नहीं है—यह भावनात्मक परिपक्वता और आर्थिक स्थिरता सुनिश्चित करने के लिए होता है।
+* **मांगलिक / मंगल ऊर्जा:** मंगल की ऊर्जा साहस और कर्मठता देती है; इसे करियर और स्वास्थ्य में लगाने से वैवाहिक तनाव स्वतः समाप्त हो जाता है।
+* **सप्तम भाव गोचर:** गुरु व शनि का संयुक्त गोचर वर्तमान दशा चक्र में सभी रुकावटों को दूर करता है।
+
+---
+
+#### 💡 क्या करें और क्या न करें
+* **✅ करें:** अपने करियर, भावनात्मक संतुलन और स्पष्ट संवाद पर ध्यान दें।
+* **❌ बचें:** भय फैलाने वाले अंधविश्वासों, महंगे अनुष्ठानों या सामाजिक दबाव में जल्दबाजी में निर्णय लेने से बचें।
+
+---
+
+#### 🌿 सात्विक दैनिक उपाय
+* **प्रातः सूर्य नमस्कार:** प्रतिदिन 10 मिनट सूर्य नमस्कार करें और बातचीत में धैर्य बनाए रखें।`;
+            }
+            if (subIntent === 'MARRIED_LIFE_QUALITY') {
+                return `### 🕊️ दांपत्य जीवन का सुख एवं परस्पर सामंजस्य
+
+> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *स्थिर, विकासोन्मुख एवं सुखद दांपत्य*  
+> **⏳ जीवन दिशा:** **नवमांश (D9) सद्भाव के अंतर्गत दीर्घकालिक स्थिरता**
+
+---
+
+#### 🪐 मुख्य ज्योतिषीय कारण
+* **नवमांश चक्र (${d9Lagna} लग्न):** बौद्धिक उन्नति और परस्पर आदर से युक्त वैवाहिक जीवन।
+* **सप्तम भाव (${sav7} बिंदु):** जीवन के उतार-चढ़ाव में संबल प्रदान करने वाली मजबूत ग्रहीय नींव।
+* **दाराकारक (${darakaraka}):** जीवनसाथी एक सच्चे मित्र व विश्वस्त सलाहकार की भूमिका निभाएंगे।
+
+---
+
+#### 💡 सुखद दांपत्य के सूत्र
+* **✅ करें:** स्पष्ट संवाद रखें, एक-दूसरे की उपलब्धियों का सम्मान करें और व्यक्तिगत स्वतंत्रता का आदर करें।
+* **❌ बचें:** कार्यक्षेत्र के तनाव को व्यक्तिगत संबंधों पर हावी न होने दें।
+
+---
+
+#### 🌿 दैनिक उपाय
+* **सांध्य संवाद:** प्रतिदिन 15 मिनट बिना किसी डिजिटल स्क्रीन के शांति से साथ बिताएं।`;
+            }
+            // Default MARRIAGE
+            return `### ❤️ विवाह एवं दांपत्य जीवन मार्गदर्शन
+
+> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *सुयोग्य जीवनसाथी व वैवाहिक सामंजस्य*  
+> **⏳ शुभ समय:** **${context.marriageTimingWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 मुख्य ज्योतिषीय कारण
+* **सप्तम भाव (${sav7} बिंदु) एवं दाराकारक (${darakaraka}):** बुद्धिमान, व्यावहारिक और सहयोगी जीवनसाथी का संकेत देते हैं।
+* **सक्रिय दशा (${context.activeMahadasha}-${context.activeAntardasha}):** विवाह योग और योग्य प्रस्तावों को सक्रिय कर रही है।
+* **नवमांश (D9) संरेखण:** वैचारिक स्वतंत्रता और परस्पर सम्मान से वैवाहिक जीवन स्थिर व सुखद रहेगा।
+
+---
+
+#### 💡 क्या करें और क्या न करें
+* **✅ करें:** स्पष्ट संवाद रखें और साथी की व्यवहार कुशलता व निष्ठा का सम्मान करें।
+* **❌ बचें:** छोटी-छोटी बातों का अधिक विश्लेषण करने या अनावश्यक अपेक्षाएं रखने से बचें।
+
+---
+
+#### 🌿 दैनिक उपाय
+* **आपसी सौहार्द:** प्रतिदिन कृतज्ञता का भाव रखें और एक-दूसरे के कार्यों में सहयोग दें।`;
+        }
+        // 2. CAREER & BUSINESS
+        if (context.detectedTopic === 'CAREER') {
+            const sav10 = sav[10] || 34;
+            const sav6 = sav[6] || 31;
+            const sav3 = sav[3] || 27;
+            if (subIntent === 'JOB_VS_BUSINESS') {
+                const isBusinessFavored = sav10 >= 30 || sav3 >= 28;
+                return `### 💼 करियर दिशा: नौकरी बनाम व्यवसाय व उद्यम
+
+> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *${isBusinessFavored ? 'स्वतंत्र व्यवसाय, परामर्श एवं रणनीतिक उद्यम में सर्वाधिक सफलता' : 'उच्च स्तरीय कार्यकारी नेतृत्व एवं विशेषज्ञता आधारित भूमिका'}*  
+> **⏳ प्रगति काल:** **${context.careerLeapWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 ग्रहीय विश्लेषण
+* **दशम भाव (${sav10} बिंदु):** रणनीतिक स्वायत्तता और नेतृत्वकारी भूमिकाओं में बड़ी सफलता का संकेत देता है।
+* **अमात्यकारक (${amatyakaraka}):** तकनीकी उत्पादों, डोमेन एडवाइजरी और बौद्धिक उद्यम में उच्च लाभ दर्शाता है।
+* **छठा भाव (${sav6} बिंदु) vs तीसरा भाव (${sav3} बिंदु):** पहले विशेषज्ञता हासिल कर बाद में स्वतंत्र व्यवसाय में कदम रखना सर्वोत्तम रहेगा।
+
+---
+
+#### 💡 रणनीतिक मार्गदर्शन
+* **✅ करें:** उच्च-मूल्य वाले दुर्लभ कौशलों में अपनी पकड़ बनाएं और स्वतंत्र अधिकार वाले क्षेत्रों में आगे बढ़ें।
+* **❌ बचें:** ऐसी सीमित भूमिकाओं में लंबे समय तक रहने से बचें जहां आपकी रणनीतिक क्षमता का उपयोग न हो।
+
+---
+
+#### 🌿 दैनिक उपाय
+* **एकाग्र कार्य:** प्रातः काल के 90 मिनट अपने मुख्य कौशल व महत्वपूर्ण कार्य को समर्पित करें।`;
+            }
+            if (subIntent === 'INDUSTRY_SELECTION') {
+                return `### 🎯 आपके लिए सबसे उपयुक्त उद्योग एवं कार्यक्षेत्र
+
+> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *उच्च मूल्य वाले तकनीकी व रणनीतिक क्षेत्र*  
+> **⏳ मुख्य समय:** **${context.careerLeapWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 मुख्य ज्योतिषीय कारक
+* **अमात्यकारक (${amatyakaraka}):** सॉफ्टवेयर आर्किटेक्चर, डेटा, रणनीतिक परामर्श, शोध अथवा प्रबंधन में स्वाभाविक योग्यता।
+* **दशम भाव (${sav10} बिंदु):** प्रतिष्ठा, नवाचार और व्यवस्था निर्माण से जुड़े कार्यों में विशेष यश।
+
+---
+
+#### 💡 शीर्ष 3 उपयुक्त कार्यक्षेत्र
+1. **प्रौद्योगिकी, एआई एवं सिस्टम्स इंजीनियरिंग:** बड़े पैमाने पर तकनीकी प्रणालियों का निर्माण।
+2. **रणनीतिक परामर्श एवं विश्लेषिकी:** जटिल संगठनात्मक व डेटा समस्याओं का समाधान।
+3. **स्वायत्त उद्यम एवं उत्पाद निर्माण:** स्वतंत्र व्यापारिक व परामर्श सेवाएं।
+
+---
+
+#### 🌿 दैनिक उपाय
+* **ज्ञान संवर्धन:** अपने क्षेत्र के नवीनतम तकनीकी विकास से निरंतर जुड़े रहें।`;
+            }
+            // Default CAREER
+            return `### 💼 करियर एवं व्यवसायिक मार्गदर्शन
+
+> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *नेतृत्व एवं स्वतंत्र कार्यक्षेत्र में उन्नति*  
+> **⏳ प्रगति का समय:** **${context.careerLeapWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 मुख्य ज्योतिषीय कारण
+* **दशम भाव (${sav10} बिंदु):** उच्च अधिकार योग जो रणनीतिक स्वतंत्रता और विशेषज्ञता आधारित कार्यों में विशेष सफलता दिलाता है।
+* **अमात्यकारक (${amatyakaraka}):** तकनीकी दक्षता, परामर्श और रणनीतिक निर्णयों से करियर में बड़ा उछाल दर्शाता है।
+
+---
+
+#### 💡 क्या करें और क्या न करें
+* **✅ करें:** उच्च-मूल्य वाले कौशलों में अपनी विशेषज्ञता बढ़ाएं और स्वायत्त भूमिकाओं को प्राथमिकता दें।
+* **❌ बचें:** ऐसे सीमित वातावरण में रुकने से बचें जहां आपके नवाचार पर पाबंदी हो।
+
+---
+
+#### 🌿 दैनिक उपाय
+* **सूर्य नमस्कार व अनुशासन:** प्रतिदिन एकाग्रता के साथ महत्वपूर्ण कार्यों को प्राथमिकता दें।`;
+        }
+        // 3. ABROAD
         if (context.detectedTopic === 'ABROAD') {
             const sav12 = sav[12] || 30;
             return `### ✈️ विदेश यात्रा एवं निवास विश्लेषण
 
 > **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *विदेश गमन एवं निवास के प्रबल योग*  
-> **⏳ शुभ समय:** **${rating.coreTriggerWindow}**
+> **⏳ शुभ समय:** **${context.relocationWindow || rating.coreTriggerWindow}**
 
 ---
 
@@ -477,56 +1088,7 @@ export class LocalLLMService {
 #### 🌿 दैनिक उपाय
 * **प्रातः सूर्य अर्घ्य:** तांबे के पात्र से उगते सूर्य को जल अर्पित करें जिससे प्रशासनिक व यात्रा कार्य निर्विघ्न हों।`;
         }
-        // 2. STRUGGLE & OBSTACLE DIAGNOSIS
-        if (context.detectedTopic === 'STRUGGLE') {
-            return `### 🌊 जीवन चक्र एवं रुकावटों का विश्लेषण
-
-> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% ज्योतिषीय निश्चितता** — *अस्थायी निर्माण व सुदृढ़ीकरण काल*  
-> **⏳ राहत का समय:** **लगभग ${context.struggleReliefDate} से परिस्थितियों में सुधार**
-
----
-
-#### 🪐 मुख्य ज्योतिषीय कारण
-* **${context.activeMahadasha}-${context.activeAntardasha} का प्रभाव:** यह समय कमजोर विकल्पों को हटाकर स्थायी कार्यप्रणाली स्थापित करने का है।
-* **कर्मिक दिशा:** वर्तमान की चुनौतियां असफलता नहीं बल्कि भविष्य के बड़े अवसरों के लिए आवश्यक तैयारी हैं।
-
----
-
-#### 💡 क्या करें और क्या न करें
-* **✅ करें:** अपने कौशल में निपुणता, नियमित दिनचर्या और दीर्घकालिक लक्ष्यों पर ध्यान केंद्रित करें।
-* **❌ बचें:** जोखिम भरे वित्तीय दांव या तात्कालिक रुकावटों से निराश होने से बचें।
-
----
-
-#### 🌿 दैनिक उपाय
-* **प्राणायाम एवं धैर्य:** सांध्यकाल में 10 मिनट अनुलोम-विलोम करें और प्रातः अनुशासन बनाए रखें।`;
-        }
-        // 3. CAREER & BUSINESS
-        if (context.detectedTopic === 'CAREER') {
-            const sav10 = sav[10] || 34;
-            return `### 💼 करियर एवं व्यवसायिक मार्गदर्शन
-
-> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *नेतृत्व एवं स्वतंत्र कार्यक्षेत्र में उन्नति*  
-> **⏳ प्रगति का समय:** **${rating.coreTriggerWindow}**
-
----
-
-#### 🪐 मुख्य ज्योतिषीय कारण
-* **दशम भाव (${sav10} बिंदु):** उच्च अधिकार योग जो रणनीतिक स्वतंत्रता और विशेषज्ञता आधारित कार्यों में विशेष सफलता दिलाता है।
-* **अमात्यकारक (${jaimini.amatyakaraka}):** तकनीकी दक्षता, परामर्श और रणनीतिक निर्णयों से करियर में बड़ा उछाल दर्शाता है।
-
----
-
-#### 💡 क्या करें और क्या न करें
-* **✅ करें:** उच्च-मूल्य वाले कौशलों में अपनी विशेषज्ञता बढ़ाएं और स्वायत्त भूमिकाओं को प्राथमिकता दें।
-* **❌ बचें:** ऐसे सीमित वातावरण में रुकने से बचें जहां आपके नवाचार पर पाबंदी हो।
-
----
-
-#### 🌿 दैनिक उपाय
-* **सूर्य नमस्कार व अनुशासन:** प्रतिदिन एकाग्रता के साथ महत्वपूर्ण कार्यों को प्राथमिकता दें।`;
-        }
-        // 4. WEALTH & FINANCE
+        // 4. WEALTH
         if (context.detectedTopic === 'WEALTH') {
             const sav11 = sav[11] || 35;
             const sav12 = sav[12] || 30;
@@ -552,62 +1114,42 @@ export class LocalLLMService {
 #### 🌿 दैनिक उपाय
 * **उत्तर दिशा की स्वच्छता:** अपने कार्यस्थल की उत्तर दिशा को स्वच्छ रखें और गुरुवार को कुछ दान करें।`;
         }
-        // 5. PROPERTY & REAL ESTATE
-        if (context.detectedTopic === 'PROPERTY') {
-            const sav4 = sav[4] || 29;
-            return `### 🏡 भवन व भूमि क्रय योग
+        // 5. STRUGGLE
+        if (context.detectedTopic === 'STRUGGLE') {
+            return `### 🌊 जीवन चक्र एवं रुकावटों का विश्लेषण
 
-> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *स्थायी संपत्ति व आवास प्राप्ति के अनुकूल योग*  
-> **⏳ शुभ समय:** **${rating.coreTriggerWindow}**
-
----
-
-#### 🪐 मुख्य ज्योतिषीय कारण
-* **चतुर्थ भाव (${sav4} बिंदु):** घरेलू सुख-शांति, भूमि व स्वयं के मकान का मजबूत आधार प्रस्तुत करता है।
-* **अनुकूल आवास:** प्राकृतिक प्रकाश व वायु से युक्त तैयार मकान या अपार्टमेंट आपके लिए विशेष शुभ रहेगा।
-
----
-
-#### 💡 क्या करें और क्या न करें
-* **✅ करें:** संपत्ति के कानूनी दस्तावेजों की पूरी जांच करें और ईएमआई को आय के 30% के भीतर रखें।
-* **❌ बचें:** बिना स्पष्ट स्वामित्व वाले विवादित सौदों में जल्दबाजी न करें।
-
----
-
-#### 🌿 दैनिक उपाय
-* **गृह शांति:** घर के ईशान कोण (North-East) को हमेशा साफ व खुला रखें।`;
-        }
-        // 6. MARRIAGE & RELATIONSHIPS
-        if (context.detectedTopic === 'MARRIAGE') {
-            const sav7 = sav[7] || 27;
-            return `### ❤️ विवाह एवं दांपत्य जीवन मार्गदर्शन
-
-> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *सुयोग्य जीवनसाथी व वैवाहिक सामंजस्य*  
-> **⏳ शुभ समय:** **${rating.coreTriggerWindow}**
+> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% ज्योतिषीय निश्चितता** — *अस्थायी निर्माण व सुदृढ़ीकरण काल*  
+> **⏳ राहत का समय:** **लगभग ${context.struggleReliefDate} से परिस्थितियों में सुधार**
 
 ---
 
 #### 🪐 मुख्य ज्योतिषीय कारण
-* **सप्तम भाव (${sav7} बिंदु) एवं दाराकारक (${jaimini.darakaraka}):** बुद्धिमान, व्यावहारिक और सहयोगी जीवनसाथी का संकेत देते हैं।
-* **नवमांश (D9) संरेखण:** वैचारिक स्वतंत्रता और परस्पर सम्मान से वैवाहिक जीवन स्थिर व सुखद रहेगा।
+* **${context.activeMahadasha}-${context.activeAntardasha} का प्रभाव:** यह समय कमजोर विकल्पों को हटाकर स्थायी कार्यप्रणाली स्थापित करने का है।
+* **कर्मिक दिशा:** वर्तमान की चुनौतियां असफलता नहीं बल्कि भविष्य के बड़े अवसरों के लिए आवश्यक तैयारी हैं।
 
 ---
 
 #### 💡 क्या करें और क्या न करें
-* **✅ करें:** स्पष्ट संवाद रखें और साथी की व्यवहार कुशलता व निष्ठा का सम्मान करें।
-* **❌ बचें:** छोटी-छोटी बातों का अधिक विश्लेषण करने या अनावश्यक अपेक्षाएं रखने से बचें।
+* **✅ करें:** अपने कौशल में निपुणता, नियमित दिनचर्या और दीर्घकालिक लक्ष्यों पर ध्यान केंद्रित करें।
+* **❌ बचें:** जोखिम भरे वित्तीय दांव या तात्कालिक रुकावटों से निराश होने से बचें।
 
 ---
 
 #### 🌿 दैनिक उपाय
-* **आपसी सौहार्द:** प्रतिदिन कृतज्ञता का भाव रखें और एक-दूसरे के कार्यों में सहयोग दें।`;
+* **प्राणायाम एवं धैर्य:** सांध्यकाल में 10 मिनट अनुलोम-विलोम करें और प्रातः अनुशासन बनाए रखें।`;
         }
-        // 7. HEALTH & STOMACH VITALITY
-        if (context.detectedTopic === 'HEALTH') {
+        // 6. HEALTH & AYUR_JYOTISH
+        if (context.detectedTopic === 'HEALTH' || context.detectedTopic === 'AYUR_JYOTISH') {
             const sav6 = sav[6] || 31;
+            const dosha = context.doshaProfile || {
+                primaryDosha: 'Vata-Pitta (वात-पित्त)',
+                dominantElements: 'वायु एवं अग्नि तत्व',
+                digestiveFire: 'तीक्ष्णाग्नि / संवेदनशील जठराग्नि',
+                doshaBreakdown: { vataPercentage: 45, pittaPercentage: 35, kaphaPercentage: 20 },
+            };
             return `### 🌿 स्वास्थ्य एवं पाचन तंत्र विश्लेषण
 
-> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% संरेखण** — *मानसिक तनाव व पाचन तंत्र की संवेदनशीलता*  
+> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% प्रकृति संरेखण** — *${dosha.primaryDosha} (${dosha.dominantElements})*  
 > **⏳ सुधार अवधि:** **नियमित दिनचर्या व खान-पान से 3–4 सप्ताह में लाभ**
 
 ---
@@ -628,113 +1170,32 @@ export class LocalLLMService {
 #### 🌿 दैनिक उपाय
 * **प्रातः प्राणायाम व ध्यान:** भोजन से पूर्व 5 मिनट धीमी व गहरी सांस लें जिससे पाचन तंत्र शांत अवस्था में कार्य करे।`;
         }
-        // 8. EDUCATION
-        if (context.detectedTopic === 'EDUCATION') {
-            const sav5 = sav[5] || 29;
-            return `### 🎓 शिक्षा एवं प्रतियोगी परीक्षा मार्गदर्शन
+        // 7. PROPERTY
+        if (context.detectedTopic === 'PROPERTY') {
+            const sav4 = sav[4] || 29;
+            return `### 🏡 भवन व भूमि क्रय योग
 
-> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *तीव्र ग्रहण क्षमता एवं परीक्षा में सफलता*  
-> **⏳ अनुकूल समय:** **${rating.coreTriggerWindow}**
-
----
-
-#### 🪐 मुख्य ज्योतिषीय कारण
-* **पंचम भाव (${sav5} बिंदु):** विश्लेषणात्मक समझ, तार्किक स्मृति और समस्या समाधान क्षमता को बढ़ाता है।
-* **अनुकूल विषय:** तकनीकी, प्रबंधन, विश्लेषिकी और पेशेवर प्रमाणन परीक्षाएं।
-
----
-
-#### 💡 क्या करें और क्या न करें
-* **✅ करें:** 90 मिनट के एकाग्र अध्ययन सत्र और मॉक टेस्ट के माध्यम से तैयारी करें।
-* **❌ बचें:** केवल रटने या पढ़ते समय मोबाइल के उपयोग से बचें।
-
----
-
-#### 🌿 दैनिक उपाय
-* **एकाग्रता प्राणायाम:** अध्ययन से पूर्व 5 मिनट ध्यान लगाकर मन को शांत करें।`;
-        }
-        // 9. DHARMA & LIFE AIM
-        if (context.detectedTopic === 'DHARMA') {
-            return `### 🧭 जीवन का मुख्य उद्देश्य एवं धर्म
-
-> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *${context.primaryArchetype}*  
-> **⏳ जीवन दिशा:** **${rating.coreTriggerWindow}**
+> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *स्थायी संपत्ति व आवास प्राप्ति के अनुकूल योग*  
+> **⏳ शुभ समय:** **${context.propertyPurchaseWindow || rating.coreTriggerWindow}**
 
 ---
 
 #### 🪐 मुख्य ज्योतिषीय कारण
-* **मूल उद्देश्य:** ${context.coreLifeAim}
-* **जन्मजात क्षमता:** रणनीतिक दूरदर्शिता, बौद्धिक स्वायत्तता और स्थायी व्यवस्थाओं का निर्माण।
+* **चतुर्थ भाव (${sav4} बिंदु):** घरेलू सुख-शांति, भूमि व स्वयं के मकान का मजबूत आधार प्रस्तुत करता है।
+* **अनुकूल आवास:** प्राकृतिक प्रकाश व वायु से युक्त तैयार मकान या अपार्टमेंट आपके लिए विशेष शुभ रहेगा।
 
 ---
 
 #### 💡 क्या करें और क्या न करें
-* **✅ करें:** अपने दैनिक प्रयासों को दीर्घकालिक प्रतिष्ठा और उच्च निष्ठा के साथ जोड़ें।
-* **❌ बचें:** तात्कालिक आराम के लिए अपनी वास्तविक क्षमता से समझौता न करें।
+* **✅ करें:** संपत्ति के कानूनी दस्तावेजों की पूरी जांच करें और ईएमआई को आय के 30% के भीतर रखें।
+* **❌ बचें:** बिना स्पष्ट स्वामित्व वाले विवादित सौदों में जल्दबाजी न करें।
 
 ---
 
 #### 🌿 दैनिक उपाय
-* **प्रातः संकल्प:** दिन की शुरुआत में अपने मुख्य जीवन लक्ष्यों का स्मरण करें।`;
+* **गृह शांति:** घर के ईशान कोण (North-East) को हमेशा साफ व खुला रखें।`;
         }
-        // 10. DECISION SIMULATION
-        if (context.detectedTopic === 'DECISION_SIMULATION') {
-            const sav10 = sav[10] || 34;
-            return `### ⚖️ रणनीतिक विकल्प तुलना एवं निर्णय सिम्युलेटर
-
-> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% स्पष्टता** — *${rating.verdictLabel}*  
-> **⏳ कार्यान्वयन समय:** **${rating.coreTriggerWindow}**
-
----
-
-#### 🪐 तुलनात्मक ग्रहीय विश्लेषण
-* **विकल्प A (स्वायत्त / उच्च विकास पथ):** दशम भाव (${sav10} बिंदु) व अमात्यकारक (${jaimini.amatyakaraka}) के साथ पूर्ण संरेखित है, जो दीर्घकालिक उन्नति देता है।
-* **विकल्प B (सुरक्षित / सीमित दिनचर्या):** तात्कालिक सुरक्षा देता है परंतु ${context.activeMahadasha}-${context.activeAntardasha} दशा में आपकी वास्तविक क्षमता को सीमित करता है।
-* **सर्वाष्टकवर्ग अंतर:** स्वतंत्र व रणनीतिक निर्णय में पारंपरिक सीमित नौकरी की तुलना में **+18% अधिक ग्रहीय लाभ** प्राप्त होता है।
-
----
-
-#### 💡 क्या करें और क्या न करें
-* **✅ करें:** उस विकल्प को चुनें जो आपकी बौद्धिक स्वायत्तता, कौशल विकास और दीर्घकालिक प्रतिष्ठा को बढ़ाए।
-* **❌ बचें:** अस्थायी असुविधा के डर से ऐसा निर्णय लेने से बचें जो आपकी क्षमता को सीमित करे।
-
----
-
-#### 🌿 दैनिक उपाय
-* **निर्णय स्पष्टता ध्यान:** महत्वपूर्ण अनुबंधों पर हस्ताक्षर करने से पूर्व प्रातः 10 मिनट मौन चिंतन करें।`;
-        }
-        // 11. AYUR-JYOTISH
-        if (context.detectedTopic === 'AYUR_JYOTISH') {
-            const dosha = context.doshaProfile || {
-                primaryDosha: 'Vata-Pitta (वात-पित्त)',
-                dominantElements: 'वायु एवं अग्नि तत्व',
-                digestiveFire: 'तीक्ष्णाग्नि / संवेदनशील जठराग्नि',
-                doshaBreakdown: { vataPercentage: 45, pittaPercentage: 35, kaphaPercentage: 20 },
-            };
-            return `### 🌿 आयुर्-ज्योतिष एवं जैविक दिनचर्या विश्लेषण
-
-> **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% प्रकृति संरेखण** — *${dosha.primaryDosha} (${dosha.dominantElements})*  
-> **⏳ जठराग्नि स्थिति:** **${dosha.digestiveFire}**
-
----
-
-#### 🪐 त्रिदोष एवं ग्रहीय ऊर्जा चक्र
-* **दोष संरचना:** **वात (${dosha.doshaBreakdown?.vataPercentage || 45}%)** | **पित्त (${dosha.doshaBreakdown?.pittaPercentage || 35}%)** | **कफ (${dosha.doshaBreakdown?.kaphaPercentage || 20}%)**।
-* **ज्योतिषीय आधार:** लग्न (${context.lagnaSign}) एवं सूर्य (${context.sunSign}) नर्वस सिस्टम व पाचन अवशोषण को नियंत्रित करते हैं।
-* **उत्तम दैनिक समय:** गहन बौद्धिक कार्य (प्रातः 06:00–10:00) | मुख्य भोजन (दोपहर 12:00–13:30 जब सूर्य व पित्त शीर्ष पर हों)।
-
----
-
-#### 💡 क्या करें और क्या न करें
-* **✅ करें:** गुनगुने ताजे भोजन (जीरा, सौंफ, अदरक युक्त) का सेवन करें और निश्चित समय पर सोएं।
-* **❌ बचें:** दोपहर का भोजन छोड़ना, ठंडे सूखे खाद्य पदार्थ और मानसिक तनाव में भोजन करना।
-
----
-
-#### 🌿 दैनिक औषधि व उपाय
-* **अश्वगंधा व सौंफ-जीरा जल:** भोजन के उपरांत गुनगुना सौंफ-जीरा पानी लें और रात्रि में जायफल युक्त दूध लें।`;
-        }
-        // 12. GENERAL
+        // 8. GENERAL
         return `### ✨ कुण्डली सार एवं जीवन मार्गदर्शन
 
 > **🎯 निष्कर्ष:** **${rating.probabilityPercentage}% अनुकूलता** — *${context.primaryArchetype}*  
@@ -759,14 +1220,184 @@ export class LocalLLMService {
 #### 🌿 दैनिक उपाय
 * **प्रातः सूर्य अर्घ्य:** प्रतिदिन उगते सूर्य को जल अर्पित करें जिससे आत्मविश्वास व यश में वृद्धि हो।`;
     }
+    // ==========================================
+    // HINGLISH SUB-INTENT HANDLERS
+    // ==========================================
     generateHinglishRAGResponse(context, rating, sav, jaimini) {
-        // 1. FOREIGN TRAVEL & OVERSEAS RELOCATION
+        const subIntent = context.detectedSubIntent || 'GENERAL';
+        const darakaraka = jaimini.darakaraka || 'Venus';
+        const amatyakaraka = jaimini.amatyakaraka || 'Mercury';
+        const dkTraits = getDarakarakaTraits(darakaraka, 'hinglish');
+        const seventhHouse = context.houseDetails?.find((h) => h.houseNumber === 7);
+        const seventhSign = seventhHouse?.signName || 'Sagittarius';
+        const seventhTraits = getSeventhHouseTraits(seventhSign, 'hinglish');
+        const d9Lagna = context.divisionalHighlights?.d9Lagna || 'Libra';
+        // 1. MARRIAGE & RELATIONSHIPS
+        if (context.detectedTopic === 'MARRIAGE') {
+            const sav7 = sav[7] || 27;
+            const sav5 = sav[5] || 28;
+            const sav9 = sav[9] || 30;
+            if (subIntent === 'SPOUSE_TRAITS') {
+                return `### 💍 Future Life Partner ka Nature & Personality Breakdown
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *High Intellectual Compatibility & Deep Understanding*  
+> **⏳ Expected Window:** **${context.marriageTimingWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Key Astrological Markers
+* **7th House (${seventhSign} / ${sav7} SAV Bindus):** Partner ka nature **${seventhTraits}** indicate hota hai.
+* **Darakaraka (${darakaraka}):** Jaimini soul indicator ke hisab se spouse ka core temperament **${dkTraits}** hoga.
+* **D9 Navamsha (${d9Lagna} Lagna):** Mutual respect aur personal space dene se relationship long-term me bahut stable aur fulfilling rahega.
+
+---
+
+#### 💼 Likely Career & Background
+* **Aligned Fields:** Technology, strategic consulting, higher education, management, finance ya creative architecture.
+* **Core Personality:** Unnecessary drama se dur, clear conversation, practical loyalty aur mutual growth ko value karne wale.
+
+---
+
+#### 💡 What to Do vs What to Avoid
+* **✅ Do:** Unki independent thinking ko appreciate karein aur joint intellectual goals banayein.
+* **❌ Avoid:** Chhoti baaton ko over-analyze karna ya partner se identical work style expect karna.
+
+---
+
+#### 🌿 Daily Practice
+* **Relationship Harmony:** Daily mutual appreciation rakhein aur ghar ka North-East corner clean rakhein.`;
+            }
+            if (subIntent === 'LOVE_VS_ARRANGED') {
+                const isLoveDominant = sav5 >= 28 || darakaraka === 'Venus' || darakaraka === 'Mercury';
+                return `### 💖 Love Marriage vs Arranged Marriage Assessment
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${isLoveDominant ? 'Self-Chosen Match jisme family ka full blessing milega' : 'Arranged Introduction with High Intellectual & Emotional Bonding'}*  
+> **⏳ Prime Timeline:** **${context.marriageTimingWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Astrological Mechanics
+* **5th House (Romantic Connection - ${sav5} Bindus):** Strong personal discernment aur mutual intellectual attraction support karta hai.
+* **7th House & Darakaraka (${darakaraka}):** Shared values aur genuine friendship par based relationship indicate karta hai.
+* **9th House (Family Consensus - ${sav9} Bindus):** Confirm karta hai ki calm dialogue se family ka full approval milega.
+
+---
+
+#### 💡 Meeting Setting
+* **How you will connect:** Work network, higher studies, shared intellectual community ya trusted mutual connections ke through milne ke strong yog hain.
+
+---
+
+#### 🌿 Daily Practice
+* **Harmonious Communication:** Marriage discussions me family ke sath transparent aur respectful dialogue maintain karein.`;
+            }
+            if (subIntent === 'OBSTACLES_MANGLIK') {
+                return `### 🛡️ Marriage Delays, Manglik Status & Solutions
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Certainty** — *Maturity Building Phase (No Superstition)*  
+> **⏳ Relief Window:** **${rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Astrological Reality Check
+* **Delay ka Asli Reason:** Vedic astrology me Saturn ya Mars ka influence koi shrap nahi hai—ye financial self-reliance aur emotional maturity develop karne ke liye hota hai.
+* **Manglik Energy:** Mars ki dynamic energy ko fitness aur career building me channelize karne se relationship friction completely resolve ho jata hai.
+* **7th House Transit:** Jupiter-Saturn ka dual transit current sub-period me marriage ke obstacles clear kar raha hai.
+
+---
+
+#### 💡 What to Do vs What to Avoid
+* **✅ Do:** Emotional self-regulation aur career stability par focus karein.
+* **❌ Avoid:** Fear-based superstitions, expensive rituals ya social pressure me hurried decision lena.
+
+---
+
+#### 🌿 Sattvic Daily Practice
+* **Grounding:** Daily 10 mins Surya Namaskar karein aur interpersonal conversations me patience maintain karein.`;
+            }
+            // Default MARRIAGE
+            return `### ❤️ Marriage & Relationship Timing Blueprint
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Matrimonial & Partnership Alignment*  
+> **⏳ Prime Window:** **${context.marriageTimingWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Key Astrological Drivers
+* **7th House (${sav7} SAV Bindus) & Darakaraka (${darakaraka}):** Intelligent, grounded aur supportive life partner indicate karta hai.
+* **D9 Navamsha Harmony:** Mutual respect aur personal space maintain karne se long-term marital harmony banti hai.
+
+---
+
+#### 💡 What to Do vs What to Avoid
+* **✅ Do:** Open transparent communication rakhein aur emotional stability ko value karein.
+* **❌ Avoid:** Chhoti baaton ko over-analyze karna ya partner se identical nature expect karna.
+
+---
+
+#### 🌿 Daily Practice
+* **Joint Gratitude:** Daily mutual appreciation aur individual creative growth ko encourage karein.`;
+        }
+        // 2. CAREER & BUSINESS
+        if (context.detectedTopic === 'CAREER') {
+            const sav10 = sav[10] || 34;
+            const sav6 = sav[6] || 31;
+            const sav3 = sav[3] || 27;
+            if (subIntent === 'JOB_VS_BUSINESS') {
+                const isBusinessFavored = sav10 >= 30 || sav3 >= 28;
+                return `### 💼 Career Direction: Job vs. Business / Startup
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${isBusinessFavored ? 'Autonomous Business & Strategic Consulting me High Success' : 'Executive Leadership in Specialized High-Growth Roles'}*  
+> **⏳ Growth Window:** **${context.careerLeapWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Key Astrological Drivers
+* **10th House (${sav10} SAV Bindus):** Strong authority configuration jo strategic autonomy aur scalable enterprise me big outcome deta hai.
+* **Amatyakaraka (${amatyakaraka}):** Tech products, strategic advisory aur domain expertise me high growth confirm karta hai.
+* **6th House (${sav6} bindus) vs 3rd House (${sav3} bindus):** Pehle high expertise build karke independent venture me shift hona highest ROI dega.
+
+---
+
+#### 💡 Actionable Advice
+* **✅ Do:** Rare skills master karein aur decisive, autonomous roles ko target karein.
+* **❌ Avoid:** Low-growth repetitive bureaucratic setups me permanently comfortable ho jana.
+
+---
+
+#### 🌿 Daily Practice
+* **Deep Work Focus:** Daily morning ke 90 mins bina kisi phone/distraction ke core skills par lagayein.`;
+            }
+            // Default CAREER
+            return `### 💼 Career & Professional Guidance
+
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Leadership & Strategic Growth*  
+> **⏳ Peak Window:** **${context.careerLeapWindow || rating.coreTriggerWindow}**
+
+---
+
+#### 🪐 Key Astrological Drivers
+* **10th House (${sav10} SAV Bindus):** Strong authority configuration jo strategic autonomy, leadership aur specialized business me bada success deta hai.
+* **Amatyakaraka (${amatyakaraka}):** Technology architecture, strategic consulting aur domain expertise se career me high elevation confirm karta hai.
+
+---
+
+#### 💡 What to Do vs What to Avoid
+* **✅ Do:** High-value rare skills develop karein aur decisive, autonomous roles ko target karein.
+* **❌ Avoid:** Low-growth repetitive bureaucratic jobs me comfortable ho jana avoid karein.
+
+---
+
+#### 🌿 Daily Practice
+* **Deep Work Focus:** Daily fixed morning hours me bina distraction ke high-impact tasks complete karein.`;
+        }
+        // 3. ABROAD
         if (context.detectedTopic === 'ABROAD') {
             const sav12 = sav[12] || 30;
             return `### ✈️ Foreign Travel & Relocation Assessment
 
 > **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Foreign Travel & Relocation ke strong yog*  
-> **⏳ Best Window:** **${rating.coreTriggerWindow}**
+> **⏳ Best Window:** **${context.relocationWindow || rating.coreTriggerWindow}**
 
 ---
 
@@ -786,56 +1417,7 @@ export class LocalLLMService {
 #### 🌿 Daily Practice
 * **Surya Arghya:** Daily morning copper vessel se Surya Dev ko jal arpit karein for smooth journeys aur clarity.`;
         }
-        // 2. STRUGGLE & FAILURE DIAGNOSIS
-        if (context.detectedTopic === 'STRUGGLE') {
-            return `### 🌊 Life Phase & Obstacle Diagnosis
-
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Planetary Certainty** — *Temporary Consolidation Phase*  
-> **⏳ Relief Horizon:** **Turning point around ${context.struggleReliefDate}**
-
----
-
-#### 🪐 Root Cause Mechanics
-* **${context.activeMahadasha}-${context.activeAntardasha} Pressure Test:** Ye phase weak shortcuts ko khatam karke strong, long-term foundation banane ke liye hai.
-* **Karmic Direction:** Abhi ke setbacks permanent failure nahi, balki future ke bade breakthrough ke liye structural redirection hain.
-
----
-
-#### 💡 What to Do vs What to Avoid
-* **✅ Do:** Apne core skills par focus karein, sleep routine theek rakhein aur daily disciplined execution karein.
-* **❌ Avoid:** High-risk quick money shortcuts ya temporary delays se emotionally panic hona avoid karein.
-
----
-
-#### 🌿 Daily Practice
-* **Grounding & Patience:** Evening me 10 mins Anulom-Vilom karein aur morning discipline maintain rakhein.`;
-        }
-        // 3. CAREER & BUSINESS
-        if (context.detectedTopic === 'CAREER') {
-            const sav10 = sav[10] || 34;
-            return `### 💼 Career & Professional Guidance
-
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Leadership & Strategic Growth*  
-> **⏳ Peak Window:** **${rating.coreTriggerWindow}**
-
----
-
-#### 🪐 Key Astrological Drivers
-* **10th House (${sav10} SAV Bindus):** Strong authority configuration jo strategic autonomy, leadership aur specialized business me bada success deta hai.
-* **Amatyakaraka (${jaimini.amatyakaraka}):** Technology architecture, strategic consulting aur domain expertise se career me high elevation confirm karta hai.
-
----
-
-#### 💡 What to Do vs What to Avoid
-* **✅ Do:** High-value rare skills develop karein aur decisive, autonomous roles ko target karein.
-* **❌ Avoid:** Low-growth repetitive bureaucratic jobs me comfortable ho jana avoid karein.
-
----
-
-#### 🌿 Daily Practice
-* **Deep Work Focus:** Daily fixed morning hours me bina distraction ke high-impact tasks complete karein.`;
-        }
-        // 4. WEALTH & FINANCE
+        // 4. WEALTH
         if (context.detectedTopic === 'WEALTH') {
             const sav11 = sav[11] || 35;
             const sav12 = sav[12] || 30;
@@ -861,58 +1443,32 @@ export class LocalLLMService {
 #### 🌿 Daily Practice
 * **Clean Workspace:** Apne workspace ki North zone clean rakhein aur Thursdays ko small charity karein.`;
         }
-        // 5. PROPERTY & REAL ESTATE
-        if (context.detectedTopic === 'PROPERTY') {
-            const sav4 = sav[4] || 29;
-            return `### 🏡 Property & Real Estate Roadmap
+        // 5. STRUGGLE
+        if (context.detectedTopic === 'STRUGGLE') {
+            return `### 🌊 Life Phase & Obstacle Diagnosis
 
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Supportive Fixed-Asset Acquisition*  
-> **⏳ Best Window:** **${rating.coreTriggerWindow}**
-
----
-
-#### 🪐 Key Astrological Drivers
-* **4th House Sanctuary (${sav4} SAV Bindus):** Strong residential foundation, property ownership aur mental peace ka strong indicator.
-* **Favored Property:** Well-ventilated constructed flat ya ready home aapke liye best suit karega.
+> **🎯 Verdict:** **${rating.probabilityPercentage}% Planetary Certainty** — *Temporary Consolidation Phase*  
+> **⏳ Relief Horizon:** **Turning point around ${context.struggleReliefDate}**
 
 ---
 
-#### 💡 What to Do vs What to Avoid
-* **✅ Do:** Property title documents thoroughly verify karein aur EMI ko cashflow ke 30% ke under rakhein.
-* **❌ Avoid:** Unregistered ya disputed property deals me jaldbazi me token amount dena avoid karein.
-
----
-
-#### 🌿 Daily Practice
-* **North-East Harmony:** Ghar ke North-East corner ko clean aur uncluttered rakhein.`;
-        }
-        // 6. MARRIAGE & RELATIONSHIPS
-        if (context.detectedTopic === 'MARRIAGE') {
-            const sav7 = sav[7] || 27;
-            return `### ❤️ Marriage & Relationship Timing Blueprint
-
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *Matrimonial & Partnership Alignment*  
-> **⏳ Prime Window:** **${rating.coreTriggerWindow}**
-
----
-
-#### 🪐 Key Astrological Drivers
-* **7th House (${sav7} SAV Bindus) & Darakaraka (${jaimini.darakaraka}):** Intelligent, grounded aur supportive life partner indicate karta hai.
-* **D9 Navamsha Harmony:** Mutual respect aur personal space maintain karne se long-term marital harmony banti hai.
+#### 🪐 Root Cause Mechanics
+* **${context.activeMahadasha}-${context.activeAntardasha} Pressure Test:** Ye phase weak shortcuts ko khatam karke strong, long-term foundation banane ke liye hai.
+* **Karmic Direction:** Abhi ke setbacks permanent failure nahi, balki future ke bade breakthrough ke liye structural redirection hain.
 
 ---
 
 #### 💡 What to Do vs What to Avoid
-* **✅ Do:** Open transparent communication rakhein aur emotional stability ko value karein.
-* **❌ Avoid:** Chhoti baaton ko over-analyze karna ya partner se identical nature expect karna.
+* **✅ Do:** Apne core skills par focus karein, sleep routine theek rakhein aur daily disciplined execution karein.
+* **❌ Avoid:** High-risk quick money shortcuts ya temporary delays se emotionally panic hona avoid karein.
 
 ---
 
 #### 🌿 Daily Practice
-* **Joint Gratitude:** Daily mutual appreciation aur individual creative growth ko encourage karein.`;
+* **Grounding & Patience:** Evening me 10 mins Anulom-Vilom karein aur morning discipline maintain rakhein.`;
         }
-        // 7. HEALTH & STOMACH VITALITY
-        if (context.detectedTopic === 'HEALTH') {
+        // 6. HEALTH & AYUR_JYOTISH
+        if (context.detectedTopic === 'HEALTH' || context.detectedTopic === 'AYUR_JYOTISH') {
             const sav6 = sav[6] || 31;
             return `### 🌿 Health & Digestive Vitality Diagnosis
 
@@ -922,128 +1478,22 @@ export class LocalLLMService {
 ---
 
 #### 🪐 Key Astrological Drivers
-* **Sun in Virgo (Digestive Axis):** Virgo sign gut aur digestion ko govern karta hai, isiliye irregular eating se digestive fire (*Jatharagni*) sensitive hoti hai.
-* **Gemini-Virgo Brain-Gut Link:** Gemini lagna hone se mental stress aur overthinking seedhe stomach acidity aur motility ko disturb karta hai.
-* **6th House Immunity (${sav6} Bindus):** Innate recovery power strong hai, routine fix karte hi pet ki problem jaldi theek ho jayegi.
+* **Sun in Virgo (Digestive Axis):** Virgo digestive fire (*Jatharagni*) aur gut microbiome govern karta hai, isliye diet me balance zaroori hai.
+* **Gemini-Virgo Brain-Gut Axis:** Overthinking aur work stress ka direct asar stomach acidity aur digestion par padta hai.
+* **6th House Resilience (${sav6} SAV Bindus):** Strong recovery baseline confirm karta hai; time par khana khane se jaldi relief milega.
 
 ---
 
 #### 💡 What to Do vs What to Avoid
-* **✅ Do:** Khane ke baad warm water ya mild saunf-jeera water lein; meal timings strictly fix rakhein.
-* **❌ Avoid:** Late-night heavy meals, cold carbonated drinks aur anxiety me jaldbazi me khana.
+* **✅ Do:** Meals ke baad warm saunf-jeera water lein aur fixed meal times follow karein.
+* **❌ Avoid:** Late-night heavy khana, cold drinks aur stress me jaldbazi me khana.
 
 ---
 
 #### 🌿 Daily Practice
-* **Morning Sunlight & Deep Breathing:** Khane se pehle 5-10 mins deep belly breathing karein to activate rest-and-digest mode.`;
+* **Morning Breathwork:** Meals se pehle 5 mins slow belly breathing karein to activate rest-and-digest mode.`;
         }
-        // 8. EDUCATION
-        if (context.detectedTopic === 'EDUCATION') {
-            const sav5 = sav[5] || 29;
-            return `### 🎓 Education & Exam Performance Roadmap
-
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *High Cognitive Retention & Focus*  
-> **⏳ Prime Window:** **${rating.coreTriggerWindow}**
-
----
-
-#### 🪐 Key Astrological Drivers
-* **5th House Intellect (${sav5} SAV Bindus):** Sharp analytical ability, conceptual clarity aur exam retention power.
-* **Favored Fields:** Tech, engineering, management, analytics aur specialized certifications.
-
----
-
-#### 💡 What to Do vs What to Avoid
-* **✅ Do:** 90-minute distraction-free blocks me study karein with active recall testing.
-* **❌ Avoid:** Passive reading ya study ke time phone multitasking.
-
----
-
-#### 🌿 Daily Practice
-* **Mindful Focus:** Study session start karne se pehle 5 mins deep breathing karein for memory clarity.`;
-        }
-        // 9. DHARMA & LIFE MISSION
-        if (context.detectedTopic === 'DHARMA') {
-            return `### 🧭 Life Mission & Soul Dharma
-
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${context.primaryArchetype}*  
-> **⏳ Life Horizon:** **${rating.coreTriggerWindow}**
-
----
-
-#### 🪐 Key Astrological Drivers
-* **Core Calling:** ${context.coreLifeAim}
-* **Innate Superpower:** Strategic foresight, intellectual autonomy aur lasting scalable systems banana.
-
----
-
-#### 💡 What to Do vs What to Avoid
-* **✅ Do:** Daily work ko apne long-term authentic legacy ke sath align karein.
-* **❌ Avoid:** Short-term comfort ke liye micromanaged setups me apna potential compromise karna.
-
----
-
-#### 🌿 Daily Practice
-* **Daily Alignment:** Morning me digital screens open karne se pehle apne top life goals recall karein.`;
-        }
-        // 10. DECISION SIMULATION
-        if (context.detectedTopic === 'DECISION_SIMULATION') {
-            const sav10 = sav[10] || 34;
-            return `### ⚖️ Strategic "What-If" Decision Simulation
-
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Clarity Score** — *${rating.verdictLabel}*  
-> **⏳ Execution Window:** **${rating.coreTriggerWindow}**
-
----
-
-#### 🪐 Comparative Planetary Matrix
-* **Option A (Autonomous / High-Growth Path):** 10th House (${sav10} SAV bindus) aur Amatyakaraka (${jaimini.amatyakaraka}) ke sath perfectly align karta hai for long-term growth.
-* **Option B (Safe / Fixed Routine Path):** Short-term safety deta hai but ${context.activeMahadasha}-${context.activeAntardasha} cycle me aapke real potential ko limit karta hai.
-* **Ashtakavarga Differential:** Strategic ventures aur domain autonomy me traditional job se **+18% zyada planetary leverage** milta hai.
-
----
-
-#### 💡 What to Do vs What to Avoid
-* **✅ Do:** Aise option ko chunein jo aapki sovereignty, skill compounding aur scalable impact ko maximize kare.
-* **❌ Avoid:** Temporary friction ke darr se micromanaged comfortable option me phans jana.
-
----
-
-#### 🌿 Daily Practice
-* **Clarity Meditation:** Important decision lene se pehle morning me 10 mins quiet reflection karein.`;
-        }
-        // 11. AYUR-JYOTISH
-        if (context.detectedTopic === 'AYUR_JYOTISH') {
-            const dosha = context.doshaProfile || {
-                primaryDosha: 'Vata-Pitta',
-                dominantElements: 'Air & Fire',
-                digestiveFire: 'Tikshnagni (Variable / Sharp Fire)',
-                doshaBreakdown: { vataPercentage: 45, pittaPercentage: 35, kaphaPercentage: 20 },
-            };
-            return `### 🌿 Ayur-Jyotish & Circadian Bio-Rhythm Blueprint
-
-> **🎯 Verdict:** **${rating.probabilityPercentage}% Constitution Score** — *${dosha.primaryDosha} (${dosha.dominantElements})*  
-> **⏳ Bio-Clock Rhythm:** **${dosha.digestiveFire}**
-
----
-
-#### 🪐 Planetary Dosha & Energy Matrix
-* **Dosha Constitution:** **Vata (${dosha.doshaBreakdown?.vataPercentage || 45}%)** | **Pitta (${dosha.doshaBreakdown?.pittaPercentage || 35}%)** | **Kapha (${dosha.doshaBreakdown?.kaphaPercentage || 20}%)**.
-* **Astrological Root:** Rising sign (${context.lagnaSign}) aur Sun (${context.sunSign}) nervous-gut metabolism aur digestive fire (*Jatharagni*) govern karte hain.
-* **Peak Circadian Windows:** Deep Cognitive Work (06:00–10:00 & 14:00–18:00) | Main Lunch (12:00–13:30 jab Surya & Pitta peak par ho).
-
----
-
-#### 💡 What to Do vs What to Avoid
-* **✅ Do:** Warm, freshly cooked meals lein with mild spices (jeera, saunf, adrak) aur fixed sleep cycle follow karein.
-* **❌ Avoid:** Lunch skip karna, cold dry snacks aur anxious mental state me jaldbazi me khana.
-
----
-
-#### 🌿 Daily Practice & Adaptogens
-* **Saunf-Jeera Water & Golden Milk:** Meals ke baad warm saunf-jeera water lein aur raat me thoda nutmeg/haldi milk lein.`;
-        }
-        // 12. GENERAL
+        // 7. GENERAL
         return `### ✨ Astrological Blueprint & Life Summary
 
 > **🎯 Verdict:** **${rating.probabilityPercentage}% Alignment** — *${context.primaryArchetype}*  

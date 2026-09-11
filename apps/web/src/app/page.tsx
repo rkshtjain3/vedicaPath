@@ -276,6 +276,7 @@ export default function HomePage() {
   const [showSuperstitionModal, setShowSuperstitionModal] = useState(false);
   const [selectedCodexTerm, setSelectedCodexTerm] = useState<string | null>(null);
   const [showObservatoryTabs, setShowObservatoryTabs] = useState(true);
+  const [isFormCollapsed, setIsFormCollapsed] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -438,6 +439,7 @@ export default function HomePage() {
       setStrugglesData(data.data.struggles);
       setLifeStorybookData(data.data.lifeStorybook);
       setAuditData(data.data.audit);
+      setIsFormCollapsed(true);
       if (data.data.audit?.dstWarning) {
         setDstAmbiguousWarning(data.data.audit.dstWarning);
       }
@@ -519,14 +521,14 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <header className="space-y-4 pt-4 border-b border-slate-800 pb-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold uppercase tracking-widest">
+    <main className="min-h-screen bg-slate-950 text-slate-100 px-3 py-4 sm:p-8">
+      <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8">
+        <header className="space-y-3 sm:space-y-4 pt-2 sm:pt-4 border-b border-slate-800 pb-4 sm:pb-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[11px] sm:text-xs font-semibold uppercase tracking-widest">
               <Sparkles className="w-3.5 h-3.5" /> {t('app.phase_tag')}
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 id="header-superstition-btn"
                 type="button"
@@ -548,30 +550,30 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="text-center space-y-2">
-            <h1 id="app-header" className="text-3xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500 bg-clip-text text-transparent">
+          <div className="text-center space-y-1 sm:space-y-2">
+            <h1 id="app-header" className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500 bg-clip-text text-transparent">
               {t('app.title')}
             </h1>
-            <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+            <p className="text-slate-400 text-xs sm:text-base max-w-2xl mx-auto px-2">
               {t('app.subtitle')}
             </p>
           </div>
         </header>
 
         {/* 1-Click Archetype Quick-Load Bar */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-lg" id="sample-profiles-bar">
+        <div className="bg-slate-900/60 border border-slate-800 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 shadow-lg" id="sample-profiles-bar">
           <span className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-amber-400" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             {t('sample.title')}
           </span>
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             {SAMPLE_PROFILES.map((p) => (
               <button
                 key={p.id}
                 id={`sample-profile-${p.id}`}
                 type="button"
                 onClick={() => handleApplySample(p)}
-                className="px-3.5 py-1.5 rounded-xl bg-slate-950/80 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 text-xs text-slate-200 hover:text-amber-300 font-medium transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
+                className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-slate-950/80 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 text-[11px] sm:text-xs text-slate-200 hover:text-amber-300 font-medium transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
               >
                 <span>{p.label}</span>
               </button>
@@ -579,11 +581,64 @@ export default function HomePage() {
           </div>
         </div>
 
-        <form onSubmit={handleCalculate} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-md shadow-2xl space-y-6">
-          <div className="flex items-center gap-2 text-amber-400 font-semibold border-b border-slate-800 pb-3">
-            <Compass className="w-5 h-5" />
-            <span>{t('form.header')}</span>
+        {/* Active Profile Summary Card when collapsed */}
+        {isFormCollapsed && (astroData || dashaData) ? (
+          <div
+            className="bg-slate-900/90 border border-amber-500/30 rounded-2xl p-3.5 sm:p-4 shadow-xl backdrop-blur-md flex flex-wrap items-center justify-between gap-3 animate-in fade-in duration-200"
+            id="collapsed-profile-card"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold text-xs sm:text-sm shrink-0">
+                {fullName ? fullName.charAt(0).toUpperCase() : '👤'}
+              </div>
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-sm sm:text-base text-slate-100">
+                    {fullName || 'Natal Profile'}
+                  </span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+                    Active
+                  </span>
+                </div>
+                <p className="text-[11px] sm:text-xs text-slate-400 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                  <span>📅 {dateOfBirth}</span>
+                  <span>⏰ {timeOfBirth}</span>
+                  <span className="truncate max-w-[140px] sm:max-w-xs">📍 {locationName}</span>
+                  {astroData?.lagna?.sign?.name && (
+                    <span className="text-amber-300 font-medium hidden sm:inline">
+                      Lagna: {astroData.lagna.sign.name} • Moon: {astroData.moonSign?.name || ''}
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+            <button
+              id="expand-profile-form-btn"
+              type="button"
+              onClick={() => setIsFormCollapsed(false)}
+              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-amber-500/50 text-xs font-semibold text-amber-300 hover:text-amber-200 transition-all flex items-center gap-1.5 shadow-sm active:scale-95 ml-auto sm:ml-0"
+            >
+              <span>✏️ {t('form.edit_profile') || 'Edit Birth Details'}</span>
+            </button>
           </div>
+        ) : (
+          <form onSubmit={handleCalculate} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-8 backdrop-blur-md shadow-2xl space-y-5 sm:space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2 text-amber-400 font-semibold text-sm sm:text-base">
+                <Compass className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span>{t('form.header')}</span>
+              </div>
+              {(astroData || dashaData) && (
+                <button
+                  type="button"
+                  onClick={() => setIsFormCollapsed(true)}
+                  className="text-xs text-slate-400 hover:text-amber-300 flex items-center gap-1 font-medium transition-colors"
+                >
+                  <span>Hide Form</span>
+                  <ChevronDown className="w-3.5 h-3.5 rotate-180" />
+                </button>
+              )}
+            </div>
 
           {/* FULL NAME (OPTIONAL) */}
           <div>
@@ -848,18 +903,30 @@ export default function HomePage() {
             </div>
           )}
 
-          <div className="flex justify-end pt-2">
-            <button
-              id="calculate-btn"
-              type="submit"
-              disabled={loading}
-              className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold rounded-xl shadow-lg shadow-amber-500/20 transition-all duration-200 flex items-center justify-center gap-2 text-sm uppercase tracking-wider disabled:opacity-50"
-            >
-              <Calculator className="w-4 h-4" />
-              {loading ? t('form.calculating') : t('form.calculate')}
-            </button>
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+            {(astroData || dashaData) && (
+              <button
+                type="button"
+                onClick={() => setIsFormCollapsed(true)}
+                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-300 transition-colors"
+              >
+                Hide Form
+              </button>
+            )}
+            <div className="flex justify-end ml-auto">
+              <button
+                id="calculate-btn"
+                type="submit"
+                disabled={loading}
+                className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold rounded-xl shadow-lg shadow-amber-500/20 transition-all duration-200 flex items-center justify-center gap-2 text-sm uppercase tracking-wider disabled:opacity-50"
+              >
+                <Calculator className="w-4 h-4" />
+                {loading ? t('form.calculating') : t('form.calculate')}
+              </button>
+            </div>
           </div>
         </form>
+        )}
 
         {error && (
           <div id="error-banner" className="bg-red-950/50 border border-red-800/80 rounded-xl p-4 text-red-300 text-sm flex items-center gap-3">

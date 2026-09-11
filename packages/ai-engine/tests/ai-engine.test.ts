@@ -267,4 +267,68 @@ describe('AI Engine - Prompt Synthesizer & Local LLM Service', () => {
     expect(full).toContain('Vata');
     expect(full).toContain('Circadian Windows');
   });
+
+  it('correctly discriminates nuanced marriage sub-intents (spouse traits, love vs arranged, obstacles)', async () => {
+    const llmService = new LocalLLMService({ endpoint: 'http://127.0.0.1:99999' });
+
+    // 1. Spouse traits query
+    const traitsPrompt = synthesizeAstrologicalPrompt({
+      question: 'What kind of partner or future spouse will I get?',
+      calculationData: mockCalculationData,
+      language: 'en',
+    });
+    expect(traitsPrompt.context.detectedTopic).toBe('MARRIAGE');
+    expect(traitsPrompt.context.detectedSubIntent).toBe('SPOUSE_TRAITS');
+    const traitsChunks: string[] = [];
+    for await (const chunk of llmService.streamResponse(traitsPrompt)) {
+      traitsChunks.push(chunk);
+    }
+    const traitsRes = traitsChunks.join('');
+    expect(traitsRes).toContain('Future Spouse Profile & Personality Analysis');
+    expect(traitsRes).toContain('Darakaraka');
+    expect(traitsRes).toContain('Likely Profession & Background');
+
+    // 2. Love vs arranged query
+    const lovePrompt = synthesizeAstrologicalPrompt({
+      question: 'Will my marriage be love or arranged?',
+      calculationData: mockCalculationData,
+      language: 'en',
+    });
+    expect(lovePrompt.context.detectedSubIntent).toBe('LOVE_VS_ARRANGED');
+    const loveChunks: string[] = [];
+    for await (const chunk of llmService.streamResponse(lovePrompt)) {
+      loveChunks.push(chunk);
+    }
+    const loveRes = loveChunks.join('');
+    expect(loveRes).toContain('Marriage Type Dynamics: Love vs. Arranged Assessment');
+
+    // 3. Marriage delay / obstacles query
+    const delayPrompt = synthesizeAstrologicalPrompt({
+      question: 'Is there any delay or Manglik problem in my marriage?',
+      calculationData: mockCalculationData,
+      language: 'en',
+    });
+    expect(delayPrompt.context.detectedSubIntent).toBe('OBSTACLES_MANGLIK');
+    const delayChunks: string[] = [];
+    for await (const chunk of llmService.streamResponse(delayPrompt)) {
+      delayChunks.push(chunk);
+    }
+    const delayRes = delayChunks.join('');
+    expect(delayRes).toContain('Marriage Timing Obstacles & Manglik Assessment');
+
+    // 4. Job vs Business query
+    const jobPrompt = synthesizeAstrologicalPrompt({
+      question: 'Should I do job or start my own business/startup?',
+      calculationData: mockCalculationData,
+      language: 'en',
+    });
+    expect(jobPrompt.context.detectedTopic).toBe('CAREER');
+    expect(jobPrompt.context.detectedSubIntent).toBe('JOB_VS_BUSINESS');
+    const jobChunks: string[] = [];
+    for await (const chunk of llmService.streamResponse(jobPrompt)) {
+      jobChunks.push(chunk);
+    }
+    const jobRes = jobChunks.join('');
+    expect(jobRes).toContain('Career Direction: Job vs. Business');
+  });
 });
