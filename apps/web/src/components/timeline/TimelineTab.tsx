@@ -972,7 +972,7 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ timelineData, monthlyF
                 </p>
                 <p className="text-xs text-slate-300 mt-1">
                   {language === 'hi' ? 'कुल बल:' : 'Overall Strength:'}{' '}
-                  <strong className="text-slate-100">{selectedPeriod.lordContext?.strengthContext?.overallStrength || 'STRONG'}</strong>
+                  <strong className="text-slate-100">{selectedPeriod.lordContext?.strengthContext?.overallStrength || 'MODERATE'}</strong>
                 </p>
               </div>
 

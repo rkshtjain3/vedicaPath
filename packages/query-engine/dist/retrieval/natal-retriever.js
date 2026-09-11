@@ -21,26 +21,38 @@ export function retrieveNatalEvidence(calculationData, targetPlanet) {
     }
     // Planetary Placements
     if (ast.planets && Array.isArray(ast.planets)) {
+        const planetFacts = analysis.planetFacts || [];
+        const dignities = analysis.dignities || [];
+        const strengthPlanets = calculationData.strengthAnalysis?.planets || [];
+        const lagnaSignId = ast.ascendant?.sign?.id || ast.lagna?.sign?.id || 1;
         for (const p of ast.planets) {
-            if (targetPlanet && p.planet?.toLowerCase() !== targetPlanet.toLowerCase())
+            const pName = p.planet || p.name || 'Sun';
+            if (targetPlanet && pName.toLowerCase() !== targetPlanet.toLowerCase())
                 continue;
-            const isStrong = ['EXALTED', 'OWN_SIGN', 'MOOLATRIKONA'].includes(p.dignity);
-            const isWeak = ['DEBILITATED', 'ENEMY_SIGN'].includes(p.dignity);
+            const factEntry = planetFacts.find((f) => f.planet === pName);
+            const dignityEntry = dignities.find((d) => d.planet === pName);
+            const strengthEntry = strengthPlanets.find((s) => s.planet === pName);
+            const signId = typeof p.sign === 'object' ? p.sign?.id : 0;
+            const computedHouse = signId ? ((signId - lagnaSignId + 12) % 12) + 1 : 1;
+            const house = factEntry?.house || p.house || computedHouse;
+            const dignity = dignityEntry?.dignityName || strengthEntry?.d1Dignity || p.dignity || 'NEUTRAL';
+            const isStrong = ['EXALTED', 'OWN_SIGN', 'MOOLATRIKONA'].includes(dignity.toUpperCase());
+            const isWeak = ['DEBILITATED', 'ENEMY_SIGN', 'VERY_WEAK', 'WEAK'].includes(dignity.toUpperCase());
             const direction = isStrong ? 'SUPPORTIVE' : isWeak ? 'CHALLENGING' : 'NEUTRAL';
             items.push({
-                id: `NATAL-PLANET-${p.planet.toUpperCase()}`,
+                id: `NATAL-PLANET-${pName.toUpperCase()}`,
                 sourceEngine: 'ASTROLOGY_CORE',
                 sourceRuleId: 'PLANET-PLACEMENT',
                 category: 'Planetary Placement',
-                planet: p.planet,
+                planet: pName,
                 direction,
-                title: `${p.planet} in ${p.sign?.name} (${p.house || 1}th House)`,
-                description: `${p.planet} is placed in House ${p.house || 1} (${p.sign?.name}) with ${p.dignity || 'NEUTRAL'} dignity. Nakshatra: ${p.nakshatra?.name || 'N/A'}.`,
+                title: `${pName} in ${p.sign?.name} (${house}th House)`,
+                description: `${pName} is placed in House ${house} (${p.sign?.name}) with ${dignity} dignity. Nakshatra: ${p.nakshatra?.name || 'N/A'}.`,
                 whyEvidence: [
-                    `Planet: ${p.planet}`,
+                    `Planet: ${pName}`,
                     `Sign: ${p.sign?.name}`,
-                    `House from Lagna: ${p.house || 1}`,
-                    `Dignity: ${p.dignity || 'NEUTRAL'}`,
+                    `House from Lagna: ${house}`,
+                    `Dignity: ${dignity}`,
                     `Nakshatra: ${p.nakshatra?.name || 'N/A'} (Pada ${p.nakshatra?.pada || 1})`,
                 ],
             });

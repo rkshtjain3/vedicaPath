@@ -4,29 +4,34 @@
 export function getPlanetStrengthInfo(planet: string, engineData: any) {
   const shad = engineData.shadbala?.planets?.find((p: any) => p.planet === planet);
   const str = engineData.strengthAnalysis?.planets?.find((p: any) => p.planet === planet);
+  const fact = engineData.analysis?.planetFacts?.find((f: any) => f.planet === planet);
   const astro = engineData.astrology?.planets?.find((p: any) => p.planet === planet);
+  const lagnaSignId = engineData.astrology?.ascendant?.sign?.id || engineData.astrology?.lagna?.sign?.id || 1;
+
+  const ratio = typeof shad?.shadbalaRatio === 'number' ? shad.shadbalaRatio : (typeof shad?.ratio === 'number' ? shad.ratio : undefined);
+  const rupas = typeof shad?.totalRupas === 'number' ? shad.totalRupas : (typeof shad?.totalRupa === 'number' ? shad.totalRupa : (typeof shad?.partialTotalRupas === 'number' ? shad.partialTotalRupas : undefined));
+
+  const dignity = fact?.dignity || str?.d1Dignity || 'NEUTRAL';
+
+  const signId = typeof astro?.sign === 'object' ? astro.sign?.id : 0;
+  const computedHouse = signId ? ((signId - lagnaSignId + 12) % 12) + 1 : 1;
+  const house = fact?.house || str?.house || computedHouse;
+  const sign = fact?.sign?.name || astro?.sign?.name || 'N/A';
+  const score = str?.score || 50;
 
   const isStrong =
     shad?.isStrong === true ||
-    (typeof shad?.ratio === 'number' && shad.ratio >= 1.0) ||
+    (typeof ratio === 'number' && ratio >= 1.0) ||
     str?.overallStrength === 'STRONG' ||
     str?.overallStrength === 'VERY_STRONG' ||
-    str?.overallStrength === 'EXCELLENT';
+    str?.overallStrength === 'EXCELLENT' ||
+    ['EXALTED', 'OWN_SIGN', 'MOOLATRIKONA'].includes(dignity.toUpperCase());
 
   const isWeak =
-    astro?.dignity === 'DEBILITATED' ||
+    dignity.toUpperCase() === 'DEBILITATED' ||
     str?.overallStrength === 'WEAK' ||
     str?.overallStrength === 'VERY_WEAK' ||
-    (typeof shad?.ratio === 'number' && shad.ratio < 0.95);
-
-  const rupas =
-    typeof shad?.totalRupa === 'number'
-      ? shad.totalRupa
-      : typeof shad?.partialTotalRupas === 'number'
-      ? shad.partialTotalRupas
-      : undefined;
-
-  const ratio = typeof shad?.ratio === 'number' ? shad.ratio : undefined;
+    (typeof ratio === 'number' && ratio < 0.95);
 
   return {
     planet,
@@ -35,7 +40,9 @@ export function getPlanetStrengthInfo(planet: string, engineData: any) {
     rupas,
     ratio,
     overallStrength: str?.overallStrength,
-    dignity: astro?.dignity || str?.d1Dignity || 'NEUTRAL',
-    house: astro?.house || str?.house,
+    dignity,
+    house,
+    sign,
+    score,
   };
 }

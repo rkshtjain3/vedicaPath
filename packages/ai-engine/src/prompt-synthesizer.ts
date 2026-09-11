@@ -741,20 +741,38 @@ export function synthesizeAstrologicalPrompt(params: {
   };
 
   // Extract Detailed Planetary Placements
+  // Pull house/dignity from analysis engine (correct source) since PlanetPosition has no house/dignity fields
+  const analysis = calculationData.analysis || {};
+  const planetFacts: any[] = analysis.planetFacts || [];
+  const dignities: any[] = analysis.dignities || [];
+  const strengthPlanets: any[] = calculationData.strengthAnalysis?.planets || [];
+  const lagnaSignId = astro.lagna?.sign?.id || 1;
+
   const rawPlanets: any[] = Array.isArray(astro.planets) ? astro.planets : [];
   const planetsDetail = rawPlanets.map((p: any) => {
     const pSign = typeof p.sign === 'string' ? p.sign : (p.sign?.name || 'Aries');
     const nakName = typeof p.nakshatra === 'string' ? p.nakshatra : (p.nakshatra?.name || 'Ashwini');
     const pada = typeof p.nakshatra === 'object' ? p.nakshatra?.pada : (p.pada || 1);
+    const pName = p.planet || p.name || 'Sun';
+
+    // Pull house from analysis.planetFacts (correct source — computed from Lagna sign offset)
+    const factEntry = planetFacts.find((f: any) => f.planet === pName);
+    // Pull dignity from analysis.dignities or strength engine
+    const dignityEntry = dignities.find((d: any) => d.planet === pName);
+    const strengthEntry = strengthPlanets.find((s: any) => s.planet === pName);
+    // Compute house from sign IDs if planetFacts unavailable
+    const signId = typeof p.sign === 'object' ? p.sign?.id : 0;
+    const computedHouse = signId ? ((signId - lagnaSignId + 12) % 12) + 1 : 1;
+
     return {
-      planet: p.planet || p.name || 'Sun',
+      planet: pName,
       sign: pSign,
-      house: p.house || 1,
+      house: factEntry?.house || computedHouse,
       nakshatra: nakName,
       pada,
       degreeFormatted: `${pSign} ${formatDegrees(p.longitude)}`,
       isRetrograde: !!p.isRetrograde,
-      dignity: p.dignity || 'Neutral',
+      dignity: dignityEntry?.dignityName || strengthEntry?.d1Dignity || (factEntry?.retrograde === true ? 'Retrograde' : 'Neutral'),
     };
   });
 

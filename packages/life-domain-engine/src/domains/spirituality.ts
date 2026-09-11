@@ -141,7 +141,7 @@ export function evaluateSpiritualityDomain(engineData: any): DomainEvaluationRes
 
   // 2. Ketu Mokshakaraka & Jupiter Dharmakaraka
   const jupiterInfo = getPlanetStrengthInfo('Jupiter', engineData);
-  const ketuFact = astrology?.planets?.find((p: any) => p.planet === 'Ketu');
+  const ketuFact = analysis?.planetFacts?.find((f: any) => f.planet === 'Ketu');
 
   if (jupiterInfo.isStrong) {
     const item = createEvidenceItem({
@@ -301,10 +301,10 @@ export function evaluateSpiritualityDomain(engineData: any): DomainEvaluationRes
       {
         planet: 'Jupiter',
         role: 'Dharmakaraka & Spiritual Wisdom Karaka',
-        sign: astrology?.planets?.find((p: any) => p.planet === 'Jupiter')?.sign?.name || 'N/A',
-        house: astrology?.planets?.find((p: any) => p.planet === 'Jupiter')?.house || 1,
-        dignity: astrology?.planets?.find((p: any) => p.planet === 'Jupiter')?.dignity || 'NEUTRAL',
-        strengthScore: strengthAnalysis?.planets?.find((p: any) => p.planet === 'Jupiter')?.score || 0,
+        sign: jupiterInfo.sign,
+        house: jupiterInfo.house,
+        dignity: jupiterInfo.dignity,
+        strengthScore: jupiterInfo.score,
         shadbalaRatio: jupiterInfo.ratio || 1.0,
       },
       {

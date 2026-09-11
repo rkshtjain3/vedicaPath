@@ -5,8 +5,9 @@ export function retrieveStrengthEvidence(calculationData, targetPlanet) {
         for (const p of strength.planets) {
             if (targetPlanet && p.planet?.toLowerCase() !== targetPlanet.toLowerCase())
                 continue;
-            const isStrong = p.score >= 70 || p.dignity === 'EXALTED' || p.dignity === 'OWN_SIGN';
-            const isWeak = p.score <= 40 || p.dignity === 'DEBILITATED';
+            const dignity = p.d1Dignity || p.dignity || 'NEUTRAL';
+            const isStrong = p.score >= 70 || ['EXALTED', 'OWN_SIGN', 'MOOLATRIKONA'].includes(dignity.toUpperCase());
+            const isWeak = p.score <= 40 || ['DEBILITATED', 'ENEMY_SIGN', 'GREAT_ENEMY_SIGN'].includes(dignity.toUpperCase());
             const direction = isStrong ? 'SUPPORTIVE' : isWeak ? 'CHALLENGING' : 'NEUTRAL';
             items.push({
                 id: `STRENGTH-${p.planet.toUpperCase()}`,
@@ -16,11 +17,11 @@ export function retrieveStrengthEvidence(calculationData, targetPlanet) {
                 planet: p.planet,
                 direction,
                 title: `${p.planet} Strength Score: ${p.score?.toFixed(1) || 50}/100`,
-                description: `${p.planet} possesses ${p.dignity || 'NEUTRAL'} dignity with a relative strength score of ${p.score?.toFixed(1) || 50}/100.`,
+                description: `${p.planet} possesses ${dignity} dignity with a relative strength score of ${p.score?.toFixed(1) || 50}/100.`,
                 whyEvidence: [
                     `Planet: ${p.planet}`,
                     `Strength Score: ${p.score?.toFixed(1) || 50}`,
-                    `Dignity: ${p.dignity || 'NEUTRAL'}`,
+                    `Dignity: ${dignity}`,
                     `Combust: ${p.isCombust ? 'YES' : 'NO'}`,
                     `Retrograde: ${p.isRetrograde ? 'YES' : 'NO'}`,
                     `Vargottama: ${p.isVargottama ? 'YES' : 'NO'}`,

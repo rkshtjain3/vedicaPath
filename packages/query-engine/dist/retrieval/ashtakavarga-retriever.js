@@ -3,8 +3,22 @@ export function retrieveAshtakavargaEvidence(calculationData, targetPlanet) {
     const av = calculationData.ashtakavarga || {};
     const transitAV = calculationData.transitAshtakavarga || {};
     // SAV Total Points
-    if (av.sav && Array.isArray(av.sav.houseScores)) {
-        for (const hs of av.sav.houseScores) {
+    const savData = av.sav || av.sarvashtakavarga;
+    if (savData) {
+        let houseEntries = [];
+        if (Array.isArray(savData.houseScores)) {
+            houseEntries = savData.houseScores;
+        }
+        else if (Array.isArray(savData.scores)) {
+            houseEntries = savData.scores.map((s, idx) => typeof s === 'number' ? { house: idx + 1, score: s } : { house: s.house || idx + 1, score: s.score || 0 });
+        }
+        else if (savData.signPoints && typeof savData.signPoints === 'object') {
+            houseEntries = Object.entries(savData.signPoints).map(([key, val], idx) => {
+                const hNum = parseInt(key, 10);
+                return { house: isNaN(hNum) ? idx + 1 : hNum, score: Number(val) || 0 };
+            });
+        }
+        for (const hs of houseEntries) {
             const isStrong = hs.score >= 30;
             const isWeak = hs.score <= 22;
             const direction = isStrong ? 'SUPPORTIVE' : isWeak ? 'CHALLENGING' : 'NEUTRAL';

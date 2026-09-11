@@ -10,5 +10,7 @@ export declare function getPlanetStrengthInfo(planet: string, engineData: any): 
     overallStrength: any;
     dignity: any;
     house: any;
+    sign: any;
+    score: any;
 };
 //# sourceMappingURL=strength-helper.d.ts.map

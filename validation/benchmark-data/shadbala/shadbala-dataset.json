@@ -23,11 +23,11 @@
           "zodiac": "SIDEREAL",
           "houseSystem": "Whole Sign"
         },
-        "enteredAt": "2026-09-11T06:14:02.315Z",
+        "enteredAt": "2026-09-11T07:17:27.725Z",
         "notes": "Test note for store abstraction"
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-11T06:14:02.325Z",
+      "updatedAt": "2026-09-11T07:17:27.728Z",
       "inputSnapshot": {
         "birthDate": "1985-06-15",
         "birthTime": "08:30:00",
@@ -70,7 +70,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-11T06:13:58.572Z",
+      "updatedAt": "2026-09-11T07:17:21.840Z",
       "inputSnapshot": {
         "birthDate": "1990-12-31",
         "birthTime": "23:59:30",
@@ -107,7 +107,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-11T06:13:58.574Z",
+      "updatedAt": "2026-09-11T07:17:21.841Z",
       "inputSnapshot": {
         "birthDate": "1995-04-24",
         "birthTime": "06:00:00",
@@ -144,7 +144,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-11T06:13:58.576Z",
+      "updatedAt": "2026-09-11T07:17:21.845Z",
       "inputSnapshot": {
         "birthDate": "1988-03-31",
         "birthTime": "18:15:00",
@@ -181,7 +181,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-11T06:13:58.578Z",
+      "updatedAt": "2026-09-11T07:17:21.846Z",
       "inputSnapshot": {
         "birthDate": "2000-01-01",
         "birthTime": "12:00:00",
@@ -218,7 +218,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-11T06:13:58.581Z",
+      "updatedAt": "2026-09-11T07:17:21.849Z",
       "inputSnapshot": {
         "birthDate": "1992-08-10",
         "birthTime": "05:30:00",
@@ -255,7 +255,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-11T06:13:58.583Z",
+      "updatedAt": "2026-09-11T07:17:21.853Z",
       "inputSnapshot": {
         "birthDate": "1997-11-05",
         "birthTime": "14:20:00",
@@ -292,7 +292,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-11T06:13:58.585Z",
+      "updatedAt": "2026-09-11T07:17:21.855Z",
       "inputSnapshot": {
         "birthDate": "1982-02-18",
         "birthTime": "21:45:00",
@@ -329,7 +329,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-11T06:13:58.587Z",
+      "updatedAt": "2026-09-11T07:17:21.860Z",
       "inputSnapshot": {
         "birthDate": "1994-07-20",
         "birthTime": "10:15:00",
@@ -366,7 +366,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-11T06:13:58.590Z",
+      "updatedAt": "2026-09-11T07:17:21.863Z",
       "inputSnapshot": {
         "birthDate": "1987-06-01",
         "birthTime": "15:30:00",
