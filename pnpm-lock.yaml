@@ -11,6 +11,15 @@ importers:
       kill-port:
         specifier: ^2.0.1
         version: 2.0.1
+      next:
+        specifier: ^15.1.7
+        version: 15.5.24
+      react:
+        specifier: ^19.0.0
+        version: 19.2.8
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.8
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
