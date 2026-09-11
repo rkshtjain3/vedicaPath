@@ -107,6 +107,7 @@ export function DailyLifeBriefing({
   }
 
   const [todayDateStr, setTodayDateStr] = React.useState('');
+  const [showMobileDetails, setShowMobileDetails] = React.useState(false);
 
   React.useEffect(() => {
     setTodayDateStr(
@@ -238,8 +239,24 @@ export function DailyLifeBriefing({
         </div>
       </div>
 
-      {/* 3 Proactive Insight Pillars */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+      {/* Mobile Toggle Button for Details */}
+      <div className="flex sm:hidden justify-between items-center pt-1 border-t border-indigo-500/20">
+        <button
+          type="button"
+          onClick={() => setShowMobileDetails(!showMobileDetails)}
+          className="w-full py-2 rounded-xl bg-indigo-950/60 border border-indigo-500/30 text-indigo-300 font-semibold text-xs flex items-center justify-center gap-1.5 transition"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          <span>
+            {showMobileDetails
+              ? (isHi ? '▲ संक्षिप्त दृश्य (Hide Details)' : '▲ Collapse Routine Details')
+              : (isHi ? '▼ दैनिक ३ मुख्य स्तंभ व आहार गाइड देखें' : '▼ View 3 Pillars & Food Guidance')}
+          </span>
+        </button>
+      </div>
+
+      {/* 3 Proactive Insight Pillars (Always visible on md+, collapsible on mobile) */}
+      <div className={`${showMobileDetails ? 'grid' : 'hidden sm:grid'} grid-cols-1 md:grid-cols-3 gap-4 relative z-10 animate-in fade-in duration-200`}>
         {/* Pillar 1: High Leverage Focus */}
         <div className="bg-slate-950/70 border border-emerald-500/20 rounded-2xl p-4 space-y-2 hover:border-emerald-500/40 transition">
           <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider">

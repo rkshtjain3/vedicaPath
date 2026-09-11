@@ -522,6 +522,7 @@ export function AskVedicaTab({ calculationData, fullName, transitDate, initialQu
   // Modals for Decision Simulator & AI Life Dossier
   const [isSimulatorOpen, setIsSimulatorOpen] = useState<boolean>(false);
   const [isDossierOpen, setIsDossierOpen] = useState<boolean>(false);
+  const [showMobileTools, setShowMobileTools] = useState<boolean>(false);
 
   // Text to Speech State
   const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null);
@@ -831,9 +832,26 @@ export function AskVedicaTab({ calculationData, fullName, transitDate, initialQu
       />
 
       {/* 2. Personal AI Agent Console Workspace */}
+      {/* Mobile Drawer Toggle Button */}
+      <div className="block lg:hidden">
+        <button
+          type="button"
+          onClick={() => setShowMobileTools(!showMobileTools)}
+          className="w-full py-2.5 px-4 rounded-2xl bg-indigo-950/70 border border-indigo-500/40 text-indigo-200 text-xs font-bold flex items-center justify-between shadow-lg cursor-pointer"
+        >
+          <div className="flex items-center gap-2">
+            <Bot className="w-4 h-4 text-amber-400" />
+            <span>{isHi ? '⚙️ एआई इंजन सेटिंग्स व त्वरित परामर्श विषय' : '⚙️ AI Engine Settings & Consultation Topics'}</span>
+          </div>
+          <span className="text-[11px] font-mono text-cyan-300">
+            {showMobileTools ? '▲ Hide' : '▼ Expand'}
+          </span>
+        </button>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Agent Profile & Quick Consultations Sidebar (4 cols) */}
-        <div className="lg:col-span-4 space-y-5">
+        <div className={`lg:col-span-4 space-y-5 ${showMobileTools ? 'block' : 'hidden lg:block'} animate-in fade-in duration-200`}>
           {/* Agent Persona Card */}
           <div className="bg-gradient-to-br from-slate-900 via-indigo-950/50 to-slate-950 border border-indigo-500/30 rounded-3xl p-5 shadow-2xl space-y-4">
             <div className="flex items-center gap-3">
