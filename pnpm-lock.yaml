@@ -13,13 +13,13 @@ importers:
         version: 2.0.1
       next:
         specifier: ^15.1.7
-        version: 15.5.24
+        version: 15.5.24(@playwright/test@1.62.1)(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react:
         specifier: ^19.0.0
         version: 19.2.8
       react-dom:
         specifier: ^19.0.0
-        version: 19.2.8
+        version: 19.2.8(react@19.2.8)
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
@@ -44,12 +44,18 @@ importers:
       '@vedica/astrology-core':
         specifier: workspace:*
         version: link:../../packages/astrology-core
+      '@vedica/bazi-engine':
+        specifier: workspace:*
+        version: link:../../packages/bazi-engine
       '@vedica/benchmark-store':
         specifier: workspace:*
         version: link:../../packages/benchmark-store
       '@vedica/chart-renderer':
         specifier: workspace:*
         version: link:../../packages/chart-renderer
+      '@vedica/compatibility-engine':
+        specifier: workspace:*
+        version: link:../../packages/compatibility-engine
       '@vedica/dasha-engine':
         specifier: workspace:*
         version: link:../../packages/dasha-engine
@@ -239,6 +245,25 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
+  packages/bazi-engine:
+    dependencies:
+      '@vedica/astrology-core':
+        specifier: workspace:*
+        version: link:../astrology-core
+      '@vedica/shared':
+        specifier: workspace:*
+        version: link:../shared
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.1
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.5
+        version: 3.2.7(@types/node@22.20.1)(jiti@1.21.7)
+
   packages/benchmark-store:
     dependencies:
       '@vedica/shared':
@@ -279,6 +304,25 @@ importers:
       react:
         specifier: ^18.3.1
         version: 18.3.1
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.5
+        version: 3.2.7(@types/node@22.20.1)(jiti@1.21.7)
+
+  packages/compatibility-engine:
+    dependencies:
+      '@vedica/astrology-core':
+        specifier: workspace:*
+        version: link:../astrology-core
+      '@vedica/shared':
+        specifier: workspace:*
+        version: link:../shared
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.1
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
@@ -714,6 +758,9 @@ importers:
       '@vedica/numerology-engine':
         specifier: workspace:*
         version: link:../packages/numerology-engine
+      '@vedica/panchanga-engine':
+        specifier: workspace:*
+        version: link:../packages/panchanga-engine
       '@vedica/report-engine':
         specifier: workspace:*
         version: link:../packages/report-engine

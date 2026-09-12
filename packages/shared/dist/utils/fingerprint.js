@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { createHash } from 'crypto';
 /**
   Generates a deterministic hex SHA-256 fingerprint for a calculation input record.
  */

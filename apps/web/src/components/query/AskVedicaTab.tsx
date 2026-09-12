@@ -47,7 +47,7 @@ import {
   Cpu,
   Cloud,
 } from 'lucide-react';
-import { executeQueryEngine, QueryAnswer, QueryEvidenceItem } from '@vedica/query-engine';
+import type { QueryAnswer, QueryEvidenceItem } from '@vedica/query-engine';
 import { useI18n, Language } from '@/lib/i18n';
 import { DailyLifeBriefing } from './DailyLifeBriefing';
 import { DecisionSimulatorModal } from './DecisionSimulatorModal';
@@ -714,17 +714,27 @@ export function AskVedicaTab({ calculationData, fullName, transitDate, initialQu
     const updatedHistory = [...messages, newUserMsg];
     setMessages(updatedHistory);
 
-    // 1. Run deterministic calculation engine
+    // 1. Run deterministic calculation engine via API
     try {
-      const result = executeQueryEngine(calculationData, q, {
-        transitDate,
-        fullName: fullName || calculationData?.fullName,
-        calculationReproducibilityHash: calculationData?.reproducibilityHash || calculationData?.hash,
+      const qRes = await fetch('/api/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question: q,
+          calculationData,
+          transitDate,
+          fullName: fullName || calculationData?.fullName,
+        }),
       });
-      setQueryAnswer(result.query);
-      setAudit(result.audit);
+      if (qRes.ok) {
+        const qJson = await qRes.json();
+        if (qJson.success && qJson.data) {
+          setQueryAnswer(qJson.data.query);
+          setAudit(qJson.data.audit);
+        }
+      }
     } catch (err) {
-      console.error('Failed to execute query engine:', err);
+      console.error('Failed to execute query engine API:', err);
     }
 
     // 2. Stream from local AI Hybrid RAG Engine with conversation history

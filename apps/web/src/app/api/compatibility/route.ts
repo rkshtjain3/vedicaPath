@@ -57,8 +57,8 @@ export async function POST(req: Request) {
 
     const compatibility = evaluateCompatibility(
       chartA,
-      chartB,
       partnerAInput.name || partnerAInput.fullName || 'Partner A',
+      chartB,
       partnerBInput.name || partnerBInput.fullName || 'Partner B'
     );
 

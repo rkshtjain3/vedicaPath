@@ -17,7 +17,6 @@ import {
   Moon,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
-import { calculateAyurvedicDoshaProfile } from '@vedica/life-domain-engine';
 
 interface AyurJyotishCardProps {
   calculationData: any;
@@ -37,10 +36,7 @@ export function AyurJyotishCard({ calculationData, onAskQuestion }: AyurJyotishC
   const doshaProfile = React.useMemo(() => {
     if (calculationData?.doshaProfile) return calculationData.doshaProfile;
     if (calculationData?.lifeDomainAnalysis?.doshaProfile) return calculationData.lifeDomainAnalysis.doshaProfile;
-    try {
-      return calculateAyurvedicDoshaProfile(calculationData);
-    } catch {
-      return {
+    return {
         primaryDosha: 'VATA_PITTA' as const,
         digestiveFireType: 'Tikshna (Intense/Pitta)' as const,
         percentages: { vata: 45, pitta: 35, kapha: 20 },
@@ -58,7 +54,6 @@ export function AyurJyotishCard({ calculationData, onAskQuestion }: AyurJyotishC
         },
         breathworkProtocol: 'Nadi Shodhana & Sheetali breathwork',
       };
-    }
   }, [calculationData]);
 
   const vataPct = doshaProfile.percentages?.vata ?? 40;

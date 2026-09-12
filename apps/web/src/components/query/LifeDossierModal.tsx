@@ -22,7 +22,6 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
-import { calculateAyurvedicDoshaProfile } from '@vedica/life-domain-engine';
 
 interface LifeDossierModalProps {
   isOpen: boolean;
@@ -112,10 +111,7 @@ export function LifeDossierModal({
   const doshaProfile = useMemo(() => {
     if (calculationData?.doshaProfile) return calculationData.doshaProfile;
     if (calculationData?.lifeDomainAnalysis?.doshaProfile) return calculationData.lifeDomainAnalysis.doshaProfile;
-    try {
-      return calculateAyurvedicDoshaProfile(calculationData);
-    } catch {
-      return {
+    return {
         primaryDosha: 'VATA_PITTA' as const,
         digestiveFireType: 'Tikshna (Intense/Pitta)' as const,
         percentages: { vata: 45, pitta: 35, kapha: 20 },
@@ -133,7 +129,6 @@ export function LifeDossierModal({
         },
         breathworkProtocol: 'Nadi Shodhana & Sheetali breathwork',
       };
-    }
   }, [calculationData]);
 
   const handlePrint = () => {

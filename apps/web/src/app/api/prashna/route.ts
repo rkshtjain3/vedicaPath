@@ -26,8 +26,12 @@ export async function POST(req: Request) {
 
     const targetInstant = body.queryTime ? new Date(body.queryTime) : new Date();
 
-    const prashnaChart = await calculatePrashnaChart(queryLocation, targetInstant, body.seedNumber);
-    const result = evaluatePrashnaQuery(prashnaChart, question);
+    const prashnaChart = await calculatePrashnaChart({
+      question,
+      location: queryLocation,
+      queryInstantIso: targetInstant.toISOString(),
+    });
+    const result = evaluatePrashnaQuery(prashnaChart);
 
     return NextResponse.json({
       success: true,
