@@ -1,0 +1,22 @@
+{
+  "name": "@vedica/ziwei-engine",
+  "version": "0.1.0",
+  "description": "Deterministic Zi Wei Dou Shu (紫微斗數) calculation engine for Vedica (chinese-ziwei-v1)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vedica/astrology-core": "workspace:*",
+    "@vedica/bazi-engine": "workspace:*",
+    "@vedica/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

@@ -28,6 +28,7 @@ import {
   FileText,
   HelpCircle,
   Bot,
+  Crown,
 } from 'lucide-react';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
@@ -41,6 +42,7 @@ import { TimelineTab } from '@/components/timeline/TimelineTab';
 import { GocharTab } from '@/components/transit/GocharTab';
 import { AskVedicaTab } from '@/components/query/AskVedicaTab';
 import { JargonBusterTab } from '@/components/glossary/JargonBusterTab';
+import { ZiWeiTab } from '@/components/chart/ZiWeiTab';
 import { AstrologyWithoutSuperstitionModal } from '@/components/glossary/AstrologyWithoutSuperstitionModal';
 import { PanchangaCard } from '@/components/panchanga/PanchangaCard';
 import { DivisionalChartsTab } from '@/components/divisional/DivisionalChartsTab';
@@ -271,7 +273,7 @@ export default function HomePage() {
   };
 
   const [activeTab, setActiveTab] = useState<
-    'storybook' | 'birthChart' | 'lifeAnalysis' | 'timeline' | 'transits' | 'astrology' | 'analysis' | 'divisional' | 'strength' | 'ashtakavarga' | 'rules' | 'timing' | 'interpretation' | 'dasha' | 'numerology' | 'yogas' | 'report' | 'query' | 'codex'
+    'storybook' | 'birthChart' | 'lifeAnalysis' | 'timeline' | 'transits' | 'astrology' | 'analysis' | 'divisional' | 'strength' | 'ashtakavarga' | 'rules' | 'timing' | 'interpretation' | 'dasha' | 'numerology' | 'yogas' | 'ziwei' | 'report' | 'query' | 'codex'
   >('storybook');
   const [showSuperstitionModal, setShowSuperstitionModal] = useState(false);
   const [selectedCodexTerm, setSelectedCodexTerm] = useState<string | null>(null);
@@ -290,6 +292,7 @@ export default function HomePage() {
   const [shodashavargaData, setShodashavargaData] = useState<any | null>(null);
   const [vimsopakaBalaData, setVimsopakaBalaData] = useState<any | null>(null);
   const [jaiminiData, setJaiminiData] = useState<any | null>(null);
+  const [ziWeiData, setZiWeiData] = useState<any | null>(null);
   const [vargaComparisonData, setVargaComparisonData] = useState<any | null>(null);
   const [dashamsaComparisonData, setDashamsaComparisonData] = useState<any | null>(null);
   const [crossChartData, setCrossChartData] = useState<any | null>(null);
@@ -416,6 +419,7 @@ export default function HomePage() {
       setShodashavargaData(data.data.shodashavarga);
       setVimsopakaBalaData(data.data.vimsopakaBala);
       setJaiminiData(data.data.jaimini);
+      setZiWeiData(data.data.ziWei);
       setVargaComparisonData(data.data.vargaComparison?.navamsa || data.data.vargaComparison);
       setDashamsaComparisonData(data.data.dashamsaComparison || data.data.vargaComparison?.dashamsa);
       setCrossChartData(data.data.crossChartAnalysis);
@@ -1225,6 +1229,17 @@ export default function HomePage() {
                 >
                   <Sparkles className="w-3.5 h-3.5" /> {t('tabs.yogas')}
                 </button>
+                <button
+                  id="tab-ziwei"
+                  onClick={() => setActiveTab('ziwei')}
+                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg shrink-0 transition-colors flex items-center gap-1.5 ${
+                    activeTab === 'ziwei'
+                      ? 'bg-purple-600 text-white font-bold'
+                      : 'text-purple-400 hover:text-purple-200 hover:bg-slate-900'
+                  }`}
+                >
+                  <Crown className="w-3.5 h-3.5" /> Zi Wei Dou Shu (紫微斗數)
+                </button>
               </div>
             </div>
 
@@ -1406,6 +1421,10 @@ export default function HomePage() {
 
             {activeTab === 'yogas' && (yogaData || analysisData) && (
               <YogasTab yogaData={yogaData} analysisData={analysisData} />
+            )}
+
+            {activeTab === 'ziwei' && (
+              <ZiWeiTab calculationData={{ ziWei: ziWeiData }} />
             )}
 
             {activeTab === 'report' && (astroData || reportData) && (

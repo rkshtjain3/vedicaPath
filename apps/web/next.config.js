@@ -29,6 +29,7 @@ const nextConfig = {
     '@vedica/transit-engine',
     '@vedica/validation',
     '@vedica/yoga-engine',
+    '@vedica/ziwei-engine',
   ],
   serverExternalPackages: ['sweph', 'better-sqlite3', '@libsql/client'],
 };

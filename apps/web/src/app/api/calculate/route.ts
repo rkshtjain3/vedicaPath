@@ -62,6 +62,7 @@ import {
 } from '@vedica/divisional-chart-engine';
 import { evaluateJaimini } from '@vedica/jaimini-engine';
 import { evaluateBaZi } from '@vedica/bazi-engine';
+import { evaluateZiWei } from '@vedica/ziwei-engine';
 import {
   calculateAshtakavarga,
   PERSONAL_ASHTAKAVARGA_V1,
@@ -139,6 +140,9 @@ export async function POST(req: Request) {
 
     // BaZi / Four Pillars of Destiny Engine (chinese-bazi-v1)
     const bazi = evaluateBaZi(chart, { gender: body.gender === 'FEMALE' ? 'FEMALE' : 'MALE' });
+
+    // Zi Wei Dou Shu Engine (chinese-ziwei-v1)
+    const ziWei = evaluateZiWei(chart);
 
     // Classical Yoga Engine (Phase 16)
     const yogaAnalysis = evaluateYogaEngine(chart, analysis, PERSONAL_YOGA_V1);
@@ -518,6 +522,7 @@ export async function POST(req: Request) {
         vimsopakaBala,
         jaimini,
         bazi,
+        ziWei,
         divisionalCharts: {
           d9: d9Chart,
           d9Analysis,
