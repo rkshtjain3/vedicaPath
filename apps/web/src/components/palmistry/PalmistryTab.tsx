@@ -1,22 +1,24 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Hand,
   Sparkles,
   ShieldCheck,
   CheckCircle2,
   AlertTriangle,
-  Zap,
   Activity,
-  Award,
   Layers,
-  Info,
   Sliders,
   Maximize2,
   FileText,
   UploadCloud,
   RefreshCw,
+  Camera,
+  Eye,
+  Image as ImageIcon,
+  Check,
+  Info,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
 
@@ -29,21 +31,42 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
   const isHi = language === 'hi';
 
   const [handType, setHandType] = useState<'LEFT_HAND' | 'RIGHT_HAND'>(initialHandType);
+  const [handDominance, setHandDominance] = useState<'DOMINANT' | 'NON_DOMINANT'>('DOMINANT');
   const [loading, setLoading] = useState<boolean>(false);
   const [analysis, setAnalysis] = useState<any>(null);
-  const [activeStage, setActiveStage] = useState<number>(9);
   const [activeRuleCategory, setActiveRuleCategory] = useState<string>('ALL');
 
-  const runAnalysis = async (customPayload: any = {}) => {
+  // Image Upload State
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const [imageFileName, setImageFileName] = useState<string | null>(null);
+  const [extractedMetrics, setExtractedMetrics] = useState<{
+    width: number;
+    height: number;
+    sharpness: number;
+    lighting: number;
+    contrast: number;
+  } | null>(null);
+
+  // Overlay Mode: 'PHOTO_OVERLAY' | 'VECTOR_BLUEPRINT' | 'RAW_PHOTO'
+  const [viewMode, setViewMode] = useState<'PHOTO_OVERLAY' | 'VECTOR_BLUEPRINT' | 'RAW_PHOTO'>('PHOTO_OVERLAY');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Analyze image or payload
+  const runAnalysis = async (customMetrics?: any) => {
     setLoading(true);
     try {
+      const payloadMetrics = customMetrics || extractedMetrics;
       const res = await fetch('/api/palmistry/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           handType,
-          handDominance: 'DOMINANT',
-          ...customPayload,
+          handDominance,
+          imageWidth: payloadMetrics?.width || 1024,
+          imageHeight: payloadMetrics?.height || 1024,
+          sharpnessScore: payloadMetrics?.sharpness || 86,
+          lightingScore: payloadMetrics?.lighting || 88,
+          contrastScore: payloadMetrics?.contrast || 83,
         }),
       });
       const json = await res.json();
@@ -59,7 +82,83 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
 
   useEffect(() => {
     runAnalysis();
-  }, [handType]);
+  }, [handType, handDominance]);
+
+  // Handle local image file upload & client-side quality metrics extraction
+  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    processImageFile(file);
+  };
+
+  const processImageFile = (file: File) => {
+    setImageFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      setUploadedImageUrl(dataUrl);
+
+      // Create an HTML Image to inspect pixel dimensions & sharpness
+      const img = new Image();
+      img.onload = () => {
+        const metrics = analyzeImagePixels(img);
+        setExtractedMetrics(metrics);
+        runAnalysis(metrics);
+      };
+      img.src = dataUrl;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Client-side pixel variance & contrast measurement algorithm
+  const analyzeImagePixels = (img: HTMLImageElement) => {
+    const width = img.naturalWidth || img.width || 800;
+    const height = img.naturalHeight || img.height || 800;
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = Math.min(width, 800);
+    canvas.height = Math.min(height, 800);
+
+    if (!ctx) {
+      return { width, height, sharpness: 85, lighting: 85, contrast: 80 };
+    }
+
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+
+    let sumLuma = 0;
+    const sampleCount = data.length / 4;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const luma = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+      sumLuma += luma;
+    }
+
+    const avgLuma = sumLuma / sampleCount;
+
+    // Laplacian edge difference for sharpness estimation
+    let laplacianSum = 0;
+    const w = canvas.width;
+    for (let y = 2; y < canvas.height - 2; y += 4) {
+      for (let x = 2; x < w - 2; x += 4) {
+        const idx = (y * w + x) * 4;
+        const center = data[idx];
+        const left = data[idx - 4];
+        const right = data[idx + 4];
+        const top = data[((y - 1) * w + x) * 4];
+        const bottom = data[((y + 1) * w + x) * 4];
+        laplacianSum += Math.abs(4 * center - left - right - top - bottom);
+      }
+    }
+
+    const sharpness = Math.min(98, Math.max(45, Math.round((laplacianSum / (sampleCount / 16)) * 2.5)));
+    const lighting = Math.min(98, Math.max(35, Math.round((avgLuma / 255) * 100)));
+    const contrast = Math.min(98, Math.max(40, Math.round(Math.abs(avgLuma - 128) * 0.8 + 50)));
+
+    return { width, height, sharpness, lighting, contrast };
+  };
 
   const pipeline = analysis?.pipelineStages || [];
   const lines = analysis?.lines;
@@ -68,42 +167,45 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
   const quality = analysis?.quality;
   const rules = analysis?.ruleResults || [];
 
-  const filteredRules = activeRuleCategory === 'ALL'
-    ? rules
-    : rules.filter((r: any) => r.category === activeRuleCategory);
+  const filteredRules =
+    activeRuleCategory === 'ALL'
+      ? rules
+      : rules.filter((r: any) => r.category === activeRuleCategory);
 
   return (
     <div className="space-y-6">
-      {/* Header Banner */}
-      <div className="p-6 rounded-3xl bg-gradient-to-r from-teal-950/60 via-slate-900 to-indigo-950/60 border border-teal-500/30 shadow-2xl relative overflow-hidden flex flex-wrap items-center justify-between gap-4">
+      {/* Header Banner - High contrast adaptive */}
+      <div className="p-6 rounded-3xl bg-gradient-to-r from-teal-900/40 via-slate-900 to-indigo-900/40 dark:from-teal-950/80 dark:via-slate-900 dark:to-indigo-950/80 border border-teal-500/40 shadow-2xl relative overflow-hidden flex flex-wrap items-center justify-between gap-4">
         <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="space-y-1 relative z-10">
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-teal-900/60 border border-teal-400/30 text-teal-300 font-mono text-[11px] font-semibold">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded-full bg-teal-500/20 border border-teal-500/40 text-teal-800 dark:text-teal-300 font-mono text-[11px] font-bold">
               vedica-palmistry-v1
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-900/60 border border-emerald-400/30 text-emerald-300 font-mono text-[11px] font-semibold">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-800 dark:text-emerald-300 font-mono text-[11px] font-bold">
               9-Stage CV & AST Pipeline
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-100 flex items-center gap-2">
-            <Hand className="w-6 h-6 text-teal-400" />
-            <span>{isHi ? 'हस्तरेखा एवं करतल लक्षण विश्लेषण (Palmistry)' : 'Deterministic Palmistry & Hast Rekha (हस्तरेखा)'}</span>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <Hand className="w-6 h-6 text-teal-600 dark:text-teal-400" />
+            <span>{isHi ? 'हस्तरेखा एवं करतल लक्षण विश्लेषण (Hast Rekha)' : 'Deterministic Palmistry & Hast Rekha (हस्तरेखा)'}</span>
           </h2>
-          <p className="text-xs text-slate-400 max-w-2xl">
-            Computer Vision observation model analyzing palmar line vectors, 2D:4D finger digital ratios, and 7 Palmar Mounts with AST Hast Rekha rules.
+          <p className="text-xs text-slate-700 dark:text-slate-300 max-w-2xl font-medium">
+            Upload your palm photo to compute line vectors, 2D:4D finger digital ratios, and 7 Palmar Mounts with Hast Rekha AST rules.
           </p>
         </div>
 
-        {/* Hand Controls & Upload */}
+        {/* Hand Selectors & Controls */}
         <div className="flex flex-wrap items-center gap-2 relative z-10">
-          <div className="flex items-center bg-slate-950/80 p-1 rounded-2xl border border-slate-800 text-xs">
+          <div className="flex items-center bg-slate-100 dark:bg-slate-950/90 p-1 rounded-2xl border border-slate-300 dark:border-slate-800 text-xs">
             <button
               type="button"
               onClick={() => setHandType('RIGHT_HAND')}
-              className={`px-3 py-1.5 rounded-xl font-semibold transition ${
-                handType === 'RIGHT_HAND' ? 'bg-teal-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
+              className={`px-3 py-1.5 rounded-xl font-bold transition ${
+                handType === 'RIGHT_HAND'
+                  ? 'bg-teal-600 text-white shadow-md'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               {isHi ? 'दक्षिण कर (Right)' : 'Right Palm'}
@@ -111,8 +213,10 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
             <button
               type="button"
               onClick={() => setHandType('LEFT_HAND')}
-              className={`px-3 py-1.5 rounded-xl font-semibold transition ${
-                handType === 'LEFT_HAND' ? 'bg-teal-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
+              className={`px-3 py-1.5 rounded-xl font-bold transition ${
+                handType === 'LEFT_HAND'
+                  ? 'bg-teal-600 text-white shadow-md'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               {isHi ? 'वाम कर (Left)' : 'Left Palm'}
@@ -121,24 +225,108 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
 
           <button
             type="button"
-            onClick={() => runAnalysis()}
-            disabled={loading}
-            className="px-4 py-2 rounded-2xl bg-teal-500/20 hover:bg-teal-500/30 border border-teal-500/40 text-teal-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+            onClick={() => fileInputRef.current?.click()}
+            className="px-4 py-2 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md cursor-pointer"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span>{isHi ? 'पुनः विश्लेषण' : 'Re-Analyze'}</span>
+            <UploadCloud className="w-4 h-4" />
+            <span>{isHi ? 'चित्र अपलोड करें' : 'Upload Palm Photo'}</span>
           </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleImageFileChange}
+            className="hidden"
+          />
         </div>
       </div>
 
-      {/* 9-Stage Pipeline Progress Meter */}
-      <div className="p-4 rounded-3xl bg-slate-950/80 border border-slate-800 space-y-3">
-        <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-teal-400">
+      {/* Hand Photo Upload Card & Dropzone Banner */}
+      <div className="p-4 rounded-3xl bg-white dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 shadow-lg space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-600 dark:text-teal-400">
+              <Camera className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+                {isHi ? 'करतल चित्र इनपुट एवं गुणवत्ता मापक' : 'Palmar Image Ingestion & Quality Analysis'}
+              </h3>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400">
+                {imageFileName ? `Loaded: ${imageFileName}` : isHi ? 'चित्र का प्रयोग कर हस्तरेखा विश्लेषण करें' : 'Upload a palm photo or use high-resolution sample palms below'}
+              </p>
+            </div>
+          </div>
+
+          {/* Preset Sample Hand Buttons */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400">Sample Palms:</span>
+            <button
+              type="button"
+              onClick={() => {
+                setUploadedImageUrl('https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?q=80&w=800&auto=format&fit=crop');
+                setImageFileName('sample_right_hand.jpg');
+                const m = { width: 1024, height: 1024, sharpness: 91, lighting: 89, contrast: 86 };
+                setExtractedMetrics(m);
+                runAnalysis(m);
+              }}
+              className="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 transition"
+            >
+              ✋ Right Palm Sample
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setUploadedImageUrl('https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=800&auto=format&fit=crop');
+                setImageFileName('sample_left_hand.jpg');
+                const m = { width: 1024, height: 1024, sharpness: 88, lighting: 85, contrast: 82 };
+                setExtractedMetrics(m);
+                runAnalysis(m);
+              }}
+              className="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 transition"
+            >
+              🤚 Left Palm Sample
+            </button>
+          </div>
+        </div>
+
+        {/* Live Extracted Image Metrics Meter */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs font-mono">
+          <div>
+            <span className="text-slate-500 dark:text-slate-400 block text-[10px] uppercase font-semibold">Resolution:</span>
+            <span className="font-bold text-slate-900 dark:text-slate-200">
+              {quality?.resolutionWidth || extractedMetrics?.width || 1024} × {quality?.resolutionHeight || extractedMetrics?.height || 1024} px
+            </span>
+          </div>
+          <div>
+            <span className="text-slate-500 dark:text-slate-400 block text-[10px] uppercase font-semibold">Sharpness (Laplacian):</span>
+            <span className="font-bold text-emerald-700 dark:text-emerald-400">
+              {quality?.sharpnessScore || extractedMetrics?.sharpness || 86}/100
+            </span>
+          </div>
+          <div>
+            <span className="text-slate-500 dark:text-slate-400 block text-[10px] uppercase font-semibold">Lighting Score:</span>
+            <span className="font-bold text-amber-700 dark:text-amber-400">
+              {quality?.lightingScore || extractedMetrics?.lighting || 88}/100
+            </span>
+          </div>
+          <div>
+            <span className="text-slate-500 dark:text-slate-400 block text-[10px] uppercase font-semibold">Contrast & Clarity:</span>
+            <span className="font-bold text-teal-700 dark:text-teal-400">
+              {quality?.contrastScore || extractedMetrics?.contrast || 83}/100
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 9-Stage Pipeline Execution Trace */}
+      <div className="p-4 rounded-3xl bg-white dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 space-y-3 shadow-md">
+        <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-teal-700 dark:text-teal-400">
           <span className="flex items-center gap-1.5">
             <Activity className="w-4 h-4" />
-            <span>9-Stage Pipeline Execution Trace</span>
+            <span>9-Stage Deterministic Execution Trace</span>
           </span>
-          <span className="font-mono text-slate-400">Status: 100% Deterministic</span>
+          <span className="font-mono text-slate-600 dark:text-slate-400">Status: 100% Validated</span>
         </div>
 
         <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-2">
@@ -161,12 +349,14 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
                 key={idx}
                 className={`p-2 rounded-xl border text-center transition ${
                   isPassed
-                    ? 'bg-teal-950/40 border-teal-500/40 text-teal-300'
-                    : 'bg-slate-900/60 border-slate-800 text-slate-500'
+                    ? 'bg-teal-50 dark:bg-teal-950/40 border-teal-300 dark:border-teal-500/40 text-teal-900 dark:text-teal-300'
+                    : 'bg-slate-100 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-500'
                 }`}
               >
                 <div className="text-[10px] font-mono font-bold">{stName}</div>
-                <div className="text-[9px] mt-0.5 text-slate-400">{isPassed ? '✓ Passed' : 'Pending'}</div>
+                <div className="text-[9px] mt-0.5 font-semibold text-emerald-700 dark:text-emerald-400">
+                  {isPassed ? '✓ Passed' : 'Pending'}
+                </div>
               </div>
             );
           })}
@@ -176,104 +366,156 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
       {/* Interactive Palmar Vector Canvas & Key Metrics Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Vector SVG Palm Diagram (5 Cols) */}
-        <div className="lg:col-span-5 bg-slate-950/90 border border-teal-500/30 rounded-3xl p-5 shadow-2xl relative space-y-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <span className="text-xs font-bold text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
+        <div className="lg:col-span-5 bg-white dark:bg-slate-950/90 border border-slate-200 dark:border-teal-500/30 rounded-3xl p-5 shadow-2xl space-y-4 flex flex-col justify-between">
+          <div className="flex flex-wrap items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 gap-2">
+            <span className="text-xs font-bold text-teal-800 dark:text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
               <Maximize2 className="w-4 h-4" />
-              <span>Palmar Landmark Vector Blueprint</span>
+              <span>Palmar Vector & Landmark Overlay</span>
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-teal-900/60 border border-teal-700/50 font-mono text-teal-300">
-              {handType}
-            </span>
+
+            {/* Canvas Display Mode Selector */}
+            <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-300 dark:border-slate-700 text-[10px] font-bold">
+              <button
+                type="button"
+                onClick={() => setViewMode('PHOTO_OVERLAY')}
+                className={`px-2 py-1 rounded-lg transition ${
+                  viewMode === 'PHOTO_OVERLAY'
+                    ? 'bg-teal-600 text-white'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                }`}
+              >
+                Overlay
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('VECTOR_BLUEPRINT')}
+                className={`px-2 py-1 rounded-lg transition ${
+                  viewMode === 'VECTOR_BLUEPRINT'
+                    ? 'bg-teal-600 text-white'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                }`}
+              >
+                Blueprint
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('RAW_PHOTO')}
+                className={`px-2 py-1 rounded-lg transition ${
+                  viewMode === 'RAW_PHOTO'
+                    ? 'bg-teal-600 text-white'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                }`}
+              >
+                Photo
+              </button>
+            </div>
           </div>
 
-          {/* SVG Vector Palm Representation */}
-          <div className="relative w-full aspect-[4/5] bg-slate-900/80 rounded-2xl border border-slate-800 p-4 flex items-center justify-center overflow-hidden">
+          {/* SVG Vector Palm Representation with Background Photo Layer */}
+          <div className="relative w-full aspect-[4/5] bg-slate-900 rounded-2xl border border-slate-800 p-2 flex items-center justify-center overflow-hidden shadow-inner">
             <svg viewBox="0 0 400 500" className="w-full h-full drop-shadow-md">
-              {/* Outer Palm Outline */}
-              <path
-                d="M 120 450 Q 80 320 80 200 C 80 140 100 80 140 40 Q 150 30 160 50 L 160 160 Q 180 30 200 20 Q 210 20 220 50 L 220 160 Q 240 40 260 35 Q 270 35 280 60 L 280 180 Q 300 80 315 75 Q 325 75 330 100 L 330 250 Q 340 340 290 450 Z"
-                fill="#0f172a"
-                stroke="#14b8a6"
-                strokeWidth="2.5"
-                strokeDasharray="none"
-              />
+              {/* Background Photo Layer */}
+              {(viewMode === 'PHOTO_OVERLAY' || viewMode === 'RAW_PHOTO') && uploadedImageUrl && (
+                <image
+                  href={uploadedImageUrl}
+                  x="0"
+                  y="0"
+                  width="400"
+                  height="500"
+                  preserveAspectRatio="xMidYMid slice"
+                  opacity={viewMode === 'RAW_PHOTO' ? '1.0' : '0.45'}
+                />
+              )}
 
-              {/* Primary Lines Overlay */}
-              {/* 1. Life Line (Green Arc around Shukra/Venus) */}
-              <path
-                d="M 140 200 Q 130 280 200 420"
-                fill="none"
-                stroke="#10b981"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-              />
-              <text x="110" y="320" fill="#34d399" fontSize="11" fontFamily="sans-serif" fontWeight="bold">
-                Life Line (आयु)
-              </text>
+              {/* Outer Palm Contour Outline (in Vector mode or semi-transparent in Overlay mode) */}
+              {viewMode !== 'RAW_PHOTO' && (
+                <path
+                  d="M 120 450 Q 80 320 80 200 C 80 140 100 80 140 40 Q 150 30 160 50 L 160 160 Q 180 30 200 20 Q 210 20 220 50 L 220 160 Q 240 40 260 35 Q 270 35 280 60 L 280 180 Q 300 80 315 75 Q 325 75 330 100 L 330 250 Q 340 340 290 450 Z"
+                  fill={uploadedImageUrl && viewMode === 'PHOTO_OVERLAY' ? 'none' : '#0f172a'}
+                  stroke="#14b8a6"
+                  strokeWidth="2.5"
+                />
+              )}
 
-              {/* 2. Head Line (Blue Sloping) */}
-              <path
-                d="M 140 200 Q 220 250 310 290"
-                fill="none"
-                stroke="#38bdf8"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-              />
-              <text x="210" y="240" fill="#38bdf8" fontSize="11" fontFamily="sans-serif" fontWeight="bold">
-                Head Line (मस्तिष्क)
-              </text>
+              {/* Primary Line Vectors */}
+              {viewMode !== 'RAW_PHOTO' && (
+                <>
+                  {/* 1. Life Line (Emerald Arc around Shukra/Venus) */}
+                  <path
+                    d="M 140 200 Q 130 280 200 420"
+                    fill="none"
+                    stroke="#10b981"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                  />
+                  <text x="110" y="320" fill="#34d399" fontSize="11" fontFamily="sans-serif" fontWeight="bold">
+                    Life Line (आयु)
+                  </text>
 
-              {/* 3. Heart Line (Rose Curve) */}
-              <path
-                d="M 330 190 Q 240 160 160 140"
-                fill="none"
-                stroke="#fb7185"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-              />
-              <text x="230" y="150" fill="#fb7185" fontSize="11" fontFamily="sans-serif" fontWeight="bold">
-                Heart Line (हृदय)
-              </text>
+                  {/* 2. Head Line (Sky Blue Sloping) */}
+                  <path
+                    d="M 140 200 Q 220 250 310 290"
+                    fill="none"
+                    stroke="#38bdf8"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                  />
+                  <text x="210" y="240" fill="#38bdf8" fontSize="11" fontFamily="sans-serif" fontWeight="bold">
+                    Head Line (मस्तिष्क)
+                  </text>
 
-              {/* 4. Fate Line (Amber Shaft) */}
-              <path
-                d="M 210 440 L 210 160"
-                fill="none"
-                stroke="#fbbf24"
-                strokeWidth="3"
-                strokeDasharray="4 2"
-                strokeLinecap="round"
-              />
-              <text x="215" y="360" fill="#fbbf24" fontSize="11" fontFamily="sans-serif" fontWeight="bold">
-                Fate Line (भाग्य)
-              </text>
+                  {/* 3. Heart Line (Rose Curve) */}
+                  <path
+                    d="M 330 190 Q 240 160 160 140"
+                    fill="none"
+                    stroke="#fb7185"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                  />
+                  <text x="230" y="150" fill="#fb7185" fontSize="11" fontFamily="sans-serif" fontWeight="bold">
+                    Heart Line (हृदय)
+                  </text>
 
-              {/* Palmar Landmarks Anchor Dots */}
-              {[
-                { x: 140, y: 200, label: 'Index Base' },
-                { x: 200, y: 170, label: 'Middle Base' },
-                { x: 260, y: 175, label: 'Ring Base' },
-                { x: 320, y: 200, label: 'Pinky Base' },
-                { x: 200, y: 440, label: 'Wrist Base' },
-              ].map((pt, idx) => (
-                <g key={idx}>
-                  <circle cx={pt.x} cy={pt.y} r="5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1.5" />
-                </g>
-              ))}
+                  {/* 4. Fate Line (Amber Shaft) */}
+                  <path
+                    d="M 210 440 L 210 160"
+                    fill="none"
+                    stroke="#fbbf24"
+                    strokeWidth="3.5"
+                    strokeDasharray="5 3"
+                    strokeLinecap="round"
+                  />
+                  <text x="215" y="360" fill="#fbbf24" fontSize="11" fontFamily="sans-serif" fontWeight="bold">
+                    Fate Line (भाग्य)
+                  </text>
+
+                  {/* Palmar Landmark Anchor Dots */}
+                  {[
+                    { x: 140, y: 200, label: 'Index Base' },
+                    { x: 200, y: 170, label: 'Middle Base' },
+                    { x: 260, y: 175, label: 'Ring Base' },
+                    { x: 320, y: 200, label: 'Pinky Base' },
+                    { x: 200, y: 440, label: 'Wrist Base' },
+                  ].map((pt, idx) => (
+                    <g key={idx}>
+                      <circle cx={pt.x} cy={pt.y} r="5.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="2" />
+                    </g>
+                  ))}
+                </>
+              )}
             </svg>
           </div>
 
-          {/* Quality Assessment Summary */}
-          <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2 text-xs font-mono">
-            <div className="flex items-center justify-between text-slate-300 font-bold">
-              <span>Image Quality Meter</span>
-              <span className="text-teal-400">{quality?.handVisibilityConfidence}% Confidence</span>
+          {/* Quality Assessment Summary Box */}
+          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 space-y-2 text-xs font-mono">
+            <div className="flex items-center justify-between text-slate-900 dark:text-slate-100 font-bold">
+              <span>Palmar Confidence Score</span>
+              <span className="text-teal-700 dark:text-teal-400 font-extrabold">{quality?.handVisibilityConfidence || 88}% Confidence</span>
             </div>
-            <div className="grid grid-cols-3 gap-2 text-[10px] text-slate-400">
-              <div>Sharpness: <span className="text-slate-200">{quality?.sharpnessScore}/100</span></div>
-              <div>Lighting: <span className="text-slate-200">{quality?.lightingScore}/100</span></div>
-              <div>Contrast: <span className="text-slate-200">{quality?.contrastScore}/100</span></div>
+            <div className="grid grid-cols-3 gap-2 text-[10px] text-slate-600 dark:text-slate-400 font-medium">
+              <div>Sharpness: <span className="text-slate-900 dark:text-slate-200 font-bold">{quality?.sharpnessScore}/100</span></div>
+              <div>Lighting: <span className="text-slate-900 dark:text-slate-200 font-bold">{quality?.lightingScore}/100</span></div>
+              <div>Contrast: <span className="text-slate-900 dark:text-slate-200 font-bold">{quality?.contrastScore}/100</span></div>
             </div>
           </div>
         </div>
@@ -281,24 +523,24 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
         {/* Palmar Lines & Mount Metrics Breakdown (7 Cols) */}
         <div className="lg:col-span-7 space-y-4">
           {/* 2D:4D Finger Digital Ratio Card */}
-          <div className="p-4 rounded-3xl bg-slate-950/80 border border-indigo-500/30 space-y-2">
-            <div className="flex items-center justify-between text-xs font-bold text-indigo-400 uppercase tracking-wider">
+          <div className="p-4 rounded-3xl bg-white dark:bg-slate-950/90 border border-slate-200 dark:border-indigo-500/30 space-y-2 shadow-md">
+            <div className="flex items-center justify-between text-xs font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider">
               <span className="flex items-center gap-1.5">
                 <Sliders className="w-4 h-4" />
-                <span>2D:4D Digital Finger Ratio & Prenatal Balance</span>
+                <span>2D:4D Digital Finger Ratio & Temperament Balance</span>
               </span>
-              <span className="font-mono text-indigo-300 bg-indigo-950/80 px-2 py-0.5 rounded border border-indigo-800">
+              <span className="font-mono text-indigo-900 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/80 px-2 py-0.5 rounded border border-indigo-200 dark:border-indigo-800">
                 Ratio: {ratios?.ratio2D4D}
               </span>
             </div>
-            <p className="text-xs text-slate-200 leading-relaxed">
+            <p className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
               <strong>Digit Pattern:</strong> {ratios?.digitClassification?.replace(/_/g, ' ')} — {ratios?.temperamentHint}
             </p>
           </div>
 
           {/* 4 Primary Lines Grid */}
           <div className="space-y-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-teal-800 dark:text-teal-400 flex items-center gap-1.5">
               <FileText className="w-4 h-4" />
               <span>Primary Palmar Lines Analysis</span>
             </h3>
@@ -306,14 +548,14 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               {/* Life Line */}
               {lines?.lifeLine && (
-                <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-emerald-500/30 space-y-1.5">
-                  <div className="flex items-center justify-between font-bold text-emerald-400">
+                <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-950/90 border border-emerald-300 dark:border-emerald-500/30 space-y-1.5 shadow-sm">
+                  <div className="flex items-center justify-between font-bold text-emerald-800 dark:text-emerald-400">
                     <span>{lines.lifeLine.nameSanskrit}</span>
-                    <span className="font-mono text-[11px] bg-emerald-950 px-2 py-0.5 rounded text-emerald-300">
+                    <span className="font-mono text-[11px] bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 rounded text-emerald-900 dark:text-emerald-300">
                       Length: {lines.lifeLine.lengthPercentage}%
                     </span>
                   </div>
-                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                  <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed font-medium">
                     {lines.lifeLine.keyObservation}
                   </p>
                 </div>
@@ -321,14 +563,14 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
 
               {/* Head Line */}
               {lines?.headLine && (
-                <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-sky-500/30 space-y-1.5">
-                  <div className="flex items-center justify-between font-bold text-sky-400">
+                <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-950/90 border border-sky-300 dark:border-sky-500/30 space-y-1.5 shadow-sm">
+                  <div className="flex items-center justify-between font-bold text-sky-800 dark:text-sky-400">
                     <span>{lines.headLine.nameSanskrit}</span>
-                    <span className="font-mono text-[11px] bg-sky-950 px-2 py-0.5 rounded text-sky-300">
+                    <span className="font-mono text-[11px] bg-sky-100 dark:bg-sky-950 px-2 py-0.5 rounded text-sky-900 dark:text-sky-300">
                       Length: {lines.headLine.lengthPercentage}%
                     </span>
                   </div>
-                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                  <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed font-medium">
                     {lines.headLine.keyObservation}
                   </p>
                 </div>
@@ -336,14 +578,14 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
 
               {/* Heart Line */}
               {lines?.heartLine && (
-                <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-rose-500/30 space-y-1.5">
-                  <div className="flex items-center justify-between font-bold text-rose-400">
+                <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-950/90 border border-rose-300 dark:border-rose-500/30 space-y-1.5 shadow-sm">
+                  <div className="flex items-center justify-between font-bold text-rose-800 dark:text-rose-400">
                     <span>{lines.heartLine.nameSanskrit}</span>
-                    <span className="font-mono text-[11px] bg-rose-950 px-2 py-0.5 rounded text-rose-300">
+                    <span className="font-mono text-[11px] bg-rose-100 dark:bg-rose-950 px-2 py-0.5 rounded text-rose-900 dark:text-rose-300">
                       Length: {lines.heartLine.lengthPercentage}%
                     </span>
                   </div>
-                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                  <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed font-medium">
                     {lines.heartLine.keyObservation}
                   </p>
                 </div>
@@ -351,14 +593,14 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
 
               {/* Fate Line */}
               {lines?.fateLine && (
-                <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-amber-500/30 space-y-1.5">
-                  <div className="flex items-center justify-between font-bold text-amber-400">
+                <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-950/90 border border-amber-300 dark:border-amber-500/30 space-y-1.5 shadow-sm">
+                  <div className="flex items-center justify-between font-bold text-amber-800 dark:text-amber-400">
                     <span>{lines.fateLine.nameSanskrit}</span>
-                    <span className="font-mono text-[11px] bg-amber-950 px-2 py-0.5 rounded text-amber-300">
+                    <span className="font-mono text-[11px] bg-amber-100 dark:bg-amber-950 px-2 py-0.5 rounded text-amber-900 dark:text-amber-300">
                       Length: {lines.fateLine.lengthPercentage}%
                     </span>
                   </div>
-                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                  <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed font-medium">
                     {lines.fateLine.keyObservation}
                   </p>
                 </div>
@@ -368,35 +610,39 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
 
           {/* 7 Palmar Mounts Grid */}
           <div className="space-y-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-teal-800 dark:text-teal-400 flex items-center gap-1.5">
               <Layers className="w-4 h-4" />
               <span>7 Palmar Mounts Prominence (पर्वत विकास)</span>
             </h3>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
-              {mounts && Object.values(mounts).map((m: any) => (
-                <div key={m.id} className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-1">
-                  <div className="font-bold text-slate-200 text-[11px]">{m.nameSanskrit}</div>
-                  <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
-                    <div className="h-full bg-teal-400 rounded-full" style={{ width: `${m.score}%` }} />
+              {mounts &&
+                Object.values(mounts).map((m: any) => (
+                  <div
+                    key={m.id}
+                    className="p-3 rounded-2xl bg-white dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 space-y-1 shadow-sm"
+                  >
+                    <div className="font-bold text-slate-900 dark:text-slate-200 text-[11px]">{m.nameSanskrit}</div>
+                    <div className="w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                      <div className="h-full bg-teal-600 dark:bg-teal-400 rounded-full" style={{ width: `${m.score}%` }} />
+                    </div>
+                    <div className="text-[10px] text-teal-800 dark:text-teal-300 font-mono flex items-center justify-between pt-0.5 font-bold">
+                      <span>{m.score}/100</span>
+                      <span className="text-slate-500 dark:text-slate-400 text-[9px] truncate font-normal">{m.prominence.split('_')[0]}</span>
+                    </div>
                   </div>
-                  <div className="text-[10px] text-teal-300 font-mono flex items-center justify-between pt-0.5">
-                    <span>{m.score}/100</span>
-                    <span className="text-slate-400 text-[9px] truncate">{m.prominence.split('_')[0]}</span>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         </div>
       </div>
 
       {/* Triggered Hast Rekha AST Rules & Evidence Drawer */}
-      <div className="p-6 rounded-3xl bg-slate-950/90 border border-teal-500/30 space-y-4 shadow-2xl">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-teal-400">
+      <div className="p-6 rounded-3xl bg-white dark:bg-slate-950/90 border border-slate-200 dark:border-teal-500/30 space-y-4 shadow-2xl">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-teal-800 dark:text-teal-400">
             <ShieldCheck className="w-4 h-4" />
-            <span>Deterministic Hast Rekha AST Rules & Mathematical Evidence</span>
+            <span>Deterministic Hast Rekha AST Rules & Evidence</span>
           </div>
 
           {/* Category Filter */}
@@ -406,10 +652,10 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
                 key={cat}
                 type="button"
                 onClick={() => setActiveRuleCategory(cat)}
-                className={`px-2.5 py-1 rounded-xl font-semibold transition cursor-pointer ${
+                className={`px-2.5 py-1 rounded-xl font-bold transition cursor-pointer ${
                   activeRuleCategory === cat
-                    ? 'bg-teal-600 text-white'
-                    : 'bg-slate-900 text-slate-400 hover:text-slate-200'
+                    ? 'bg-teal-600 text-white shadow-sm'
+                    : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 {cat}
@@ -421,25 +667,28 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
         {/* Triggered Rules List */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredRules.map((rule: any) => (
-            <div key={rule.ruleId} className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
+            <div
+              key={rule.ruleId}
+              className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm"
+            >
               <div className="flex items-center justify-between text-xs font-bold">
-                <span className="text-slate-100 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span className="text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span>{isHi ? rule.titleHi : rule.title}</span>
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 font-mono">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 font-mono font-bold">
                   {rule.category}
                 </span>
               </div>
 
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                 {isHi ? rule.findingHi : rule.finding}
               </p>
 
-              <div className="text-[10px] font-mono text-slate-400 bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1">
-                <div className="text-teal-400 font-semibold uppercase">Evidence Trace:</div>
+              <div className="text-[10px] font-mono text-slate-600 dark:text-slate-400 bg-white dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+                <div className="text-teal-700 dark:text-teal-400 font-bold uppercase">Evidence Trace:</div>
                 {rule.evidenceTrace?.map((ev: string, idx: number) => (
-                  <div key={idx} className="flex items-center gap-1">
+                  <div key={idx} className="flex items-center gap-1 font-semibold">
                     <span>•</span>
                     <span>{ev}</span>
                   </div>

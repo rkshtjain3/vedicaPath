@@ -285,6 +285,25 @@ html.light [class*="bg-cyan-950"] {
   border-color: #a5f3fc !important;
 }
 
+html.light .text-teal-100,
+html.light .text-teal-200,
+html.light .text-teal-300,
+html.light .text-teal-400,
+html.light .text-teal-500,
+html.light .text-teal-600 {
+  color: #0f766e !important;
+}
+
+html.light .bg-teal-950,
+html.light [class*="bg-teal-950"],
+html.light [class*="bg-teal-900"],
+html.light [class*="bg-teal-500/10"],
+html.light [class*="bg-teal-500/20"] {
+  background-color: #f0fdfa !important;
+  color: #0f766e !important;
+  border-color: #99f6e4 !important;
+}
+
 /* Borders in Light Mode */
 html.light .border-slate-800,
 html.light .border-slate-700,
