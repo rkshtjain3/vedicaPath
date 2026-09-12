@@ -11,3 +11,4 @@ export * from './domain-context/domain-transit-adapters.js';
 export * from './evidence/transit-evidence-builder.js';
 export * from './convergence/natal-dasha-transit-convergence.js';
 export * from './reproducibility/transit-hash.js';
+export * from './double-transit-lock.js';

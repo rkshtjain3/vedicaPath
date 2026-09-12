@@ -11,6 +11,7 @@ export * from './retrieval/evidence-retriever.js';
 export * from './synthesis/answer-builder.js';
 export * from './explainability/why-chain-builder.js';
 export * from './reproducibility/query-fingerprint.js';
+export * from './prashna-evaluator.js';
 export function executeQueryEngine(calculationData, question, options = {}) {
     const profile = options.profile || PERSONAL_QUERY_V1;
     // 1. Question Normalization & Intent Parsing

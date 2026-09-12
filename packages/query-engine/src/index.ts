@@ -13,6 +13,7 @@ export * from './retrieval/evidence-retriever.js';
 export * from './synthesis/answer-builder.js';
 export * from './explainability/why-chain-builder.js';
 export * from './reproducibility/query-fingerprint.js';
+export * from './prashna-evaluator.js';
 
 export interface QueryEngineOptions {
   transitDate?: string;

@@ -8,3 +8,5 @@ export * from './windows/transit-timeline.js';
 export * from './windows/combined-timeline.js';
 export * from './windows/milestone-engine.js';
 export * from './ashtakavarga/index.js';
+export * from './event-muhurtha-finder.js';
+

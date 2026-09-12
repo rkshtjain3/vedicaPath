@@ -6,5 +6,6 @@ export * from './nakshatra/nakshatra-panchanga.js';
 export * from './yoga/yoga-calculator.js';
 export * from './karana/karana-calculator.js';
 export * from './muhurtha/muhurtha-calculator.js';
+export * from './muhurtha/choghadiya-hora.js';
 export * from './upagraha/upagraha-calculator.js';
 export * from './panchanga-calculator.js';

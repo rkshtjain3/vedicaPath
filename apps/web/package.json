@@ -18,6 +18,7 @@
     "@vedica/astrology-core": "workspace:*",
     "@vedica/benchmark-store": "workspace:*",
     "@vedica/chart-renderer": "workspace:*",
+    "@vedica/compatibility-engine": "workspace:*",
     "@vedica/dasha-engine": "workspace:*",
     "@vedica/divisional-chart-engine": "workspace:*",
     "@vedica/interpretation-engine": "workspace:*",

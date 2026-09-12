@@ -5,4 +5,6 @@ export * from './aspects/aspect-calculator.js';
 export * from './north-indian/NorthIndianChart.js';
 export * from './south-indian/SouthIndianChart.js';
 export * from './accessibility/AccessibilityTable.js';
+export * from './synastry/DualChartRenderer.js';
+
 

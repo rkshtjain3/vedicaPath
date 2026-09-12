@@ -6,3 +6,6 @@ export * from './yogini/canonical-yogini.js';
 export * from './yogini/yogini-types.js';
 export * from './yogini/yogini-calculator.js';
 
+export * from './jaimini/chara-dasha.js';
+
+
