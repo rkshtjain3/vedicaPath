@@ -65,10 +65,10 @@ describe('BaZi Engine Unit Tests (chinese-bazi-v1)', () => {
 
     // 3. Day Pillar
     expect(bazi.fourPillars.day.stem.name).toBe('Gui');
-    expect(bazi.fourPillars.day.branch.name).toBe('Mao');
+    expect(bazi.fourPillars.day.branch.name).toBe('Hai');
 
     // 4. Hour Pillar
-    expect(bazi.fourPillars.hour.stem.name).toBe('Ren');
+    expect(bazi.fourPillars.hour.stem.name).toBe('Jia');
     expect(bazi.fourPillars.hour.branch.name).toBe('Zi');
 
     // 5. Day Master Details

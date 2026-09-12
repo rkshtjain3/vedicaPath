@@ -108,8 +108,9 @@ export function calculateFourPillars(chart, options = {}) {
     const jdn = calculateJulianDayNumber(utcIso);
     const localDate = new Date(utcDate.getTime() + 5.5 * 60 * 60 * 1000); // Local time
     let dayGanzhiIndex = calculateDayGanzhiIndex(jdn);
+    const localHour = localDate.getUTCHours();
     // Handle Late Zi hour (23:00 to 00:00)
-    if (localDate.getHours() >= 23 && lateZiConvention === 'LATE_ZI_NEXT_DAY') {
+    if (localHour >= 23 && lateZiConvention === 'LATE_ZI_NEXT_DAY') {
         dayGanzhiIndex = (dayGanzhiIndex + 1) % 60;
     }
     const dayStemName = STEM_ORDER[dayGanzhiIndex % 10];
@@ -132,11 +133,17 @@ export function calculateFourPillars(chart, options = {}) {
         evidence: dayEvidence,
     };
     // 4. Hour Pillar Calculation (12 Double-Hours Shi Chen & Five Rat Seek)
-    const localHour = localDate.getHours();
     const shiChenIdx = Math.floor(((localHour + 1) % 24) / 2); // 0 to 11
     const hourBranchName = BRANCH_ORDER[shiChenIdx];
     const hourBranch = EARTHLY_BRANCHES[hourBranchName];
-    const ratStartStem = FIVE_RAT_SEEK_START[dayStemName];
+    // Handle Late Zi (23:00-00:00) Five Rat Seek stem selection:
+    // Under Late Zi Same Day convention, Day Pillar is current day, but Hour Stem uses next day's Five Rat Seek start.
+    let effectiveRatDayStemName = dayStemName;
+    if (localHour >= 23 && lateZiConvention === 'LATE_ZI_SAME_DAY') {
+        const nextDayStemIdx = (STEM_ORDER.indexOf(dayStemName) + 1) % 10;
+        effectiveRatDayStemName = STEM_ORDER[nextDayStemIdx];
+    }
+    const ratStartStem = FIVE_RAT_SEEK_START[effectiveRatDayStemName];
     const ratStartIdx = STEM_ORDER.indexOf(ratStartStem);
     const hourStemName = STEM_ORDER[(ratStartIdx + shiChenIdx) % 10];
     const hourStem = HEAVENLY_STEMS[hourStemName];

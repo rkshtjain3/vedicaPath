@@ -27,7 +27,7 @@
         "notes": "Test note for store abstraction"
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-12T09:20:22.886Z",
+      "updatedAt": "2026-09-12T09:22:17.761Z",
       "inputSnapshot": {
         "birthDate": "1985-06-15",
         "birthTime": "08:30:00",
@@ -50,7 +50,7 @@
       "metadata": {
         "checklistConfirmed": true,
         "investigationCause": "FORMULA_VARIANT",
-        "investigationNotes": "Test note for store abstraction"
+        "investigationNotes": "Test note"
       }
     },
     {
@@ -70,7 +70,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-12T09:20:12.855Z",
+      "updatedAt": "2026-09-12T09:22:17.765Z",
       "inputSnapshot": {
         "birthDate": "1990-12-31",
         "birthTime": "23:59:30",
@@ -107,7 +107,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-12T09:20:12.857Z",
+      "updatedAt": "2026-09-12T09:22:17.775Z",
       "inputSnapshot": {
         "birthDate": "1995-04-24",
         "birthTime": "06:00:00",
@@ -144,7 +144,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-12T09:20:12.859Z",
+      "updatedAt": "2026-09-12T09:22:17.777Z",
       "inputSnapshot": {
         "birthDate": "1988-03-31",
         "birthTime": "18:15:00",
@@ -181,7 +181,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-12T09:20:12.861Z",
+      "updatedAt": "2026-09-12T09:22:17.781Z",
       "inputSnapshot": {
         "birthDate": "2000-01-01",
         "birthTime": "12:00:00",
@@ -218,7 +218,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-12T09:20:12.863Z",
+      "updatedAt": "2026-09-12T09:22:17.782Z",
       "inputSnapshot": {
         "birthDate": "1992-08-10",
         "birthTime": "05:30:00",
@@ -255,7 +255,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-12T09:20:12.865Z",
+      "updatedAt": "2026-09-12T09:22:17.786Z",
       "inputSnapshot": {
         "birthDate": "1997-11-05",
         "birthTime": "14:20:00",
@@ -292,7 +292,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-12T09:20:12.867Z",
+      "updatedAt": "2026-09-12T09:22:17.787Z",
       "inputSnapshot": {
         "birthDate": "1982-02-18",
         "birthTime": "21:45:00",
@@ -329,7 +329,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-12T09:20:12.868Z",
+      "updatedAt": "2026-09-12T09:22:17.792Z",
       "inputSnapshot": {
         "birthDate": "1994-07-20",
         "birthTime": "10:15:00",
@@ -366,7 +366,7 @@
         }
       },
       "createdAt": "2026-08-29T12:00:00.000Z",
-      "updatedAt": "2026-09-12T09:20:12.871Z",
+      "updatedAt": "2026-09-12T09:22:17.794Z",
       "inputSnapshot": {
         "birthDate": "1987-06-01",
         "birthTime": "15:30:00",
