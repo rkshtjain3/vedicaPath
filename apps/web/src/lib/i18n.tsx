@@ -147,6 +147,7 @@ const translations: Record<Language, Record<string, string>> = {
     'form.use_manual_coords': 'Use Manual Coordinates',
     'form.calculate': '[ CALCULATE BIRTH CHART ]',
     'form.calculating': 'Calculating Chart...',
+    'form.edit_profile': 'Edit Birth Details',
 
     // Sample Archetypes
     'sample.title': '1-Click Archetype Profiles:',
@@ -331,6 +332,7 @@ const translations: Record<Language, Record<string, string>> = {
     'form.use_manual_coords': 'मैन्युअल निर्देशांक का प्रयोग करें',
     'form.calculate': '[ जन्म कुण्डली की गणना करें ]',
     'form.calculating': 'कुण्डली की गणना हो रही है...',
+    'form.edit_profile': 'जन्म विवरण बदलें (Edit Profile)',
 
     // Sample Archetypes
     'sample.title': 'एक क्लिक में नमूना कुण्डली देखें:',
