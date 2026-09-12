@@ -16,6 +16,7 @@
     "@vedica/analysis-engine": "workspace:*",
     "@vedica/ashtakavarga-engine": "workspace:*",
     "@vedica/astrology-core": "workspace:*",
+    "@vedica/bazi-engine": "workspace:*",
     "@vedica/benchmark-store": "workspace:*",
     "@vedica/chart-renderer": "workspace:*",
     "@vedica/compatibility-engine": "workspace:*",

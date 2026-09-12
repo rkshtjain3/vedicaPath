@@ -61,6 +61,7 @@ import {
   calculateCareerCrossChartFacts,
 } from '@vedica/divisional-chart-engine';
 import { evaluateJaimini } from '@vedica/jaimini-engine';
+import { evaluateBaZi } from '@vedica/bazi-engine';
 import {
   calculateAshtakavarga,
   PERSONAL_ASHTAKAVARGA_V1,
@@ -135,6 +136,9 @@ export async function POST(req: Request) {
 
     // Jaimini Astrology Engine (Chara Karakas, Arudha Padas, Rashi Drishti, Karakamsha)
     const jaimini = evaluateJaimini(chart, '7_KARAKA');
+
+    // BaZi / Four Pillars of Destiny Engine (chinese-bazi-v1)
+    const bazi = evaluateBaZi(chart, { gender: body.gender === 'FEMALE' ? 'FEMALE' : 'MALE' });
 
     // Classical Yoga Engine (Phase 16)
     const yogaAnalysis = evaluateYogaEngine(chart, analysis, PERSONAL_YOGA_V1);
@@ -513,6 +517,7 @@ export async function POST(req: Request) {
         shodashavarga: allDivisionalCharts,
         vimsopakaBala,
         jaimini,
+        bazi,
         divisionalCharts: {
           d9: d9Chart,
           d9Analysis,
