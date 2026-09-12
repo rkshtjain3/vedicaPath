@@ -1,0 +1,20 @@
+{
+  "name": "@vedica/palmistry-engine",
+  "version": "0.1.0",
+  "description": "Deterministic Palmistry (Hast Rekha / हस्तरेखा) engine for Vedica (vedica-palmistry-v1)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vedica/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

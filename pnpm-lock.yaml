@@ -77,6 +77,9 @@ importers:
       '@vedica/numerology-engine':
         specifier: workspace:*
         version: link:../../packages/numerology-engine
+      '@vedica/palmistry-engine':
+        specifier: workspace:*
+        version: link:../../packages/palmistry-engine
       '@vedica/panchanga-engine':
         specifier: workspace:*
         version: link:../../packages/panchanga-engine
@@ -453,6 +456,22 @@ importers:
       vitest:
         specifier: ^3.0.5
         version: 3.2.7(@types/node@22.20.1)(jiti@1.21.7)
+
+  packages/palmistry-engine:
+    dependencies:
+      '@vedica/shared':
+        specifier: workspace:*
+        version: link:../shared
+    devDependencies:
+      '@types/node':
+        specifier: ^22.13.4
+        version: 22.20.1
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@22.20.1)
 
   packages/panchanga-engine:
     dependencies:

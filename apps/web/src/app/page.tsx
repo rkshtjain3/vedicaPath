@@ -29,6 +29,7 @@ import {
   HelpCircle,
   Bot,
   Crown,
+  Hand,
 } from 'lucide-react';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
@@ -43,6 +44,7 @@ import { GocharTab } from '@/components/transit/GocharTab';
 import { AskVedicaTab } from '@/components/query/AskVedicaTab';
 import { JargonBusterTab } from '@/components/glossary/JargonBusterTab';
 import { ZiWeiTab } from '@/components/chart/ZiWeiTab';
+import { PalmistryTab } from '@/components/palmistry/PalmistryTab';
 import { AstrologyWithoutSuperstitionModal } from '@/components/glossary/AstrologyWithoutSuperstitionModal';
 import { PanchangaCard } from '@/components/panchanga/PanchangaCard';
 import { DivisionalChartsTab } from '@/components/divisional/DivisionalChartsTab';
@@ -273,7 +275,7 @@ export default function HomePage() {
   };
 
   const [activeTab, setActiveTab] = useState<
-    'storybook' | 'birthChart' | 'lifeAnalysis' | 'timeline' | 'transits' | 'astrology' | 'analysis' | 'divisional' | 'strength' | 'ashtakavarga' | 'rules' | 'timing' | 'interpretation' | 'dasha' | 'numerology' | 'yogas' | 'ziwei' | 'report' | 'query' | 'codex'
+    'storybook' | 'birthChart' | 'lifeAnalysis' | 'timeline' | 'transits' | 'astrology' | 'analysis' | 'divisional' | 'strength' | 'ashtakavarga' | 'rules' | 'timing' | 'interpretation' | 'dasha' | 'numerology' | 'yogas' | 'ziwei' | 'palmistry' | 'report' | 'query' | 'codex'
   >('storybook');
   const [showSuperstitionModal, setShowSuperstitionModal] = useState(false);
   const [selectedCodexTerm, setSelectedCodexTerm] = useState<string | null>(null);
@@ -1240,6 +1242,17 @@ export default function HomePage() {
                 >
                   <Crown className="w-3.5 h-3.5" /> Zi Wei Dou Shu (紫微斗數)
                 </button>
+                <button
+                  id="tab-palmistry"
+                  onClick={() => setActiveTab('palmistry')}
+                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg shrink-0 transition-colors flex items-center gap-1.5 ${
+                    activeTab === 'palmistry'
+                      ? 'bg-teal-600 text-white font-bold'
+                      : 'text-teal-400 hover:text-teal-200 hover:bg-slate-900'
+                  }`}
+                >
+                  <Hand className="w-3.5 h-3.5" /> Hast Rekha (हस्तरेखा)
+                </button>
               </div>
             </div>
 
@@ -1425,6 +1438,10 @@ export default function HomePage() {
 
             {activeTab === 'ziwei' && (
               <ZiWeiTab calculationData={{ ziWei: ziWeiData }} />
+            )}
+
+            {activeTab === 'palmistry' && (
+              <PalmistryTab />
             )}
 
             {activeTab === 'report' && (astroData || reportData) && (
