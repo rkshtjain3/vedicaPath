@@ -316,6 +316,94 @@ export const CODEX_ENTRIES: CodexEntry[] = [
     },
     empowermentAction: 'Adopt the 4 Authentic Sattvic Daily Pillars: Early sun exposure, 10 min pranayama, voluntary weekly Seva, and truthful speech.',
     relatedTerms: ['Karma vs Free Will', 'Purushartha']
+  },
+  {
+    id: 'atmakaraka',
+    term: 'Atmakaraka (AK)',
+    sanskrit: 'आत्मकारक',
+    category: 'PHILOSOPHY',
+    plainEnglish: 'The Soul Planet & Core Life Purpose',
+    summary: 'In Jaimini Jyotish, the planet at the highest degree in your chart. Represents your soul’s deepest lesson, core drive, and primary evolution in this lifetime.',
+    practicalMeaning: 'While Lagna shows your physical operating system, Atmakaraka shows your soul’s internal compass. Understanding your AK helps you stop fighting your true calling and make high-fulfillment career & personal choices.',
+    empowermentAction: 'Embrace the specific lessons of your AK planet to unlock natural inner peace and vocational alignment.',
+    relatedTerms: ['Jaimini Jyotish', 'Navamsha (D9)']
+  },
+  {
+    id: '2d4d-ratio',
+    term: '2D:4D Finger Ratio',
+    sanskrit: 'अंगुलि अनुपात (2D:4D)',
+    category: 'STRENGTH_BALA',
+    plainEnglish: 'Index to Ring Finger Length Balance',
+    summary: 'The physical digital ratio comparing 2nd digit (index finger) to 4th digit (ring finger) length, reflecting prenatal hormone balance and natural temperament.',
+    practicalMeaning: 'A 2D:4D ratio < 1.0 (longer ring finger) indicates high spatial focus, assertiveness, and competitive drive. A ratio >= 1.0 (longer index finger) indicates high empathy, verbal fluency, and social intelligence.',
+    empowermentAction: 'Align your work style with your natural temperament balance.',
+    relatedTerms: ['Hast Rekha', 'Shukra Mount']
+  },
+  {
+    id: 'hast-rekha',
+    term: 'Hast Rekha (हस्तरेखा)',
+    sanskrit: 'हस्तरेखा शास्त्र',
+    category: 'PHILOSOPHY',
+    plainEnglish: 'Palmar Vector Science & Neural Mapping',
+    summary: 'The classical Indian science of palmar line vectors, mount prominence, and hand geometry as a reflection of neural pathways and subconscious vitality.',
+    practicalMeaning: 'Your hands are connected to millions of nerve endings from the cerebral cortex. Hast Rekha measures physical stamina (Life Line), cognitive depth (Head Line), emotional dignity (Heart Line), and fate resilience.',
+    empowermentAction: 'Observe palmar line variations over months as a reflection of physical lifestyle and mental focus changes.',
+    relatedTerms: ['2D:4D Finger Ratio', 'Guru Mount']
+  },
+  {
+    id: 'guru-mount',
+    term: 'Guru Mount (Jupiter Mount)',
+    sanskrit: 'गुरु पर्वत',
+    category: 'STRENGTH_BALA',
+    plainEnglish: 'Mount of Ambition, Wisdom & Leadership',
+    summary: 'The palmar region directly beneath the index finger, representing leadership capacity, self-esteem, ethical wisdom, and executive vision.',
+    practicalMeaning: 'A well-developed Guru Mount (Score > 75/100) indicates high self-respect, natural managerial authority, and a desire to guide and uplift others ethically.',
+    empowermentAction: 'Develop your mentoring and strategic planning skills to fully express Guru Mount potential.',
+    relatedTerms: ['Shani Mount', 'Shukra Mount']
+  },
+  {
+    id: 'shukra-mount',
+    term: 'Shukra Mount (Venus Mount)',
+    sanskrit: 'शुक्र पर्वत',
+    category: 'STRENGTH_BALA',
+    plainEnglish: 'Mount of Vitality, Warmth & Charm',
+    summary: 'The palmar region at the base of the thumb surrounded by the Life Line, representing physical vitality, aesthetic appreciation, and relationship warmth.',
+    practicalMeaning: 'A prominent Shukra Mount indicates strong cellular stamina, high enthusiasm for life, creative appreciation, and emotional generosity.',
+    empowermentAction: 'Channel Shukra energy into creative arts, healthy relationships, and positive environmental aesthetics.',
+    relatedTerms: ['Guru Mount', 'Life Line']
+  },
+  {
+    id: 'shani-mount',
+    term: 'Shani Mount (Saturn Mount)',
+    sanskrit: 'शनि पर्वत',
+    category: 'STRENGTH_BALA',
+    plainEnglish: 'Mount of Discipline, Focus & Fate',
+    summary: 'The palmar region beneath the middle finger, representing work ethic, practical realism, perseverance, and long-term destiny.',
+    practicalMeaning: 'A balanced Shani Mount indicates strong discipline, patience under pressure, and the ability to build enduring wealth and legacy through steady effort.',
+    empowermentAction: 'Maintain steady daily routines and long-term focus to maximize Shani Mount strength.',
+    relatedTerms: ['Fate Line', 'Guru Mount']
+  },
+  {
+    id: 'bazi-pillars',
+    term: 'BaZi Four Pillars (八字)',
+    sanskrit: 'चतुस्तम्भ विद्या (BaZi)',
+    category: 'PHILOSOPHY',
+    plainEnglish: 'Four Pillars of Destiny & 5 Elements',
+    summary: 'The classical Chinese metaphysical system calculating Year, Month, Day, and Hour pillars using Solar Terms, Heavenly Stems, and Earthly Branches.',
+    practicalMeaning: 'BaZi maps your cosmic element balance (Wood, Fire, Earth, Metal, Water) to reveal your core character, energy flow, and optimal life career environments.',
+    empowermentAction: 'Surround yourself with environments and activities that balance your chart’s favorable elements.',
+    relatedTerms: ['Zi Wei Dou Shu', 'Vedic Astrology']
+  },
+  {
+    id: 'ziwei-palaces',
+    term: 'Zi Wei Dou Shu (紫微斗數)',
+    sanskrit: 'पर्पल स्टार ज्योतिष (Zi Wei)',
+    category: 'PHILOSOPHY',
+    plainEnglish: '12 Palaces of Cosmic Destiny',
+    summary: 'The Purple Star Chinese astrology system placing major and minor stars across 12 life palaces (Self, Career, Wealth, Spouse, Health, Travel, etc.).',
+    practicalMeaning: 'Zi Wei provides a detailed 12-domain map of life areas, showing where your luck, challenges, and high-impact opportunities reside.',
+    empowermentAction: 'Focus your key initiatives on palaces containing prominent auspicious stars like Zi Wei or Tian Fu.',
+    relatedTerms: ['BaZi Four Pillars', 'Navamsha (D9)']
   }
 ];
 

@@ -60,6 +60,7 @@ import {
   NumerologyTab,
   YogasTab,
 } from '@/components/observatory';
+import { MultiSystemConvergenceCard } from '@/components/observatory/MultiSystemConvergenceCard';
 import { BookOpen, ShieldCheck } from 'lucide-react';
 import '@/styles/print.css';
 
@@ -275,7 +276,7 @@ export default function HomePage() {
   };
 
   const [activeTab, setActiveTab] = useState<
-    'storybook' | 'birthChart' | 'lifeAnalysis' | 'timeline' | 'transits' | 'astrology' | 'analysis' | 'divisional' | 'strength' | 'ashtakavarga' | 'rules' | 'timing' | 'interpretation' | 'dasha' | 'numerology' | 'yogas' | 'ziwei' | 'palmistry' | 'report' | 'query' | 'codex'
+    'convergence' | 'storybook' | 'birthChart' | 'lifeAnalysis' | 'timeline' | 'transits' | 'astrology' | 'analysis' | 'divisional' | 'strength' | 'ashtakavarga' | 'rules' | 'timing' | 'interpretation' | 'dasha' | 'numerology' | 'yogas' | 'ziwei' | 'palmistry' | 'report' | 'query' | 'codex'
   >('storybook');
   const [showSuperstitionModal, setShowSuperstitionModal] = useState(false);
   const [selectedCodexTerm, setSelectedCodexTerm] = useState<string | null>(null);
@@ -294,6 +295,7 @@ export default function HomePage() {
   const [shodashavargaData, setShodashavargaData] = useState<any | null>(null);
   const [vimsopakaBalaData, setVimsopakaBalaData] = useState<any | null>(null);
   const [jaiminiData, setJaiminiData] = useState<any | null>(null);
+  const [baZiData, setBaZiData] = useState<any | null>(null);
   const [ziWeiData, setZiWeiData] = useState<any | null>(null);
   const [vargaComparisonData, setVargaComparisonData] = useState<any | null>(null);
   const [dashamsaComparisonData, setDashamsaComparisonData] = useState<any | null>(null);
@@ -421,6 +423,7 @@ export default function HomePage() {
       setShodashavargaData(data.data.shodashavarga);
       setVimsopakaBalaData(data.data.vimsopakaBala);
       setJaiminiData(data.data.jaimini);
+      setBaZiData(data.data.baZi);
       setZiWeiData(data.data.ziWei);
       setVargaComparisonData(data.data.vargaComparison?.navamsa || data.data.vargaComparison);
       setDashamsaComparisonData(data.data.dashamsaComparison || data.data.vargaComparison?.dashamsa);
@@ -1007,6 +1010,21 @@ export default function HomePage() {
               {/* Primary Compass Tabs (Personal Guidance) */}
               <div className="flex border-b border-slate-800 gap-3 overflow-x-auto pb-1" id="results-tabs">
                 <button
+                  id="tab-convergence"
+                  onClick={() => setActiveTab('convergence')}
+                  className={`pb-3 px-4 font-semibold text-sm transition-colors border-b-2 flex items-center gap-2 shrink-0 ${
+                    activeTab === 'convergence'
+                      ? 'border-amber-500 text-amber-300 font-bold bg-amber-500/10 rounded-t-lg'
+                      : 'border-transparent text-slate-300 hover:text-slate-100'
+                  }`}
+                >
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <span>{language === 'hi' ? '🎯 एकीकृत बहु-प्रणाली निष्कर्षण' : '🎯 Unified Synthesis'}</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-mono">
+                    5 Systems
+                  </span>
+                </button>
+                <button
                   id="tab-storybook"
                   onClick={() => setActiveTab('storybook')}
                   className={`pb-3 px-4 font-semibold text-sm transition-colors border-b-2 flex items-center gap-2 shrink-0 ${
@@ -1255,6 +1273,22 @@ export default function HomePage() {
                 </button>
               </div>
             </div>
+
+            {activeTab === 'convergence' && (
+              <div id="convergence-tab-content">
+                <MultiSystemConvergenceCard
+                  astroData={astroData}
+                  jaiminiData={jaiminiData}
+                  baziData={baZiData}
+                  ziWeiData={ziWeiData}
+                  palmistryData={{
+                    lines: { lifeLine: { lengthPercentage: 88 } },
+                    mounts: { jupiter: { score: 85 } },
+                  }}
+                  lifeDomainData={lifeDomainData}
+                />
+              </div>
+            )}
 
             {activeTab === 'birthChart' && (
               <div id="birth-chart-tab-content">

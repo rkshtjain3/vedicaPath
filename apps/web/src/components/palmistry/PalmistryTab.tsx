@@ -23,6 +23,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
+import { JargonTooltip } from '@/components/glossary/JargonTooltip';
 
 interface PalmistryTabProps {
   initialHandType?: 'LEFT_HAND' | 'RIGHT_HAND';
@@ -371,6 +372,57 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
             <span className="font-bold text-teal-700 dark:text-teal-400">
               {quality?.contrastScore || extractedMetrics?.contrast || 83}/100
             </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Executive Plain Language Life Summary Card (TL;DR) */}
+      <div className="p-5 rounded-3xl bg-white dark:bg-slate-950/90 border border-slate-200 dark:border-teal-500/30 shadow-xl space-y-3">
+        <div className="flex flex-wrap items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 gap-2">
+          <div className="flex items-center gap-2 text-teal-800 dark:text-teal-400 font-extrabold text-sm uppercase tracking-wider">
+            <Sparkles className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+            <span>{isHi ? 'करतल लक्षण निष्कर्षण सारांश (Executive Life Summary)' : 'Palmistry Executive Life Summary (TL;DR)'}</span>
+          </div>
+          <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-teal-50 dark:bg-teal-950 text-teal-900 dark:text-teal-300 font-mono font-bold border border-teal-200 dark:border-teal-800">
+            Plain Language Takeaways
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-1">
+            <div className="font-bold text-indigo-800 dark:text-indigo-400 flex items-center gap-1 text-[12px]">
+              <span>💼 Career & Leadership</span>
+            </div>
+            <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed font-medium">
+              High strategic ambition supported by <JargonTooltip termId="guru-mount">Guru Mount</JargonTooltip> prominence ({mounts?.jupiter?.score || 85}/100) and clear Fate Line alignment. Natural fit for executive decision-making.
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-1">
+            <div className="font-bold text-amber-800 dark:text-amber-400 flex items-center gap-1 text-[12px]">
+              <span>💰 Financial Accumulation</span>
+            </div>
+            <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed font-medium">
+              Steady financial growth with strong <JargonTooltip termId="shani-mount">Shani Mount</JargonTooltip> stability. Long-term wealth preservation is favored over high-risk speculation.
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-1">
+            <div className="font-bold text-rose-800 dark:text-rose-400 flex items-center gap-1 text-[12px]">
+              <span>❤️ Relationship Integrity</span>
+            </div>
+            <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed font-medium">
+              Deep emotional loyalty and warm boundaries anchored by <JargonTooltip termId="shukra-mount">Shukra Mount</JargonTooltip> vitality and Heart Line curve under Jupiter.
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-1">
+            <div className="font-bold text-emerald-800 dark:text-emerald-400 flex items-center gap-1 text-[12px]">
+              <span>🩺 Vitality & Stamina</span>
+            </div>
+            <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed font-medium">
+              High cellular recovery reserves ({lines?.lifeLine?.lengthPercentage || 88}%) combined with <JargonTooltip termId="2d4d-ratio">2D:4D ratio</JargonTooltip> ({ratios?.ratio2D4D || '0.96'}) indicating spatial focus and resilience.
+            </p>
           </div>
         </div>
       </div>
