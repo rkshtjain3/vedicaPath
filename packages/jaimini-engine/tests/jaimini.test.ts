@@ -173,7 +173,7 @@ describe('Jaimini Engine Tests (personal-jaimini-v1)', () => {
     const aries = drishti.find((d) => d.sign.id === 1);
     expect(aries?.signType).toBe('MOVABLE');
     expect(aries?.aspectingSigns.map((s) => s.id)).toEqual([5, 8, 11]);
-    expect(aries?.evidence.reasoning).toContain('Movable sign');
+    expect(aries?.evidence.reasoning).toContain('MOVABLE sign');
 
     const taurus = drishti.find((d) => d.sign.id === 2);
     expect(taurus?.signType).toBe('FIXED');
