@@ -98,13 +98,7 @@ const PADA_METADATA = [
     },
 ];
 /**
- * Calculates all 12 Arudha Padas (A1 to A12, including AL and UL) with classical exception rules.
- *
- * Exception Rules (Brihat Parasara Hora Shastra & Jaimini Sutras):
- * 1. If Arudha Pada falls in the house itself (1st from house, offset = 0/12):
- *    Jump 10 houses forward -> places Pada in 10th house from original house.
- * 2. If Arudha Pada falls in the 7th house from the original house (offset = 6):
- *    Jump 10 houses forward from 7th -> places Pada in 4th house from original house.
+ * Calculates all 12 Arudha Padas (A1 to A12, including AL and UL) with classical exception rules and evidence traces.
  */
 export function calculateArudhaPadas(birthChart) {
     const d1LagnaSignId = birthChart.lagna?.sign?.id ?? birthChart.ascendant?.rashi?.id ?? 1;
@@ -122,26 +116,51 @@ export function calculateArudhaPadas(birthChart) {
         const houseSign = RASHIS[houseSignId - 1];
         const houseLord = houseSign.ruler;
         const lordSignId = getPlanetSignId(houseLord);
+        const lordSign = RASHIS[lordSignId - 1];
         const lordDistance = ((lordSignId - houseSignId + 12) % 12) + 1; // 1 to 12 inclusive
         // Raw Pada sign: count lordDistance from lordSignId
         const rawSignId = ((lordSignId + lordDistance - 2) % 12) + 1;
+        const rawSign = RASHIS[rawSignId - 1];
         const rawHouseOffset = ((rawSignId - houseSignId + 12) % 12) + 1; // 1 to 12
         let finalSignId = rawSignId;
         let exceptionApplied = false;
         let exceptionNote;
+        let exceptionRule;
         // Classical Exception 1: Pada falls in the house itself (1st house from houseSign)
         if (rawHouseOffset === 1) {
             finalSignId = ((rawSignId + 10 - 2) % 12) + 1; // 10th from house
             exceptionApplied = true;
+            exceptionRule = '1ST_HOUSE_EXCEPTION_SHIFT_10';
             exceptionNote = '1st house exception applied: Pada shifted 10 houses forward to 10th from house.';
         }
         // Classical Exception 2: Pada falls in the 7th house from houseSign
         else if (rawHouseOffset === 7) {
             finalSignId = ((rawSignId + 10 - 2) % 12) + 1; // 10th from 7th = 4th from house
             exceptionApplied = true;
+            exceptionRule = '7TH_HOUSE_EXCEPTION_SHIFT_10';
             exceptionNote = '7th house exception applied: Pada shifted 10 houses forward from 7th to 4th from house.';
         }
         const finalSign = RASHIS[finalSignId - 1];
+        const reasoning = exceptionApplied
+            ? `House ${h} (${houseSign.name}) lord is ${houseLord} in ${lordSign.name} (distance ${lordDistance} signs). Raw calculation gave ${rawSign.name} (House offset ${rawHouseOffset}). Exception rule '${exceptionRule}' applied: final Pada is shifted to ${finalSign.name}.`
+            : `House ${h} (${houseSign.name}) lord is ${houseLord} in ${lordSign.name} (distance ${lordDistance} signs). Counting ${lordDistance} signs from ${lordSign.name} yields ${finalSign.name}. No exception required.`;
+        const reasoningHi = exceptionApplied
+            ? `भाव ${h} (${houseSign.name}) का स्वामी ${houseLord} (${lordSign.name}) ${lordDistance} भाव दूर स्थित है। प्रारंभिक गणना से ${rawSign.name} (अंतर ${rawHouseOffset}) प्राप्त हुआ। अपवाद नियम '${exceptionRule}' लागू करके अंतिम पद ${finalSign.name} निर्धारित हुआ।`
+            : `भाव ${h} (${houseSign.name}) का स्वामी ${houseLord} (${lordSign.name}) ${lordDistance} भाव दूर स्थित है। स्वामी से ${lordDistance} भाव गिनने पर ${finalSign.name} प्राप्त होता है। अपवाद लागू नहीं।`;
+        const evidence = {
+            houseNumber: h,
+            houseSign: houseSign.name,
+            houseLord,
+            lordSign: lordSign.name,
+            lordHouseDistance: lordDistance,
+            rawOffsetSign: rawSign.name,
+            rawHouseOffset,
+            exceptionApplied,
+            exceptionRule,
+            finalSign: finalSign.name,
+            reasoning,
+            reasoningHi,
+        };
         results.push({
             houseNumber: h,
             code: meta.code,
@@ -156,6 +175,7 @@ export function calculateArudhaPadas(birthChart) {
             exceptionNote,
             significance: meta.significance,
             significanceHi: meta.significanceHi,
+            evidence,
         });
     }
     return results;

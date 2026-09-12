@@ -21,6 +21,7 @@ function getRashiIndexFromLongitude(longitude) {
 export function calculateCharaDasha(chart, birthInstant) {
     const lagnaLongitude = chart.lagna?.longitude ?? 0;
     const lagnaSignIndex = getRashiIndexFromLongitude(lagnaLongitude);
+    const lagnaSignName = RASHIS[lagnaSignIndex - 1]?.name || 'Aries';
     const startDate = birthInstant ?? new Date(chart.utcInstant?.isoString || Date.now());
     // Determine 12-sign sequence starting from Lagna
     const isLagnaDirect = DIRECT_SIGNS.has(lagnaSignIndex);
@@ -44,41 +45,86 @@ export function calculateCharaDasha(chart, birthInstant) {
     let currentStartMs = startDate.getTime();
     for (const rashiIdx of sequence) {
         const isRashiDirect = DIRECT_SIGNS.has(rashiIdx);
+        const rashiName = RASHIS[rashiIdx - 1]?.name || `Rashi ${rashiIdx}`;
         const lordName = RASHI_LORDS[rashiIdx];
         const lordSignIdx = planetSigns[lordName] || rashiIdx;
+        const lordSignName = RASHIS[lordSignIdx - 1]?.name || `Rashi ${lordSignIdx}`;
+        let lordDistance = 0;
         let durationYears = 0;
         if (lordSignIdx === rashiIdx) {
             durationYears = 12;
+            lordDistance = 0;
         }
         else {
             if (isRashiDirect) {
-                const distance = ((lordSignIdx - rashiIdx + 12) % 12);
-                durationYears = distance === 0 ? 12 : distance - 1;
+                lordDistance = ((lordSignIdx - rashiIdx + 12) % 12);
+                durationYears = lordDistance === 0 ? 12 : lordDistance - 1;
             }
             else {
-                const distance = ((rashiIdx - lordSignIdx + 12) % 12);
-                durationYears = distance === 0 ? 12 : distance - 1;
+                lordDistance = ((rashiIdx - lordSignIdx + 12) % 12);
+                durationYears = lordDistance === 0 ? 12 : lordDistance - 1;
             }
             if (durationYears <= 0) {
                 durationYears = 12;
             }
         }
         const start = new Date(currentStartMs);
-        // Add duration in years (approx 365.2425 days per year)
         const endMs = currentStartMs + durationYears * 365.2425 * 24 * 60 * 60 * 1000;
         const end = new Date(endMs);
+        // Calculate Antardashas (sub-periods) for this Mahadasha
+        // Sub-period sequence starts from the Mahadasha sign itself, direct/reverse based on sign quality
+        const antardashas = [];
+        const subDurationMs = (endMs - currentStartMs) / 12;
+        const subDurationMonths = Number((durationYears).toFixed(2));
+        for (let s = 0; s < 12; s++) {
+            let subSignIdx = 1;
+            if (isRashiDirect) {
+                subSignIdx = ((rashiIdx - 1 + s) % 12) + 1;
+            }
+            else {
+                subSignIdx = ((rashiIdx - 1 - s + 120) % 12) + 1;
+            }
+            const subStartMs = currentStartMs + s * subDurationMs;
+            const subEndMs = currentStartMs + (s + 1) * subDurationMs;
+            antardashas.push({
+                rashiIndex: subSignIdx,
+                rashiName: RASHIS[subSignIdx - 1]?.name || `Rashi ${subSignIdx}`,
+                start: new Date(subStartMs),
+                end: new Date(subEndMs),
+                durationMonths: subDurationMonths,
+            });
+        }
         currentStartMs = endMs;
+        const reasoning = `${rashiName} is a ${isRashiDirect ? 'Direct (Pratyak)' : 'Reverse (Paravritta)'} sign. Its lord ${lordName} is in ${lordSignName} (distance ${lordDistance} signs). Calculated duration: ${durationYears} years.`;
+        const reasoningHi = `${rashiName} एक ${isRashiDirect ? 'प्रत्यक्ष' : 'अप्रत्यक्ष'} राशि है। इसका स्वामी ${lordName} ${lordSignName} में ${lordDistance} भाव दूर स्थित है। कुल अवधि: ${durationYears} वर्ष।`;
+        const evidence = {
+            rashiIndex: rashiIdx,
+            rashiName,
+            isDirect: isRashiDirect,
+            signLord: lordName,
+            lordSignIndex: lordSignIdx,
+            lordSignName,
+            lordDistance,
+            durationYears,
+            reasoning,
+            reasoningHi,
+        };
         periods.push({
             rashiIndex: rashiIdx,
-            rashiName: RASHIS[rashiIdx - 1]?.name || `Rashi ${rashiIdx}`,
+            rashiName,
             start,
             end,
             durationYears,
+            evidence,
+            antardashas,
         });
     }
     return {
         periods,
-        calculationMethod: 'Jaimini Sutra Canonical Chara Dasha System',
+        lagnaSign: lagnaSignName,
+        lagnaDirection: isLagnaDirect ? 'DIRECT' : 'REVERSE',
+        calculationMethod: 'K.N. Rao Jaimini Chara Dasha System with Sub-Periods',
+        profileVersion: 'personal-jaimini-v1',
     };
 }
 //# sourceMappingURL=chara-dasha.js.map

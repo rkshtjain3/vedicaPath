@@ -9,3 +9,5 @@ export * from './InsightsTab';
 export * from './DashaExplorerTab';
 export * from './NumerologyTab';
 export * from './YogasTab';
+export * from './JaiminiTab';
+

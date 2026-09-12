@@ -1,11 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { calculateCharaKarakas, analyzeKarakamsha } from '../src/karakas/chara-karaka-calculator.js';
 import { calculateArudhaPadas } from '../src/arudha/arudha-calculator.js';
-import { calculateRashiDrishti, JAIMINI_SIGN_ASPECTS } from '../src/drishti/rashi-drishti-calculator.js';
+import { calculateRashiDrishti } from '../src/drishti/rashi-drishti-calculator.js';
 import { evaluateJaimini } from '../src/jaimini-calculator.js';
-import { BirthChart, PlanetPosition } from '@vedica/astrology-core';
+import { SwissEphemerisEngine, PERSONAL_VEDIC_V1, BirthChart, PlanetPosition } from '@vedica/astrology-core';
+import { calculateCharaDasha } from '@vedica/dasha-engine';
 
-describe('Jaimini Engine Tests', () => {
+describe('Jaimini Engine Tests (personal-jaimini-v1)', () => {
   const samplePlanets: PlanetPosition[] = [
     {
       planet: 'Sun',
@@ -104,12 +105,14 @@ describe('Jaimini Engine Tests', () => {
     houses: [],
   };
 
-  it('calculates 7 Chara Karakas correctly by degree rank', () => {
+  it('calculates 7 Chara Karakas correctly by degree rank with evidence', () => {
     const karakas = calculateCharaKarakas(sampleBirthChart, '7_KARAKA');
     expect(karakas).toHaveLength(7);
 
     expect(karakas[0].role).toBe('AK');
     expect(karakas[0].planet).toBe('Sun');
+    expect(karakas[0].evidence?.assignedRole).toBe('AK');
+    expect(karakas[0].evidence?.rank).toBe(1);
 
     expect(karakas[1].role).toBe('AmK');
     expect(karakas[1].planet).toBe('Moon');
@@ -130,7 +133,16 @@ describe('Jaimini Engine Tests', () => {
     expect(karakas[6].planet).toBe('Saturn');
   });
 
-  it('calculates Karakamsha analysis correctly', () => {
+  it('calculates 8 Chara Karakas correctly including Rahu with 30°-deg treatment', () => {
+    const karakas = calculateCharaKarakas(sampleBirthChart, '8_KARAKA');
+    expect(karakas).toHaveLength(8);
+    // Rahu is at 15° Taurus -> 30 - 15 = 15° effective degree
+    const rahu = karakas.find((k) => k.planet === 'Rahu');
+    expect(rahu).toBeDefined();
+    expect(rahu?.evidence?.effectiveDegree).toBe(15);
+  });
+
+  it('calculates Karakamsha analysis with evidence', () => {
     const karakas = calculateCharaKarakas(sampleBirthChart, '7_KARAKA');
     const km = analyzeKarakamsha(sampleBirthChart, karakas);
 
@@ -138,50 +150,97 @@ describe('Jaimini Engine Tests', () => {
     expect(km.karakamshaSign).toBeDefined();
     expect(km.karakamshaHouseFromLagna).toBeGreaterThanOrEqual(1);
     expect(km.karakamshaHouseFromLagna).toBeLessThanOrEqual(12);
+    expect(km.evidence.reasoning).toContain('Atmakaraka is Sun');
   });
 
-  it('calculates 12 Arudha Padas with classical exception jump rules', () => {
+  it('calculates 12 Arudha Padas with classical exception jump rules and evidence', () => {
     const padas = calculateArudhaPadas(sampleBirthChart);
     expect(padas).toHaveLength(12);
 
     const al = padas.find((p) => p.code === 'AL');
     expect(al).toBeDefined();
-    expect(al?.sign).toBeDefined();
+    expect(al?.evidence.houseNumber).toBe(1);
 
     const ul = padas.find((p) => p.code === 'UL');
     expect(ul).toBeDefined();
-    expect(ul?.sign).toBeDefined();
-
-    // Verify exception rules flag
-    for (const p of padas) {
-      expect(p.signId).toBeGreaterThanOrEqual(1);
-      expect(p.signId).toBeLessThanOrEqual(12);
-    }
+    expect(ul?.evidence.houseNumber).toBe(12);
   });
 
-  it('calculates Jaimini Rashi Drishti sign aspects correctly', () => {
+  it('calculates Jaimini Rashi Drishti sign aspects with evidence', () => {
     const drishti = calculateRashiDrishti(sampleBirthChart);
     expect(drishti).toHaveLength(12);
 
-    // Aries (1, Movable) must aspect Leo (5), Scorpio (8), Aquarius (11)
     const aries = drishti.find((d) => d.sign.id === 1);
+    expect(aries?.signType).toBe('MOVABLE');
     expect(aries?.aspectingSigns.map((s) => s.id)).toEqual([5, 8, 11]);
+    expect(aries?.evidence.reasoning).toContain('Movable sign');
 
-    // Taurus (2, Fixed) must aspect Cancer (4), Libra (7), Capricorn (10)
     const taurus = drishti.find((d) => d.sign.id === 2);
+    expect(taurus?.signType).toBe('FIXED');
     expect(taurus?.aspectingSigns.map((s) => s.id)).toEqual([4, 7, 10]);
 
-    // Gemini (3, Dual) must aspect Virgo (6), Sagittarius (9), Pisces (12)
     const gemini = drishti.find((d) => d.sign.id === 3);
+    expect(gemini?.signType).toBe('DUAL');
     expect(gemini?.aspectingSigns.map((s) => s.id)).toEqual([6, 9, 12]);
   });
 
-  it('evaluates complete Jaimini report in single coordinator pass', () => {
+  it('evaluates complete Jaimini report in personal-jaimini-v1 format', () => {
     const report = evaluateJaimini(sampleBirthChart);
+    expect(report.profileVersion).toBe('personal-jaimini-v1');
     expect(report.scheme).toBe('7_KARAKA');
     expect(report.charaKarakas).toHaveLength(7);
     expect(report.karakamsha).toBeDefined();
     expect(report.arudhaPadas).toHaveLength(12);
     expect(report.rashiDrishti).toHaveLength(12);
+    expect(report.yogas).toBeDefined();
+  });
+
+  it('verifies cross-engine isolation: Jaimini does not mutate original BirthChart', () => {
+    const originalChartJson = JSON.stringify(sampleBirthChart);
+    evaluateJaimini(sampleBirthChart);
+    expect(JSON.stringify(sampleBirthChart)).toBe(originalChartJson);
+  });
+
+  it('golden regression test for Rakshit Jain birth chart (1996-09-23 23:00 IST, Panipat)', async () => {
+    const engine = new SwissEphemerisEngine();
+    const chart = await engine.calculateBirthChart(
+      {
+        birthTime: { dateOfBirth: '1996-09-23', timeOfBirth: '23:00:00', timezone: 'Asia/Kolkata' },
+        location: { latitude: 29.38747, longitude: 76.96825, name: 'Panipat', timezone: 'Asia/Kolkata' },
+      },
+      PERSONAL_VEDIC_V1
+    );
+
+    const jaimini = evaluateJaimini(chart, '7_KARAKA');
+    expect(jaimini.profileVersion).toBe('personal-jaimini-v1');
+
+    // 1. Chara Karakas
+    const ak = jaimini.charaKarakas.find((k) => k.role === 'AK');
+    expect(ak?.planet).toBe('Mercury');
+    expect(ak?.sign.name).toBe('Leo');
+
+    const amk = jaimini.charaKarakas.find((k) => k.role === 'AmK');
+    expect(amk?.planet).toBe('Venus');
+
+    const bk = jaimini.charaKarakas.find((k) => k.role === 'BK');
+    expect(bk?.planet).toBe('Moon');
+
+    // 2. Karakamsha
+    expect(jaimini.karakamsha.atmakarakaPlanet).toBe('Mercury');
+    expect(jaimini.karakamsha.karakamshaSign.name).toBe('Scorpio');
+
+    // 3. Arudha Lagna (AL) & Upapada (UL)
+    const al = jaimini.arudhaPadas.find((a) => a.code === 'AL');
+    expect(al?.sign.name).toBe('Libra');
+
+    const ul = jaimini.arudhaPadas.find((a) => a.code === 'UL');
+    expect(ul?.sign.name).toBe('Virgo');
+
+    // 4. Chara Dasha
+    const charaDasha = calculateCharaDasha(chart, new Date('1996-09-23T23:00:00+05:30'));
+    expect(charaDasha.profileVersion).toBe('personal-jaimini-v1');
+    expect(charaDasha.periods).toHaveLength(12);
+    expect(charaDasha.periods[0].rashiName).toBe('Gemini');
+    expect(charaDasha.periods[0].antardashas).toHaveLength(12);
   });
 });
