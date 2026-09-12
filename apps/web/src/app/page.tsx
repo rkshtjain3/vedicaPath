@@ -30,6 +30,7 @@ import {
   Bot,
   Crown,
   Hand,
+  Flame,
 } from 'lucide-react';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
@@ -59,6 +60,7 @@ import {
   DashaExplorerTab,
   NumerologyTab,
   YogasTab,
+  BaZiTab,
 } from '@/components/observatory';
 import { MultiSystemConvergenceCard } from '@/components/observatory/MultiSystemConvergenceCard';
 import { BookOpen, ShieldCheck } from 'lucide-react';
@@ -276,7 +278,7 @@ export default function HomePage() {
   };
 
   const [activeTab, setActiveTab] = useState<
-    'convergence' | 'storybook' | 'birthChart' | 'lifeAnalysis' | 'timeline' | 'transits' | 'astrology' | 'analysis' | 'divisional' | 'strength' | 'ashtakavarga' | 'rules' | 'timing' | 'interpretation' | 'dasha' | 'numerology' | 'yogas' | 'ziwei' | 'palmistry' | 'report' | 'query' | 'codex'
+    'convergence' | 'storybook' | 'birthChart' | 'lifeAnalysis' | 'timeline' | 'transits' | 'astrology' | 'analysis' | 'divisional' | 'strength' | 'ashtakavarga' | 'rules' | 'timing' | 'interpretation' | 'dasha' | 'numerology' | 'yogas' | 'bazi' | 'ziwei' | 'palmistry' | 'report' | 'query' | 'codex'
   >('storybook');
   const [showSuperstitionModal, setShowSuperstitionModal] = useState(false);
   const [selectedCodexTerm, setSelectedCodexTerm] = useState<string | null>(null);
@@ -1250,6 +1252,17 @@ export default function HomePage() {
                   <Sparkles className="w-3.5 h-3.5" /> {t('tabs.yogas')}
                 </button>
                 <button
+                  id="tab-bazi"
+                  onClick={() => setActiveTab('bazi')}
+                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg shrink-0 transition-colors flex items-center gap-1.5 ${
+                    activeTab === 'bazi'
+                      ? 'bg-red-600 text-white font-bold'
+                      : 'text-red-400 hover:text-red-200 hover:bg-slate-900'
+                  }`}
+                >
+                  <Flame className="w-3.5 h-3.5" /> BaZi Four Pillars (八字)
+                </button>
+                <button
                   id="tab-ziwei"
                   onClick={() => setActiveTab('ziwei')}
                   className={`px-3 py-1.5 text-xs font-semibold rounded-lg shrink-0 transition-colors flex items-center gap-1.5 ${
@@ -1468,6 +1481,10 @@ export default function HomePage() {
 
             {activeTab === 'yogas' && (yogaData || analysisData) && (
               <YogasTab yogaData={yogaData} analysisData={analysisData} />
+            )}
+
+            {activeTab === 'bazi' && baZiData && (
+              <BaZiTab baziData={baZiData} />
             )}
 
             {activeTab === 'ziwei' && (
