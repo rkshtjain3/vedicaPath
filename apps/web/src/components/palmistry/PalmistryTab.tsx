@@ -19,6 +19,8 @@ import {
   Image as ImageIcon,
   Check,
   Info,
+  X,
+  Zap,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
 
@@ -36,9 +38,14 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
   const [analysis, setAnalysis] = useState<any>(null);
   const [activeRuleCategory, setActiveRuleCategory] = useState<string>('ALL');
 
-  // Image Upload State
+  // Image Upload & Camera State
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   const [imageFileName, setImageFileName] = useState<string | null>(null);
+  const [showCameraModal, setShowCameraModal] = useState<boolean>(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+
   const [extractedMetrics, setExtractedMetrics] = useState<{
     width: number;
     height: number;
@@ -96,18 +103,64 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
     const reader = new FileReader();
     reader.onload = (event) => {
       const dataUrl = event.target?.result as string;
-      setUploadedImageUrl(dataUrl);
-
-      // Create an HTML Image to inspect pixel dimensions & sharpness
-      const img = new Image();
-      img.onload = () => {
-        const metrics = analyzeImagePixels(img);
-        setExtractedMetrics(metrics);
-        runAnalysis(metrics);
-      };
-      img.src = dataUrl;
+      processDataUrl(dataUrl, file.name);
     };
     reader.readAsDataURL(file);
+  };
+
+  const processDataUrl = (dataUrl: string, name: string) => {
+    setUploadedImageUrl(dataUrl);
+    setImageFileName(name);
+
+    const img = new Image();
+    img.onload = () => {
+      const metrics = analyzeImagePixels(img);
+      setExtractedMetrics(metrics);
+      runAnalysis(metrics);
+    };
+    img.src = dataUrl;
+  };
+
+  // Client-side webcam photo capture
+  const startCamera = async () => {
+    setCameraError(null);
+    setShowCameraModal(true);
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+      });
+      streamRef.current = mediaStream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = mediaStream;
+      }
+    } catch (err: any) {
+      console.warn('Camera access error:', err);
+      setCameraError(err.message || 'Unable to access device camera. Please check permissions or upload a photo.');
+    }
+  };
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+    setShowCameraModal(false);
+  };
+
+  const capturePhotoFromCamera = () => {
+    if (!videoRef.current) return;
+    const video = videoRef.current;
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth || 800;
+    canvas.height = video.videoHeight || 800;
+
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+      processDataUrl(dataUrl, 'webcam_captured_palm.jpg');
+    }
+    stopCamera();
   };
 
   // Client-side pixel variance & contrast measurement algorithm
@@ -192,7 +245,7 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
             <span>{isHi ? 'हस्तरेखा एवं करतल लक्षण विश्लेषण (Hast Rekha)' : 'Deterministic Palmistry & Hast Rekha (हस्तरेखा)'}</span>
           </h2>
           <p className="text-xs text-slate-700 dark:text-slate-300 max-w-2xl font-medium">
-            Upload your palm photo to compute line vectors, 2D:4D finger digital ratios, and 7 Palmar Mounts with Hast Rekha AST rules.
+            Upload or capture your palm photo to compute line vectors, 2D:4D finger digital ratios, and 7 Palmar Mounts with Hast Rekha AST rules.
           </p>
         </div>
 
@@ -225,11 +278,20 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
 
           <button
             type="button"
+            onClick={startCamera}
+            className="px-3.5 py-2 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md cursor-pointer"
+          >
+            <Camera className="w-4 h-4" />
+            <span>{isHi ? 'कैमरा से लें' : 'Take Live Photo'}</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="px-4 py-2 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md cursor-pointer"
+            className="px-3.5 py-2 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md cursor-pointer"
           >
             <UploadCloud className="w-4 h-4" />
-            <span>{isHi ? 'चित्र अपलोड करें' : 'Upload Palm Photo'}</span>
+            <span>{isHi ? 'चित्र अपलोड करें' : 'Upload Photo'}</span>
           </button>
           <input
             ref={fileInputRef}
@@ -253,7 +315,7 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
                 {isHi ? 'करतल चित्र इनपुट एवं गुणवत्ता मापक' : 'Palmar Image Ingestion & Quality Analysis'}
               </h3>
               <p className="text-[11px] text-slate-600 dark:text-slate-400">
-                {imageFileName ? `Loaded: ${imageFileName}` : isHi ? 'चित्र का प्रयोग कर हस्तरेखा विश्लेषण करें' : 'Upload a palm photo or use high-resolution sample palms below'}
+                {imageFileName ? `Loaded: ${imageFileName}` : isHi ? 'चित्र का प्रयोग कर हस्तरेखा विश्लेषण करें' : 'Upload a palm photo, capture via camera, or test with sample palms below'}
               </p>
             </div>
           </div>
@@ -264,11 +326,8 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
             <button
               type="button"
               onClick={() => {
-                setUploadedImageUrl('https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?q=80&w=800&auto=format&fit=crop');
-                setImageFileName('sample_right_hand.jpg');
-                const m = { width: 1024, height: 1024, sharpness: 91, lighting: 89, contrast: 86 };
-                setExtractedMetrics(m);
-                runAnalysis(m);
+                const url = 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?q=80&w=800&auto=format&fit=crop';
+                processDataUrl(url, 'sample_right_hand.jpg');
               }}
               className="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 transition"
             >
@@ -277,11 +336,8 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
             <button
               type="button"
               onClick={() => {
-                setUploadedImageUrl('https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=800&auto=format&fit=crop');
-                setImageFileName('sample_left_hand.jpg');
-                const m = { width: 1024, height: 1024, sharpness: 88, lighting: 85, contrast: 82 };
-                setExtractedMetrics(m);
-                runAnalysis(m);
+                const url = 'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=800&auto=format&fit=crop';
+                processDataUrl(url, 'sample_left_hand.jpg');
               }}
               className="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 transition"
             >
@@ -698,6 +754,76 @@ export function PalmistryTab({ initialHandType = 'RIGHT_HAND' }: PalmistryTabPro
           ))}
         </div>
       </div>
+
+      {/* Camera Live Viewfinder Capture Modal */}
+      {showCameraModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-5 space-y-4 shadow-2xl relative">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+              <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-bold text-sm">
+                <Camera className="w-5 h-5 text-amber-500" />
+                <span>{isHi ? 'करतल चित्र कैप्चर (Live Palm Camera)' : 'Live Palm Photo Capture'}</span>
+              </div>
+              <button
+                type="button"
+                onClick={stopCamera}
+                className="p-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {cameraError ? (
+              <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-xs text-rose-800 dark:text-rose-300 space-y-2">
+                <div className="flex items-center gap-2 font-bold">
+                  <AlertTriangle className="w-4 h-4 text-rose-600" />
+                  <span>Camera Access Required</span>
+                </div>
+                <p>{cameraError}</p>
+                <p className="text-[11px]">Please check your browser camera permissions or upload an existing photo.</p>
+              </div>
+            ) : (
+              <div className="relative w-full aspect-[4/3] bg-black rounded-2xl overflow-hidden border border-slate-800 flex items-center justify-center">
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="w-full h-full object-cover"
+                />
+
+                {/* Palmar Alignment Guide Overlay */}
+                <div className="absolute inset-0 border-2 border-dashed border-teal-400/60 rounded-2xl pointer-events-none flex items-center justify-center">
+                  <div className="text-[11px] font-mono font-bold text-teal-300 bg-slate-950/70 px-3 py-1 rounded-full border border-teal-500/40 shadow-lg">
+                    Align Palm Inside Box
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={stopCamera}
+                className="px-4 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 transition"
+              >
+                Cancel
+              </button>
+
+              {!cameraError && (
+                <button
+                  type="button"
+                  onClick={capturePhotoFromCamera}
+                  className="px-5 py-2 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg cursor-pointer"
+                >
+                  <Zap className="w-4 h-4" />
+                  <span>{isHi ? 'फोटो खींचें (Snap Photo)' : 'Snap Palm Photo'}</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
